@@ -326,10 +326,7 @@ whileStatement
  */
 
 forValue
-   : DATE_LITERAL
-   | TIME_LITERAL
-   | booleanLiteral
-   | numberLiteral
+   : expression
    ;
 
 forControlStatement
@@ -343,13 +340,7 @@ forStatement
  */
 
 caseValue
-   : numberLiteral
-   | booleanLiteral
-   | DATE_LITERAL
-   | TIME_LITERAL
-   | DATETIME_LITERAL
-   | optionLiteral
-   | STRING_LITERAL
+   : expression
    ;
 
 caseSet
