@@ -101,8 +101,8 @@ PIPE
 AMPERSAND
    : '&';
 
-/* 
- * operator keywords 
+/*
+ * operator keywords
  */
 
 AND
@@ -149,6 +149,10 @@ BREAK
 
 CASE
    : C A S E
+   ;
+
+CONTINUE
+   : C O N T I N U E
    ;
 
 DO
@@ -283,8 +287,8 @@ WITHEVENTS
    : W I T H E V E N T S
    ;
 
-/* 
- * boolean 
+/*
+ * boolean
  */
 
 TRUE
@@ -293,29 +297,29 @@ TRUE
 FALSE
    : F A L S E;
 
-/* 
- * date 
+/*
+ * date
  */
 
 DATE_LITERAL
    : DIGIT+ D;
 
-/* 
- * time 
+/*
+ * time
  */
 
 TIME_LITERAL
    : DIGIT+ ([.] DIGIT+)? T;
 
-/* 
- * datetime 
+/*
+ * datetime
  */
 
 DATETIME_LITERAL
    : DIGIT+ D T;
 
-/* 
- * numbers 
+/*
+ * numbers
  */
 
 INTEGER_LITERAL
@@ -324,20 +328,20 @@ INTEGER_LITERAL
    ;
 
 FLOAT_LITERAL
-	: (DIGIT+ [.] (DIGIT*)? {_input.La(1) != '.'}? (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)? 
-	| [.] DIGIT+ (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)? 
+	: (DIGIT+ [.] (DIGIT*)? {_input.La(1) != '.'}? (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)?
+	| [.] DIGIT+ (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)?
 	| DIGIT+ EXPONENT_NOTATION EXPONENT_SIGN DIGIT+) (INTEGER_SUFFIX | FLOAT_SUFFIX)?
 	;
 
-/* 
- * strings 
+/*
+ * strings
  */
 
 STRING_LITERAL
 	: '\'' ( ESC | ~['\r\n])* '\'';
 
-/* 
- * identifiers 
+/*
+ * identifiers
  */
 
 IDENTIFIER
@@ -349,7 +353,7 @@ UNDERSCORE
 	: '_';
 
 LETTER
-	: LOWERCASE 
+	: LOWERCASE
 	| UPPERCASE
 	;
 
@@ -360,8 +364,8 @@ LETTER
 PREPROCESSOR_DIRECTIVE
    : '#' ~[\r\n]* '\r'? '\n';
 
-/* 
- * fragments 
+/*
+ * fragments
  */
 
 fragment LOWERCASE
@@ -387,7 +391,7 @@ fragment INTEGER_SUFFIX
 fragment FLOAT_SUFFIX
    : [fF];
 
-fragment ESC 
+fragment ESC
 	: '\'\'' ;
 
 fragment INPUT_CHARACTER
