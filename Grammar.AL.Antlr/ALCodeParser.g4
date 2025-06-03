@@ -2,79 +2,79 @@ parser grammar ALCodeParser;
 
 options { tokenVocab=ALLexer; }
 
-@parser::members 
+@parser::members
 {  // Define our member text lists
-   List<string> Builtins = new List<string>() 
+   List<string> Builtins = new List<string>()
       {
-         "action", "array", "automation", "biginteger", "bigtext", "blob", "boolean", "byte", 
-         "char", "clienttype", "code", "codeunit", "completiontriggererrorlevel", "connectiontype", 
-         "database", "dataclassification", "datascope", "date", "dateformula", "datetime", "decimal", 
-         "defaultlayout", "dialog", "dictionary", "dotnet", "dotnetassembly", "dotnettypedeclaration", 
-         "duration", "enum", "errorinfo", "errortype", "executioncontext", "executionmode", "fieldclass", 
-         "fieldref", "fieldtype", "file", "filterpagebuilder", "guid", "instream", "integer", "joker", 
-         "keyref", "list", "moduledependencyinfo", "moduleinfo", "none", "notification", 
-         "notificationscope", "objecttype", "option", "outstream", "page", "pageresult", "query", 
-         "record", "recordid", "recordref", "report", "reportformat", "securityfilter", "securityfiltering", 
-         "table", "tableconnectiontype", "tablefilter", "testaction", "testfield", "testfilterfield", 
-         "testpage", "testpermissions", "testrequestpage", "text", "textbuilder", "textconst", "textencoding", 
-         "time", "transactionmodel", "transactiontype", "variant", "verbosity", "version", "xmlport", 
-         "httpcontent", "httpheaders", "httpclient", "httprequestmessage", "httpresponsemessage", 
-         "jsontoken", "jsonvalue", "jsonarray", "jsonobject", "view", "views", "xmlattribute", 
-         "xmlattributecollection", "xmlcomment", "xmlcdata", "xmldeclaration", "xmldocument", 
-         "xmldocumenttype", "xmlelement", "xmlnamespacemanager", "xmlnametable", "xmlnode", 
-         "xmlnodelist", "xmlprocessinginstruction", "xmlreadoptions", "xmltext", "xmlwriteoptions", 
+         "action", "array", "automation", "biginteger", "bigtext", "blob", "boolean", "byte",
+         "char", "clienttype", "code", "codeunit", "completiontriggererrorlevel", "connectiontype",
+         "database", "dataclassification", "datascope", "date", "dateformula", "datetime", "decimal",
+         "defaultlayout", "dialog", "dictionary", "dotnet", "dotnetassembly", "dotnettypedeclaration",
+         "duration", "enum", "errorinfo", "errortype", "executioncontext", "executionmode", "fieldclass",
+         "fieldref", "fieldtype", "file", "filterpagebuilder", "guid", "instream", "integer", "joker",
+         "keyref", "list", "moduledependencyinfo", "moduleinfo", "none", "notification",
+         "notificationscope", "objecttype", "option", "outstream", "page", "pageresult", "query",
+         "record", "recordid", "recordref", "report", "reportformat", "securityfilter", "securityfiltering",
+         "table", "tableconnectiontype", "tablefilter", "testaction", "testfield", "testfilterfield",
+         "testpage", "testpermissions", "testrequestpage", "text", "textbuilder", "textconst", "textencoding",
+         "time", "transactionmodel", "transactiontype", "variant", "verbosity", "version", "xmlport",
+         "httpcontent", "httpheaders", "httpclient", "httprequestmessage", "httpresponsemessage",
+         "jsontoken", "jsonvalue", "jsonarray", "jsonobject", "view", "views", "xmlattribute",
+         "xmlattributecollection", "xmlcomment", "xmlcdata", "xmldeclaration", "xmldocument",
+         "xmldocumenttype", "xmlelement", "xmlnamespacemanager", "xmlnametable", "xmlnode",
+         "xmlnodelist", "xmlprocessinginstruction", "xmlreadoptions", "xmltext", "xmlwriteoptions",
          "webserviceactioncontext", "webserviceactionresultcode", "sessionsettings;"
       };
 
-      List<string> VariableTypes = new List<string>() 
+      List<string> VariableTypes = new List<string>()
       {
-         "any", "biginteger", "bigtext", "blob", "boolean", "byte", "char", "code", 
-         "codeunit", "companyproperty", "database", "datatransfer", "date", "dateformula", 
-         "datetime", "debugger", "decimal", "dialog", "dictionary", "dotnet", "duration", 
-         "enum", "errorinfo", "fieldref", "file", "filterpagebuilder", "guid", "httpclient", 
-         "httpcontent", "httpheaders", "httprequestmessage", "httpresponsemessage", 
-         "instream", "integer", "isolatedstorage", "jsonarray", "jsonobject", "jsontoken", "jsonvalue", 
-         "keyref", "label", "list", "media", "mediaset", "moduledependencyinfo", "moduleinfo", 
-         "navapp", "none", "notification", "numbersequence", "option", "outstream", "page", "productname", "query", 
-         "record", "recordid", "recordref", "report", "requestpage", "session", "sessioninformation", 
-         "sessionsettings", "system", "taskscheduler", "testaction", "testfield", 
-         "testfilter", "testfilterfield", "testpage", "testpart", "testrequestpage", "text", 
-         "textbuilder", "textconst", "time", "variant", "version", "webserviceactioncontext", 
-         "xmlattribute", "xmlattributecollection", "xmlcdata", "xmlcomment", "xmldeclaration", 
-         "xmldocument", "xmldocumenttype", "xmlelement", "xmlnamespacemanager", "xmlnametable", 
-         "xmlnode", "xmlnodelist", "xmlport", "xmlprocessinginstruction", "xmlreadoptions", "xmltext", 
-         "xmlwriteoptions", "action", "auditcategory", "clienttype", "commitbehavior", "dataclassification", 
-         "datascope", "defaultlayout", "errorbehavior", "errortype", "executioncontext", "executionmode", 
-         "fieldclass", "fieldtype", "inherentpermissionsscope", "isolationlevel", "notificationscope", 
-         "objecttype", "pagebackgroundtaskerrorlevel", "permissionobjecttype", "reportformat", "reportlayouttype", 
-         "securityfilter", "securityoperationresult", "tableconnectiontype", "telemetryscope", "testpermissions", 
+         "any", "biginteger", "bigtext", "blob", "boolean", "byte", "char", "code",
+         "codeunit", "companyproperty", "database", "datatransfer", "date", "dateformula",
+         "datetime", "debugger", "decimal", "dialog", "dictionary", "dotnet", "duration",
+         "enum", "errorinfo", "fieldref", "file", "filterpagebuilder", "guid", "httpclient",
+         "httpcontent", "httpheaders", "httprequestmessage", "httpresponsemessage",
+         "instream", "integer", "isolatedstorage", "jsonarray", "jsonobject", "jsontoken", "jsonvalue",
+         "keyref", "label", "list", "media", "mediaset", "moduledependencyinfo", "moduleinfo",
+         "navapp", "none", "notification", "numbersequence", "option", "outstream", "page", "productname", "query",
+         "record", "recordid", "recordref", "report", "requestpage", "session", "sessioninformation",
+         "sessionsettings", "system", "taskscheduler", "testaction", "testfield",
+         "testfilter", "testfilterfield", "testpage", "testpart", "testrequestpage", "text",
+         "textbuilder", "textconst", "time", "variant", "version", "webserviceactioncontext",
+         "xmlattribute", "xmlattributecollection", "xmlcdata", "xmlcomment", "xmldeclaration",
+         "xmldocument", "xmldocumenttype", "xmlelement", "xmlnamespacemanager", "xmlnametable",
+         "xmlnode", "xmlnodelist", "xmlport", "xmlprocessinginstruction", "xmlreadoptions", "xmltext",
+         "xmlwriteoptions", "action", "auditcategory", "clienttype", "commitbehavior", "dataclassification",
+         "datascope", "defaultlayout", "errorbehavior", "errortype", "executioncontext", "executionmode",
+         "fieldclass", "fieldtype", "inherentpermissionsscope", "isolationlevel", "notificationscope",
+         "objecttype", "pagebackgroundtaskerrorlevel", "permissionobjecttype", "reportformat", "reportlayouttype",
+         "securityfilter", "securityoperationresult", "tableconnectiontype", "telemetryscope", "testpermissions",
          "textencoding", "transactionmodel", "transactiontype", "verbosity", "webserviceactionresultcode"
       };
 
       List<string> VarAppObjects = new List<string>() {"codeunit", "page", "requestpage", "dotnet", "enum", "query", "report", "xmlport"};
 
-      List<string> SimpleFieldTypes = new List<string>() 
+      List<string> SimpleFieldTypes = new List<string>()
       {
          "integer", "biginteger", "decimal", "enum", "boolean", "binary", "blob", "date", "time", "datetime", "dateformula", "duration", "recordid", "tablefilter", "option", "guid"
       };
 
       // Positioning keywords for various entities (Groups, Areas, Actions, Controls)
-      List<string> GroupPosKeywords = new List<string>() 
+      List<string> GroupPosKeywords = new List<string>()
       {
          "addfirst", "addlast", "addafter", "addbefore", "movefirst", "movelast", "moveafter", "movebefore", "modify"
       };
-      
-      List<string> AreaPosKeywords = new List<string>() 
+
+      List<string> AreaPosKeywords = new List<string>()
       {
          "addfirst", "addlast", "movefirst", "movelast"
       };
 
-      List<string> ActionPosKeywords = new List<string>() 
+      List<string> ActionPosKeywords = new List<string>()
       {
          "addafter", "addbefore", "moveafter", "movebefore", "modify"
       };
 
-      List<string> ControlPosKeywords = new List<string>() 
+      List<string> ControlPosKeywords = new List<string>()
       {
          "addafter", "addbefore", "moveafter", "movebefore", "modify"
       };
@@ -133,20 +133,20 @@ sizeDeclaration : LEFTBRACKET INTEGER_LITERAL RIGHTBRACKET;
 builtinType
    : IDENTIFIER;
    /*
-   : ACTION | ARRAY | AUTOMATION | BIGINTEGER | BIGTEXT | BLOB | BOOLEAN | BYTE | CHAR | CLIENTTYPE | CODE 
-   | CODEUNIT | COMPLETIONTRIGGERERRORLEVEL | CONNECTIONTYPE | DATABASE | DATACLASSIFICATION | DATASCOPE 
-   | DATE | DATEFORMULA | DATETIME | DECIMAL | DEFAULTLAYOUT | DIALOG | DICTIONARY | DOTNET | DOTNETASSEMBLY 
-   | DOTNETTYPEDECLARATION | DURATION | ENUM | ERRORINFO | ERRORTYPE | EXECUTIONCONTEXT | EXECUTIONMODE 
-   | FIELDCLASS | FIELDREF | FIELDTYPE | FILE | FILTERPAGEBUILDER | GUID | INSTREAM | INTEGER | JOKER 
-   | KEYREF | LIST | MODULEDEPENDENCYINFO | MODULEINFO | NONE | NOTIFICATION | NOTIFICATIONSCOPE | OBJECTTYPE 
-   | OPTION | OUTSTREAM | PAGE | PAGERESULT | QUERY | RECORD | RECORDID | RECORDREF | REPORT | REPORTFORMAT 
-   | SECURITYFILTER | SECURITYFILTERING | TABLE | TABLECONNECTIONTYPE | TABLEFILTER | TESTACTION | TESTFIELD 
-   | TESTFILTERFIELD | TESTPAGE | TESTPERMISSIONS | TESTREQUESTPAGE | TEXT | TEXTBUILDER | TEXTCONST 
-   | TEXTENCODING | TIME | TRANSACTIONMODEL | TRANSACTIONTYPE | VARIANT | VERBOSITY | VERSION | XMLPORT 
-   | HTTPCONTENT | HTTPHEADERS | HTTPCLIENT | HTTPREQUESTMESSAGE | HTTPRESPONSEMESSAGE | JSONTOKEN 
-   | JSONVALUE | JSONARRAY | JSONOBJECT | VIEW | VIEWS | XMLATTRIBUTE | XMLATTRIBUTECOLLECTION | XMLCOMMENT 
-   | XMLCDATA | XMLDECLARATION | XMLDOCUMENT | XMLDOCUMENTTYPE | XMLELEMENT | XMLNAMESPACEMANAGER 
-   | XMLNAMETABLE | XMLNODE | XMLNODELIST | XMLPROCESSINGINSTRUCTION | XMLREADOPTIONS | XMLTEXT 
+   : ACTION | ARRAY | AUTOMATION | BIGINTEGER | BIGTEXT | BLOB | BOOLEAN | BYTE | CHAR | CLIENTTYPE | CODE
+   | CODEUNIT | COMPLETIONTRIGGERERRORLEVEL | CONNECTIONTYPE | DATABASE | DATACLASSIFICATION | DATASCOPE
+   | DATE | DATEFORMULA | DATETIME | DECIMAL | DEFAULTLAYOUT | DIALOG | DICTIONARY | DOTNET | DOTNETASSEMBLY
+   | DOTNETTYPEDECLARATION | DURATION | ENUM | ERRORINFO | ERRORTYPE | EXECUTIONCONTEXT | EXECUTIONMODE
+   | FIELDCLASS | FIELDREF | FIELDTYPE | FILE | FILTERPAGEBUILDER | GUID | INSTREAM | INTEGER | JOKER
+   | KEYREF | LIST | MODULEDEPENDENCYINFO | MODULEINFO | NONE | NOTIFICATION | NOTIFICATIONSCOPE | OBJECTTYPE
+   | OPTION | OUTSTREAM | PAGE | PAGERESULT | QUERY | RECORD | RECORDID | RECORDREF | REPORT | REPORTFORMAT
+   | SECURITYFILTER | SECURITYFILTERING | TABLE | TABLECONNECTIONTYPE | TABLEFILTER | TESTACTION | TESTFIELD
+   | TESTFILTERFIELD | TESTPAGE | TESTPERMISSIONS | TESTREQUESTPAGE | TEXT | TEXTBUILDER | TEXTCONST
+   | TEXTENCODING | TIME | TRANSACTIONMODEL | TRANSACTIONTYPE | VARIANT | VERBOSITY | VERSION | XMLPORT
+   | HTTPCONTENT | HTTPHEADERS | HTTPCLIENT | HTTPREQUESTMESSAGE | HTTPRESPONSEMESSAGE | JSONTOKEN
+   | JSONVALUE | JSONARRAY | JSONOBJECT | VIEW | VIEWS | XMLATTRIBUTE | XMLATTRIBUTECOLLECTION | XMLCOMMENT
+   | XMLCDATA | XMLDECLARATION | XMLDOCUMENT | XMLDOCUMENTTYPE | XMLELEMENT | XMLNAMESPACEMANAGER
+   | XMLNAMETABLE | XMLNODE | XMLNODELIST | XMLPROCESSINGINSTRUCTION | XMLREADOPTIONS | XMLTEXT
    | XMLWRITEOPTIONS | WEBSERVICEACTIONCONTEXT | WEBSERVICEACTIONRESULTCODE | SESSIONSETTINGS;
 */
 
@@ -230,8 +230,8 @@ variableTypeDeclaration
    | {TokenMatches("list")}? IDENTIFIER OF LEFTBRACKET variableTypeDeclaration RIGHTBRACKET #ListVariable
    | ARRAY LEFTBRACKET dimensions RIGHTBRACKET OF variableTypeDeclaration #ArrayVariable
    | {TokenMatches(VarAppObjects)}? IDENTIFIER objectId #ApplicationObjectVariable
-   | {TokenMatches("label")}? IDENTIFIER labelText (COMMA labelArgs)? #LabelVariable   
-   | {TokenMatches("record")}? IDENTIFIER objectId TEMPORARY? #RecordVariable   
+   | {TokenMatches("label")}? IDENTIFIER labelText (COMMA labelArgs)? #LabelVariable
+   | {TokenMatches("record")}? IDENTIFIER objectId TEMPORARY? #RecordVariable
    | {TokenMatches("text")}? IDENTIFIER sizeDeclaration? #TextVariable
    | {TokenMatches("code")}? IDENTIFIER sizeDeclaration #CodeVariable
    | {TokenMatches("textconst")}? IDENTIFIER IDENTIFIER EQUAL STRING_LITERAL #TextConstantVariable
@@ -249,7 +249,7 @@ parameterDeclaration
 parameterList
    : parameterDeclaration (SEMICOLON parameterDeclaration)*?
    ;
-   
+
 variableNameList
 	: IDENTIFIER (COMMA IDENTIFIER)*?
    ;
@@ -365,6 +365,19 @@ caseStatement
    : caseControlStatement caseBody END;
 
 /*
+ * AL CONTINUE statement logic
+ */
+
+continueStatement
+   : CONTINUE;
+
+/*
+ * AL BREAK statement logic
+ */
+
+breakStatement: BREAK;
+
+/*
  * AL REPEAT UNTIL statement logic
  */
 
@@ -385,7 +398,7 @@ withControlStatement
 withStatement
    : withControlStatement statement;
 
-/* 
+/*
  *AL Exit statement logic
  */
 
@@ -404,8 +417,10 @@ statementLine
    | whileStatement
    | repeatUntilStatement
    | exitStatement
+   | continueStatement
+   | breakStatement
    | expression;
-   
+
 statementBlock
    : BEGIN statementList END;
 
@@ -443,7 +458,7 @@ expression
    | expression LEFTBRACKET indexAccessorSet RIGHTBRACKET #IndexExpression
    | LEFTBRACKET valueSet? RIGHTBRACKET #SetExpression
    | IDENTIFIER (PERIOD IDENTIFIER)*? LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
-   | expression PERIOD IDENTIFIER (PERIOD IDENTIFIER)*? #MemberAccessExpression   
+   | expression PERIOD IDENTIFIER (PERIOD IDENTIFIER)*? #MemberAccessExpression
    | IDENTIFIER RIGHTPAREN #FunctionCallExpression
    | expression IN LEFTBRACKET valueSet? RIGHTBRACKET #InSetExpression
    | GUIALLOWED #GuiAllowedFunctionExpression
