@@ -116,12 +116,12 @@ keyIdentifierListProperty
    : IDENTIFIER EQUAL identifierList? SEMICOLON
    ;
 
-permissionSpeficier
+permissionSpecifier
    : {TokenMatches("tabledata")}? IDENTIFIER objectId EQUAL IDENTIFIER
    ;
 
 permissionsProperty
-   : {TokenMatches("permissions")}? IDENTIFIER EQUAL permissionSpeficier (COMMA permissionSpeficier)*? SEMICOLON
+   : {TokenMatches("permissions")}? IDENTIFIER EQUAL permissionSpecifier (COMMA permissionSpecifier)*? SEMICOLON
    ;
 
 /*
@@ -155,7 +155,7 @@ builtinType
  */
 
 methodDeclaration
-   : methodAttribute*? PROCEDURE IDENTIFIER LEFTPAREN parameterList? RIGHTPAREN returnValue? varBlock? statementBlock SEMICOLON;
+   : methodAttribute*? LOCAL? PROCEDURE IDENTIFIER LEFTPAREN parameterList? RIGHTPAREN returnValue? varBlock? statementBlock SEMICOLON;
 
 /*
  * Method attributes
@@ -284,7 +284,7 @@ triggerDeclaration
    : TRIGGER triggerName LEFTPAREN parameterList? RIGHTPAREN returnValue? varBlock? statementBlock SEMICOLON;
 
 /*
- * Code delcaration elements
+ * Code declaration elements
  */
 
 codeEntity
@@ -302,24 +302,24 @@ codeDeclarations
  * AL IF statement logic
  */
 
-ifConditionStatement
+ifCondition
    : IF expression THEN;
 
-elseStatement
+else
    : ELSE statement;
 
 ifStatement
-   : ifConditionStatement statement (elseStatement)?;
+   : ifCondition statement (else)?;
 
 /*
  * AL WHILE statement logic
  */
 
-whileConditionalStatement
+whileConditional
    : WHILE expression DO;
 
 whileStatement
-   : whileConditionalStatement statement;
+   : whileConditional statement;
 
 /*
  * AL FOR statement logic
@@ -329,11 +329,20 @@ forValue
    : expression
    ;
 
-forControlStatement
+forControl
    : FOR IDENTIFIER ASSGN expression (TO | DOWNTO) expression DO;
 
 forStatement
-   : forControlStatement statement;
+   : forControl statement;
+
+/*
+ * AL FOREACH statement logic
+ */
+
+forEachControl:
+	FOREACH IDENTIFIER IN expression DO;
+
+forEachStatement: forEachControl statement;
 
 /*
  * AL CASE statement logic
@@ -349,20 +358,17 @@ caseSet
 caseRange
    : caseValue RANGE caseValue;
 
-caseValueStatement
+caseValueCondition
    : (caseSet | caseRange) COLON statement;
 
-caseElseStatement
-   : ELSE statement;
-
 caseBody
-   : (caseValueStatement (SEMICOLON caseValueStatement)*?)? caseElseStatement?;
+   : (caseValueCondition (SEMICOLON caseValueCondition)*?)? else?;
 
-caseControlStatement
+caseControl
    : CASE expression OF;
 
 caseStatement
-   : caseControlStatement caseBody END;
+   : caseControl caseBody END;
 
 /*
  * AL CONTINUE statement logic
@@ -392,11 +398,11 @@ repeatUntilStatement
  * (DEPRECATED in Dynamics 365 Business Central 2020, release wave 2)
  */
 
-withControlStatement
+withControl
    : WITH IDENTIFIER DO;
 
 withStatement
-   : withControlStatement statement;
+   : withControl statement;
 
 /*
  *AL Exit statement logic
@@ -412,6 +418,7 @@ withStatement
 statementLine
    : ifStatement
    | forStatement
+   | forEachStatement
    | caseStatement
    | withStatement
    | whileStatement
@@ -425,11 +432,11 @@ statementBlock
    : BEGIN statementList END;
 
 statement
-   : (statementLine | statementBlock) SEMICOLON?
+   : (statementLine | statementBlock)
    ;
 
 statementList
-   : (statementLine (SEMICOLON statementLine)*?)? SEMICOLON?;
+   : (statementLine (SEMICOLON statementLine?)*?)?;
 
 /*
  * AL expression logic
@@ -448,7 +455,7 @@ valueSet
 
 expression
    : LEFTPAREN expression RIGHTPAREN #ParenthesisExpression
-   | expression (ASTERISK | BACKSLASH | MOD) expression #DivMultExpression
+   | expression (ASTERISK | BACKSLASH | MOD) expression #DivideMultiplyExpression
    | expression (PLUS | MINUS) expression #AddSubtractExpression
    | expression (LESSTHAN | GREATERTHAN | LESSTHANEQUAL | GREATERTHANEQUAL | NOTEQUAL | EQUAL) expression #ComparisonExpression
    | NOT expression #negationExpression
