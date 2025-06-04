@@ -217,9 +217,17 @@ optionValueList
    ;
 
 objectId
+   : simpleObjectId
+   | qualifiedObjectId
+   ;
+
+simpleObjectId
    : IDENTIFIER
    | INTEGER_LITERAL
    ;
+
+qualifiedObjectId
+   : IDENTIFIER (PERIOD IDENTIFIER)*?;
 
 dimensions
    : INTEGER_LITERAL (COMMA INTEGER_LITERAL)*?
@@ -271,7 +279,11 @@ protectedVarBlock
    ;
 
 returnValue
-   : COLON IDENTIFIER
+   : IDENTIFIER? returnType
+   ;
+
+returnType
+   : COLON variableTypeDeclaration
    ;
 
 /*
@@ -305,11 +317,11 @@ codeDeclarations
 ifCondition
    : IF expression THEN;
 
-else
-   : ELSE statement;
+ifElse
+   : ELSE statement?;
 
 ifStatement
-   : ifCondition statement (else)?;
+   : ifCondition statement (ifElse)?;
 
 /*
  * AL WHILE statement logic
@@ -359,10 +371,13 @@ caseRange
    : caseValue RANGE caseValue;
 
 caseValueCondition
-   : (caseSet | caseRange) COLON statement;
+   : (caseSet | caseRange) COLON statement?;
+
+caseElse
+   : ELSE statement? SEMICOLON?;
 
 caseBody
-   : (caseValueCondition (SEMICOLON caseValueCondition)*?)? else?;
+   : (caseValueCondition (SEMICOLON caseValueCondition?)*?)? caseElse?;
 
 caseControl
    : CASE expression OF;
