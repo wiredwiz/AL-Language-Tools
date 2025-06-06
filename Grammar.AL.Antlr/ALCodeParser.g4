@@ -478,7 +478,7 @@ expression
    | MINUS expression #NegativeExpression
 	| expression PERIOD IDENTIFIER LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
    | IDENTIFIER LEFTPAREN methodCallArguments? RIGHTPAREN #FunctionCallExpression
-   | expression PERIOD IDENTIFIER (PERIOD IDENTIFIER)*? #MemberAccessExpression
+   | expression PERIOD IDENTIFIER #MemberAccessExpression
    | expression (ASTERISK | BACKSLASH | MOD) expression #DivideMultiplyExpression
    | expression PLUS expression #AddExpression
    | expression MINUS expression #SubtractExpression
