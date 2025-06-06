@@ -162,7 +162,7 @@ methodDeclaration
  */
 
 attributeArgument
-   : IDENTIFIER COLON builtinType;
+   : (IDENTIFIER COLON)? (STRING_LITERAL | INTEGER_LITERAL	| FLOAT_LITERAL | booleanLiteral);
 
 attributeArgumentList
    : attributeArgument (COMMA attributeArgument)*?;
@@ -424,7 +424,7 @@ withStatement
  */
 
  exitStatement
-   : EXIT (expression)?;
+   : EXIT (LEFTPAREN expression RIGHTPAREN)?;
 
 /*
  * AL generic statement statement logic
@@ -469,20 +469,24 @@ valueSet
    : expression (COMMA expression)*?;
 
 expression
-   : LEFTPAREN expression RIGHTPAREN #ParenthesisExpression
-   | expression (ASTERISK | BACKSLASH | MOD) expression #DivideMultiplyExpression
-   | expression (PLUS | MINUS) expression #AddSubtractExpression
-   | expression (LESSTHAN | GREATERTHAN | LESSTHANEQUAL | GREATERTHANEQUAL | NOTEQUAL | EQUAL) expression #ComparisonExpression
-   | NOT expression #negationExpression
-   | expression (AND | OR) expression #LogicalComparisonExpression
-   | expression (ASSGN | DIV_ASSGN | MULTIPLY_ASSGN | ADD_ASSGN | MINUS_ASSGN) expression #AssignmentExpression
+:
+   LEFTPAREN expression RIGHTPAREN #ParenthesisExpression
    | expression SCOPE IDENTIFIER #ScopeExpression
    | expression LEFTBRACKET indexAccessorSet RIGHTBRACKET #IndexExpression
    | LEFTBRACKET valueSet? RIGHTBRACKET #SetExpression
-   | IDENTIFIER (PERIOD IDENTIFIER)*? LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
+   | NOT expression #NotExpression
+   | MINUS expression #NegativeExpression
+	| expression PERIOD IDENTIFIER LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
+   | IDENTIFIER LEFTPAREN methodCallArguments? RIGHTPAREN #FunctionCallExpression
    | expression PERIOD IDENTIFIER (PERIOD IDENTIFIER)*? #MemberAccessExpression
-   | IDENTIFIER RIGHTPAREN #FunctionCallExpression
-   | expression IN LEFTBRACKET valueSet? RIGHTBRACKET #InSetExpression
+   | expression (ASTERISK | BACKSLASH | MOD) expression #DivideMultiplyExpression
+   | expression PLUS expression #AddExpression
+   | expression MINUS expression #SubtractExpression
+   | expression (LESSTHAN | GREATERTHAN | LESSTHANEQUAL | GREATERTHANEQUAL | NOTEQUAL | EQUAL) expression #ComparisonExpression
+   | expression (AND | OR | XOR) expression #LogicalComparisonExpression
+   | expression CONDITION expression COLON expression #TernaryExpression
+   | expression (ASSGN | DIV_ASSGN | MULTIPLY_ASSGN | ADD_ASSGN | MINUS_ASSGN) expression #AssignmentExpression
+   | expression IN LEFTBRACKET valueSet? RIGHTBRACKET #InRangeExpression
    | GUIALLOWED #GuiAllowedFunctionExpression
    | booleanLiteral #BooleanLiteralExpression
    | DATE_LITERAL #DateLiteralExpression
@@ -493,7 +497,6 @@ expression
    | FLOAT_LITERAL #FloatLiteralExpression
    | INTEGER_LITERAL #IntegerLiteralExpression
    | optionLiteral #OptionLiteralExpression
-   | MINUS expression #NegativeExpression
    ;
 
 methodCallArguments

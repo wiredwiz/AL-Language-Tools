@@ -101,6 +101,9 @@ PIPE
 AMPERSAND
    : '&';
 
+CONDITION
+   : '?' ;
+
 /*
  * operator keywords
  */
