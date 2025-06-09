@@ -2,6 +2,12 @@ parser grammar ALCodeParser;
 
 options { tokenVocab=ALLexer; }
 
+/*
+ * AL Code Parser
+ This parser is designed to parse AL code, including variable declarations,
+ * method declarations, control structures, expressions and codeunits.
+ */
+
 @parser::members
 {  // Define our member text lists
    List<string> Builtins = new List<string>()
