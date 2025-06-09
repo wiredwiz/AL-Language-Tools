@@ -42,8 +42,11 @@ namespace ALParser.Demo
          if (string.IsNullOrEmpty(ruleName) || tokens.Count == 0)
             return;
 
-         var ruleInstance = ParserRules.GetInstance(ruleName);
-         ruleInstance.Parse(stream, _Parser);
+         var parser = new Org.Edgerunner.BC.AL.Language.Parsers.AlParser();
+         parser.AddErrorListener(_ErrorListener);
+         parser.ParseSource(stream);
+         //var ruleInstance = AlParser. ParserRules.GetInstance(ruleName);
+         //ruleInstance.Parse(stream, _Parser);
          MessageList.DataSource = new BindingList<AlErrorFacade>(_ErrorListener.Errors.Select(x => new AlErrorFacade(x)).ToList());
          demoEditor.ClearAllStyles();
          var last = tokens.Last();
@@ -78,14 +81,14 @@ namespace ALParser.Demo
                span.SetStyle(_Styles.Default);
          }
 
-         PaintErrors(ruleInstance);
+         PaintErrors(parser.Result);
 
          listTokens.DataSource = new BindingList<AlToken>(tokens);
-         var graph = TreeGrapher.CreateGraph(ruleInstance);
+         var graph = TreeGrapher.CreateGraph(parser.Result);
          gViewer1.Graph = graph;
       }
 
-      void PaintErrors(AlParserRule? node)
+      private void PaintErrors(ParserRule<AlToken, AlSyntaxNodeType>? node)
       {
          if (node == null)
             return;
