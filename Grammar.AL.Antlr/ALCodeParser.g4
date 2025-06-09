@@ -415,7 +415,7 @@ untilCondition
    : UNTIL expression;
 
 repeatUntilStatement
-   : REPEAT statement SEMICOLON? untilCondition;
+   : REPEAT statementList SEMICOLON? untilCondition;
 
 /*
  * AL WITH statement logic
