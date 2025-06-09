@@ -85,6 +85,12 @@ options { tokenVocab=ALLexer; }
          "addafter", "addbefore", "moveafter", "movebefore", "modify"
       };
 
+      List<string> ObsoleteStateValues = new List<string>()
+      {
+         "pending", "no"
+      };
+
+
       // Define helper methods for token text matching
 
       bool TokenMatches(string text)
@@ -218,6 +224,9 @@ objectId
    | qualifiedObjectId
    ;
 
+objectName
+   : IDENTIFIER;
+
 simpleObjectId
    : IDENTIFIER
    | INTEGER_LITERAL
@@ -255,8 +264,11 @@ parameterList
    : parameterDeclaration (SEMICOLON parameterDeclaration)*?
    ;
 
+variableName
+   : IDENTIFIER;
+
 variableNameList
-	: IDENTIFIER (COMMA IDENTIFIER)*?
+	: variableName (COMMA variableName)*?
    ;
 
 variableDeclaration
@@ -515,3 +527,35 @@ numberLiteral
    : FLOAT_LITERAL
    | INTEGER_LITERAL
    ;
+
+/*
+* Codeunit structure
+*/
+
+namespaceIdentifier
+   : IDENTIFIER (PERIOD IDENTIFIER)*?
+   ;
+
+namespaceDeclaration
+   : {TokenMatches("namespace")}? namespaceIdentifier namespaceIdentifier SEMICOLON;
+
+usingDeclaration
+   : {TokenMatches("using")}? IDENTIFIER namespaceIdentifier SEMICOLON;
+
+usingDeclarations
+   : usingDeclaration (usingDeclaration)*?;
+
+codeunitProperty
+   : {TokenMatches("Obsolete")}? IDENTIFIER EQUAL STRING_LITERAL SEMICOLON
+   | {TokenMatches("ObsoleteState")}? IDENTIFIER EQUAL {TokenMatches(ObsoleteStateValues)}? IDENTIFIER SEMICOLON
+   | {TokenMatches("ObsoleteTag")}? IDENTIFIER EQUAL STRING_LITERAL SEMICOLON
+   | permissionsProperty
+   | keyValueProperty
+   | keyIdentifierListProperty
+   ;
+
+codeunitProperties
+   : codeunitProperty (codeunitProperty)*?;
+
+codeunitDeclaration
+   : namespaceDeclaration? usingDeclarations? {TokenMatches("CodeUnit")}? IDENTIFIER objectId? objectName LEFTCBRACE codeunitProperties? codeDeclarations? RIGHTCBRACE;
