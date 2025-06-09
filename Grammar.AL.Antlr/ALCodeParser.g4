@@ -114,8 +114,11 @@ permissionSpecifier
    : {TokenMatches("tabledata")}? IDENTIFIER objectId EQUAL IDENTIFIER
    ;
 
+permissionSpecifiers
+   : permissionSpecifier (COMMA permissionSpecifier)*?;
+
 permissionsProperty
-   : {TokenMatches("permissions")}? IDENTIFIER EQUAL permissionSpecifier (COMMA permissionSpecifier)*? SEMICOLON
+   : {TokenMatches("permissions")}? IDENTIFIER EQUAL permissionSpecifiers SEMICOLON
    ;
 
 /*
