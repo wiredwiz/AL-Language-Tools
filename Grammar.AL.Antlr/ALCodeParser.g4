@@ -83,7 +83,7 @@ options { tokenVocab=ALLexer; }
 
       bool TokenMatches(string text)
       {
-         return _input.Lt(1).Text.ToLowerInvariant() == text;
+         return _input.Lt(1).Text.ToLowerInvariant() == text.ToLowerInvariant();
       }
 
       bool TokenMatches(List<string> values)
@@ -91,18 +91,6 @@ options { tokenVocab=ALLexer; }
          return values.Contains(_input.Lt(1).Text.ToLowerInvariant());
       }
 }
-
-comment
-   : IDENTIFIER
-   ;
-
-maxLength
-   : IDENTIFIER
-   ;
-
-locked
-   : IDENTIFIER
-   ;
 
 keyValueProperty
    : IDENTIFIER EQUAL (STRING_LITERAL | INTEGER_LITERAL | FLOAT_LITERAL | IDENTIFIER | booleanLiteral) SEMICOLON
@@ -187,15 +175,15 @@ labelText
    ;
 
 labelMaxLength
-   : maxLength EQUAL INTEGER_LITERAL
+   : {TokenMatches("MaxLength")}? IDENTIFIER EQUAL INTEGER_LITERAL
    ;
 
 labelComment
-   : comment EQUAL STRING_LITERAL
+   : {TokenMatches("Comment")}? IDENTIFIER EQUAL STRING_LITERAL
    ;
 
 labelLocked
-   : locked EQUAL (TRUE | FALSE)
+   : {TokenMatches("Locked")}? IDENTIFIER EQUAL (TRUE | FALSE)
    ;
 
 labelArgument
