@@ -476,10 +476,13 @@ expression
    | LEFTBRACKET valueSet? RIGHTBRACKET #SetExpression
    | NOT expression #NotExpression
    | MINUS expression #NegativeExpression
-	| expression PERIOD IDENTIFIER LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
+   | expression PERIOD IDENTIFIER LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
    | IDENTIFIER LEFTPAREN methodCallArguments? RIGHTPAREN #FunctionCallExpression
    | expression PERIOD IDENTIFIER #MemberAccessExpression
-   | expression (ASTERISK | BACKSLASH | MOD) expression #DivideMultiplyExpression
+   | expression ASTERISK expression	# MultiplyExpression
+   | expression BACKSLASH expression # DivideExpression
+   | expression DIV expression # IntegerDivideExpression
+   | expression MOD expression # ModulusExpression
    | expression PLUS expression #AddExpression
    | expression MINUS expression #SubtractExpression
    | expression (LESSTHAN | GREATERTHAN | LESSTHANEQUAL | GREATERTHANEQUAL | NOTEQUAL | EQUAL) expression #ComparisonExpression
