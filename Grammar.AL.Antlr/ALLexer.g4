@@ -365,7 +365,7 @@ LETTER
  */
 
 PREPROCESSOR_DIRECTIVE
-   : '#' ~[\r\n]* '\r'? '\n';
+   : '#' ~[\r\n]* '\r'? '\n' -> channel(COMMENTS_CHANNEL);
 
 /*
  * fragments
