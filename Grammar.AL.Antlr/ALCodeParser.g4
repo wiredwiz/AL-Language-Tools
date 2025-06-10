@@ -104,6 +104,54 @@ options { tokenVocab=ALLexer; }
       }
 }
 
+/*
+ * Generic constructs
+ */
+
+namespaceIdentifier
+   : IDENTIFIER (PERIOD IDENTIFIER)*?
+   ;
+
+objectId
+   : simpleObjectId
+   | qualifiedObjectId;
+
+objectName
+   : IDENTIFIER
+   ;
+
+simpleObjectId
+   : IDENTIFIER
+   | INTEGER_LITERAL;
+
+qualifiedObjectId
+   : namespaceIdentifier PERIOD IDENTIFIER
+   ;
+
+objectLiteral
+   : (namespaceIdentifier PERIOD)? IDENTIFIER
+   ;
+
+enumerationLiteral
+   : objectLiteral SCOPE IDENTIFIER
+   ;
+
+databaseLiteral
+   : {TokenMatches("database")}? IDENTIFIER SCOPE (enumerationLiteral | objectLiteral)
+   ;
+
+booleanLiteral
+   : TRUE | FALSE
+   ;
+
+numberLiteral
+   : FLOAT_LITERAL | INTEGER_LITERAL
+   ;
+
+/*
+ * Property declarations
+ */
+
 keyValueProperty
    : IDENTIFIER EQUAL (STRING_LITERAL | INTEGER_LITERAL | FLOAT_LITERAL | IDENTIFIER | booleanLiteral) SEMICOLON
    ;
@@ -164,8 +212,11 @@ methodDeclaration
  * Method attributes
  */
 
+attributeIdentifier
+   : IDENTIFIER COLON;
+
 attributeArgument
-   : (IDENTIFIER COLON)? (STRING_LITERAL | INTEGER_LITERAL	| FLOAT_LITERAL | booleanLiteral);
+   : (attributeIdentifier)? (STRING_LITERAL | INTEGER_LITERAL	| FLOAT_LITERAL | booleanLiteral);
 
 attributeArgumentList
    : attributeArgument (COMMA attributeArgument)*?;
@@ -218,22 +269,6 @@ optionValue
 optionValueList
    : optionValue (COMMA optionValue)*?
    ;
-
-objectId
-   : simpleObjectId
-   | qualifiedObjectId
-   ;
-
-objectName
-   : IDENTIFIER;
-
-simpleObjectId
-   : IDENTIFIER
-   | INTEGER_LITERAL
-   ;
-
-qualifiedObjectId
-   : IDENTIFIER (PERIOD IDENTIFIER)*?;
 
 dimensions
    : INTEGER_LITERAL (COMMA INTEGER_LITERAL)*?
@@ -478,16 +513,24 @@ valueSet
    : expression (COMMA expression)*?;
 
 expression
-:
-   LEFTPAREN expression RIGHTPAREN #ParenthesisExpression
-   | expression SCOPE IDENTIFIER #ScopeExpression
+   : LEFTPAREN expression RIGHTPAREN # ParenthesisExpression
+   | booleanLiteral # BooleanLiteralExpression
+   | DATE_LITERAL # DateLiteralExpression
+   | TIME_LITERAL # TimeLiteralExpression
+   | DATETIME_LITERAL # DatetimeLiteralExpression
+   | STRING_LITERAL # StringLiteralExpression
+   | FLOAT_LITERAL # FloatLiteralExpression
+   | INTEGER_LITERAL	# IntegerLiteralExpression
+   | databaseLiteral # DatabaseLiteralExpression
+   | enumerationLiteral	# EnumerationLiteralExpression
+   | IDENTIFIER # IdentifierExpression
+   | expression PERIOD IDENTIFIER # MemberAccessExpression
    | expression LEFTBRACKET indexAccessorSet RIGHTBRACKET #IndexExpression
    | LEFTBRACKET valueSet? RIGHTBRACKET #SetExpression
    | NOT expression #NotExpression
    | MINUS expression #NegativeExpression
    | expression PERIOD IDENTIFIER LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
    | IDENTIFIER LEFTPAREN methodCallArguments? RIGHTPAREN #FunctionCallExpression
-   | expression PERIOD IDENTIFIER #MemberAccessExpression
    | expression ASTERISK expression	# MultiplyExpression
    | expression BACKSLASH expression # DivideExpression
    | expression DIV expression # IntegerDivideExpression
@@ -500,44 +543,18 @@ expression
    | expression (ASSGN | DIV_ASSGN | MULTIPLY_ASSGN | ADD_ASSGN | MINUS_ASSGN) expression #AssignmentExpression
    | expression IN LEFTBRACKET valueSet? RIGHTBRACKET #InRangeExpression
    | GUIALLOWED #GuiAllowedFunctionExpression
-   | booleanLiteral #BooleanLiteralExpression
-   | DATE_LITERAL #DateLiteralExpression
-   | TIME_LITERAL #TimeLiteralExpression
-   | DATETIME_LITERAL #DatetimeLiteralExpression
-   | IDENTIFIER #IdentifierExpression
-   | STRING_LITERAL #StringLiteralExpression
-   | FLOAT_LITERAL #FloatLiteralExpression
-   | INTEGER_LITERAL #IntegerLiteralExpression
-   | optionLiteral #OptionLiteralExpression
    ;
 
 methodCallArguments
    : expression (COMMA expression)*?
    ;
 
-optionLiteral
-   : IDENTIFIER SCOPE IDENTIFIER;
-
-booleanLiteral
-   : TRUE
-   | FALSE
-   ;
-
-numberLiteral
-   : FLOAT_LITERAL
-   | INTEGER_LITERAL
-   ;
-
 /*
 * Codeunit structure
 */
 
-namespaceIdentifier
-   : IDENTIFIER (PERIOD IDENTIFIER)*?
-   ;
-
 namespaceDeclaration
-   : {TokenMatches("namespace")}? namespaceIdentifier namespaceIdentifier SEMICOLON;
+   : {TokenMatches("namespace")}? IDENTIFIER namespaceIdentifier SEMICOLON;
 
 usingDeclaration
    : {TokenMatches("using")}? IDENTIFIER namespaceIdentifier SEMICOLON;
