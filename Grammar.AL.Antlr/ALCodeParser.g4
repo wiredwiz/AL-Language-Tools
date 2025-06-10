@@ -109,7 +109,7 @@ options { tokenVocab=ALLexer; }
  */
 
 namespaceIdentifier
-   : IDENTIFIER (PERIOD IDENTIFIER)*?
+   : IDENTIFIER (PERIOD IDENTIFIER)*
    ;
 
 objectId
@@ -157,7 +157,7 @@ keyValueProperty
    ;
 
 identifierList
-   : IDENTIFIER (COMMA IDENTIFIER)*?
+   : IDENTIFIER (COMMA IDENTIFIER)*
    ;
 
 keyIdentifierListProperty
@@ -169,7 +169,7 @@ permissionSpecifier
    ;
 
 permissionSpecifiers
-   : permissionSpecifier (COMMA permissionSpecifier)*?;
+   : permissionSpecifier (COMMA permissionSpecifier)*;
 
 permissionsProperty
    : {TokenMatches("permissions")}? IDENTIFIER EQUAL permissionSpecifiers SEMICOLON
@@ -299,14 +299,14 @@ parameterDeclaration
    ;
 
 parameterList
-   : parameterDeclaration (SEMICOLON parameterDeclaration)*?
+   : parameterDeclaration (SEMICOLON parameterDeclaration)*
    ;
 
 variableName
    : IDENTIFIER;
 
 variableNameList
-	: variableName (COMMA variableName)*?
+	: variableName (COMMA variableName)*
    ;
 
 variableDeclaration
@@ -314,7 +314,7 @@ variableDeclaration
    ;
 
 variableDeclarations
-   : variableDeclaration (variableDeclaration)*?
+   : variableDeclaration*
    ;
 
 varBlock
@@ -510,10 +510,10 @@ indexAccessorValue
    ;
 
 indexAccessorSet
-   : indexAccessorValue (COMMA indexAccessorValue)*?;
+   : indexAccessorValue (COMMA indexAccessorValue)*;
 
 valueSet
-   : expression (COMMA expression)*?;
+   : expression (COMMA expression)*;
 
 expression
    : LEFTPAREN expression RIGHTPAREN #ParenthesisExpression
@@ -526,6 +526,7 @@ expression
    | INTEGER_LITERAL	#IntegerLiteralExpression
    | databaseLiteral #DatabaseLiteralExpression
    | enumerationLiteral	#EnumerationLiteralExpression
+   | objectLiteral # ObjectLiteralExpression
    | IDENTIFIER #IdentifierExpression
    | expression PERIOD methodName LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
    | methodName LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
@@ -549,7 +550,7 @@ expression
    ;
 
 methodCallArguments
-   : expression (COMMA expression)*?
+   : expression (COMMA expression)*
    ;
 
 /*
@@ -563,7 +564,7 @@ usingDeclaration
    : {TokenMatches("using")}? IDENTIFIER namespaceIdentifier SEMICOLON;
 
 usingDeclarations
-   : usingDeclaration (usingDeclaration)*?;
+   : usingDeclaration*;
 
 codeunitProperty
    : {TokenMatches("Obsolete")}? IDENTIFIER EQUAL STRING_LITERAL SEMICOLON
@@ -575,7 +576,7 @@ codeunitProperty
    ;
 
 codeunitProperties
-   : codeunitProperty (codeunitProperty)*?;
+   : codeunitProperty*;
 
 codeunitDeclaration
    : namespaceDeclaration? usingDeclarations? {TokenMatches("CodeUnit")}? IDENTIFIER objectId? objectName LEFTCBRACE codeunitProperties? codeDeclarations? RIGHTCBRACE;
