@@ -205,6 +205,9 @@ builtinType
  * Method
  */
 
+methodName
+   : IDENTIFIER;
+
 methodDeclaration
    : methodAttribute*? LOCAL? PROCEDURE IDENTIFIER LEFTPAREN parameterList? RIGHTPAREN returnValue? varBlock? statementBlock SEMICOLON;
 
@@ -513,28 +516,28 @@ valueSet
    : expression (COMMA expression)*?;
 
 expression
-   : LEFTPAREN expression RIGHTPAREN # ParenthesisExpression
-   | booleanLiteral # BooleanLiteralExpression
-   | DATE_LITERAL # DateLiteralExpression
-   | TIME_LITERAL # TimeLiteralExpression
-   | DATETIME_LITERAL # DatetimeLiteralExpression
-   | STRING_LITERAL # StringLiteralExpression
-   | FLOAT_LITERAL # FloatLiteralExpression
-   | INTEGER_LITERAL	# IntegerLiteralExpression
-   | databaseLiteral # DatabaseLiteralExpression
-   | enumerationLiteral	# EnumerationLiteralExpression
-   | IDENTIFIER # IdentifierExpression
-   | expression PERIOD IDENTIFIER # MemberAccessExpression
+   : LEFTPAREN expression RIGHTPAREN #ParenthesisExpression
+   | booleanLiteral #BooleanLiteralExpression
+   | DATE_LITERAL #DateLiteralExpression
+   | TIME_LITERAL #TimeLiteralExpression
+   | DATETIME_LITERAL #DatetimeLiteralExpression
+   | STRING_LITERAL #StringLiteralExpression
+   | FLOAT_LITERAL #FloatLiteralExpression
+   | INTEGER_LITERAL	#IntegerLiteralExpression
+   | databaseLiteral #DatabaseLiteralExpression
+   | enumerationLiteral	#EnumerationLiteralExpression
+   | IDENTIFIER #IdentifierExpression
+   | expression PERIOD methodName LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
+   | methodName LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
+   | expression PERIOD IDENTIFIER #MemberAccessExpression
    | expression LEFTBRACKET indexAccessorSet RIGHTBRACKET #IndexExpression
    | LEFTBRACKET valueSet? RIGHTBRACKET #SetExpression
    | NOT expression #NotExpression
    | MINUS expression #NegativeExpression
-   | expression PERIOD IDENTIFIER LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
-   | IDENTIFIER LEFTPAREN methodCallArguments? RIGHTPAREN #FunctionCallExpression
-   | expression ASTERISK expression	# MultiplyExpression
-   | expression BACKSLASH expression # DivideExpression
-   | expression DIV expression # IntegerDivideExpression
-   | expression MOD expression # ModulusExpression
+   | expression ASTERISK expression	#MultiplyExpression
+   | expression BACKSLASH expression #DivideExpression
+   | expression DIV expression #IntegerDivideExpression
+   | expression MOD expression #ModulusExpression
    | expression PLUS expression #AddExpression
    | expression MINUS expression #SubtractExpression
    | expression (LESSTHAN | GREATERTHAN | LESSTHANEQUAL | GREATERTHANEQUAL | NOTEQUAL | EQUAL) expression #ComparisonExpression
