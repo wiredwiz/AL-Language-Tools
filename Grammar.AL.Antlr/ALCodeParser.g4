@@ -109,7 +109,11 @@ options { tokenVocab=ALLexer; }
  */
 
 namespaceIdentifier
-   : IDENTIFIER (PERIOD IDENTIFIER)*
+   : IDENTIFIER namespaceAccessor?
+   ;
+
+namespaceAccessor
+   : PERIOD IDENTIFIER namespaceAccessor?
    ;
 
 objectId
@@ -128,16 +132,32 @@ qualifiedObjectId
    : namespaceIdentifier PERIOD IDENTIFIER
    ;
 
-scopeLiteral
-   : IDENTIFIER SCOPE IDENTIFIER
-   ;
-
 booleanLiteral
-   : TRUE | FALSE
+   : TRUE
+   | FALSE
    ;
 
 numberLiteral
-   : FLOAT_LITERAL | INTEGER_LITERAL
+   : FLOAT_LITERAL
+   | INTEGER_LITERAL
+   ;
+
+objectLiteral
+   : (namespaceIdentifier PERIOD)? IDENTIFIER
+   ;
+
+enumerationLiteral
+   : objectLiteral SCOPE IDENTIFIER
+   ;
+
+databaseLiteral
+   : {TokenMatches("database")}? IDENTIFIER SCOPE (enumerationLiteral | objectLiteral)
+   ;
+
+// TODO: Add support for other root system literals like enum, table, page, etc.
+
+systemEnumerationLiteral
+   : databaseLiteral
    ;
 
 /*
@@ -211,7 +231,7 @@ attributeIdentifier
    : IDENTIFIER COLON;
 
 attributeArgument
-   : (attributeIdentifier)? (STRING_LITERAL | INTEGER_LITERAL	| FLOAT_LITERAL | booleanLiteral);
+   : (attributeIdentifier)? (STRING_LITERAL | INTEGER_LITERAL	| FLOAT_LITERAL | booleanLiteral | systemEnumerationLiteral | enumerationLiteral);
 
 attributeArgumentList
    : attributeArgument (COMMA attributeArgument)*?;
