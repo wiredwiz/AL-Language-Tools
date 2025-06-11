@@ -128,16 +128,8 @@ qualifiedObjectId
    : namespaceIdentifier PERIOD IDENTIFIER
    ;
 
-objectLiteral
-   : (namespaceIdentifier PERIOD)? IDENTIFIER
-   ;
-
-enumerationLiteral
-   : objectLiteral SCOPE IDENTIFIER
-   ;
-
-databaseLiteral
-   : {TokenMatches("database")}? IDENTIFIER SCOPE (enumerationLiteral | objectLiteral)
+scopeLiteral
+   : IDENTIFIER SCOPE IDENTIFIER
    ;
 
 booleanLiteral
@@ -524,12 +516,10 @@ expression
    | STRING_LITERAL #StringLiteralExpression
    | FLOAT_LITERAL #FloatLiteralExpression
    | INTEGER_LITERAL	#IntegerLiteralExpression
-   | databaseLiteral #DatabaseLiteralExpression
-   | enumerationLiteral	#EnumerationLiteralExpression
-   | objectLiteral # ObjectLiteralExpression
    | IDENTIFIER #IdentifierExpression
    | expression PERIOD methodName LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
    | methodName LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
+   | expression SCOPE IDENTIFIER # ScopeExpression
    | expression PERIOD IDENTIFIER #MemberAccessExpression
    | expression LEFTBRACKET indexAccessorSet RIGHTBRACKET #IndexExpression
    | LEFTBRACKET valueSet? RIGHTBRACKET #SetExpression
