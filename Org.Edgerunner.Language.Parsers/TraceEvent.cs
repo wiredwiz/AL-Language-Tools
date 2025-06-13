@@ -32,7 +32,6 @@ namespace Org.Edgerunner.Language.Parsers
    {
       Enter,
       Exit,
-      Consume,
-      Match
+      Consume
    }
 }

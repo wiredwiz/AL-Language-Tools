@@ -35,7 +35,7 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Terminals
    /// Implements the <see cref="TerminalNode{AlToken, AlSyntaxNodeType}" />
    /// </summary>
    /// <seealso cref="TerminalNode{AlToken, AlSyntaxNodeType}" />
-   public abstract class AlTerminalNode : AlParserRule
+   public abstract class AlTerminalNode : AlParserRule, ITerminalNode<AlToken, AlSyntaxNodeType>
    {
       /// <summary>
       /// Initializes a new instance of the <see cref="AlTerminalNode" /> class.
@@ -47,6 +47,7 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Terminals
       protected AlTerminalNode(AlSyntaxNodeType type, AlToken symbol, string name) : base(type, name)
       {
          Token = symbol;
+         Text = symbol.Value;
       }
 
       /// <summary>
@@ -60,11 +61,17 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Terminals
 
       /// <inheritdoc />
       public override AlToken End => Token;
-      
+
+      /// <summary>
+      /// Gets or sets the text.
+      /// </summary>
+      /// <value>The text.</value>
+      public string Text { get; set; }
+
       /// <inheritdoc />
       public override string GetText()
       {
-         return Token.Value;
+         return Text;
       }
    }
 }

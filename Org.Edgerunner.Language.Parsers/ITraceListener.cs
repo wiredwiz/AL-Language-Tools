@@ -23,7 +23,6 @@
 // THE SOFTWARE.
 #endregion
 
-using System.Runtime.InteropServices.JavaScript;
 using Org.Edgerunner.Language.Lexers;
 
 namespace Org.Edgerunner.Language.Parsers
@@ -36,16 +35,10 @@ namespace Org.Edgerunner.Language.Parsers
       /// <summary>
       /// Announces the traced parser event to all listeners.
       /// </summary>
-      /// <param name="rule">The parser rule.</param>
-      /// <param name="traceEvent">The parser event.</param>
-      void AnnounceTraceMessage<TToken, TType>(ParserRule<TToken, TType> rule, TraceEvent traceEvent) where TToken : IToken;
-
-      /// <summary>
-      /// Announces the traced parser event to all listeners.
-      /// </summary>
       /// <typeparam name="TToken">The type of the token.</typeparam>
       /// <param name="token">The token.</param>
+      /// <param name="ruleName">The parser rule name.</param>
       /// <param name="traceEvent">The parser event.</param>
-      void AnnounceTraceMessage<TToken>(TToken token, TraceEvent traceEvent) where TToken : IToken;
+      void AnnounceTraceMessage<TToken>(TToken token, string ruleName, TraceEvent traceEvent) where TToken : IToken;
    }
 }

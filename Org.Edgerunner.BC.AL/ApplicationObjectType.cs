@@ -1,6 +1,6 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "ReservedWords.cs">
-// Copyright(c) Thaddeus Ryker 2023
+// <copyright company = "Edgerunner.org" file = "ApplicationObjectType.cs">
+// Copyright(c)  2023
 // </copyright>
 // The MIT License (MIT)
 // 
@@ -23,32 +23,29 @@
 // THE SOFTWARE.
 #endregion
 
-
-namespace Org.Edgerunner.BC.AL.Language
+namespace Org.Edgerunner.BC.AL
 {
-   public enum ReservedWords
+   public enum ApplicationObjectType
    {
-      OF,
-      DOWNTO,
-      TO,
-      IF,
-      ELSE,
-      WHILE,
-      DO,
-      REPEAT,
-      UNTIL,
-      BEGIN,
-      END,
-      WITH,
-      FOR,
-      CASE,
-      MOD,
-      NOT,
-      AND,
-      OR,
-      EXIT,
-      TRUE,
-      FALSE,
-      GUIALLOWED
+      CODEUNIT,
+      PAGE,
+      PAGEEXTENSION,
+      PAGECUSTOMIZATION,
+      DOTNET,
+      ENUM,
+      ENUMEXTENSION,
+      VALUE,
+      QUERY,
+      REPORT,
+      TABLE,
+      TABLEEXTENSION,
+      XMLPORT,
+      PROFILE,
+      CONTROLADDIN,
+      REPORTEXTENSION,
+      INTERFACE,
+      PERMISSIONSET,
+      PERMISSIONSETEXTENSION,
+      ENTITLEMENT
    }
 }

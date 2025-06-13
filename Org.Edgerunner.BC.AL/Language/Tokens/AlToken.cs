@@ -46,6 +46,7 @@ namespace Org.Edgerunner.BC.AL.Language.Tokens
          EndingLine = end.LineNumber;
          StartingColumn = start.Column;
          EndingColumn = end.Column;
+         TokenType = 0;
       }
 
       /// <inheritdoc />
@@ -65,5 +66,41 @@ namespace Org.Edgerunner.BC.AL.Language.Tokens
 
       /// <inheritdoc />
       public virtual int EndingColumn { get; }
+
+      /// <summary>
+      /// Gets a value indicating whether this instance represents an operator.
+      /// </summary>
+      /// <value><c>true</c> if this instance represents an operator; otherwise, <c>false</c>.</value>
+      public virtual bool IsOperator
+      {
+         get => false;
+      }
+
+      /// <summary>
+      /// Gets a value indicating whether this instance represents an assignment operator.
+      /// </summary>
+      /// <value><c>true</c> if this instance represents an assignment operator; otherwise, <c>false</c>.</value>
+      public virtual bool IsAssignmentOperator
+      {
+         get => false;
+      }
+
+      /// <summary>
+      /// Gets a value indicating whether this instance represents an comparison operator.
+      /// </summary>
+      /// <value><c>true</c> if this instance represents an comparison operator; otherwise, <c>false</c>.</value>
+      public virtual bool IsComparisonOperator
+      {
+         get => false;
+      }
+
+      /// <summary>
+      /// Gets a value indicating whether this instance represents a binary operator.
+      /// </summary>
+      /// <value><c>true</c> if this instance represents a binary operator; otherwise, <c>false</c>.</value>
+      public virtual bool IsBinaryOperator
+      {
+         get => false;
+      }
    }
 }

@@ -25,6 +25,7 @@
 
 using Org.Edgerunner.BC.AL.Language.Tokens;
 using Org.Edgerunner.Buffers;
+using Org.Edgerunner.Common;
 using Org.Edgerunner.Pooling;
 
 namespace Org.Edgerunner.BC.AL.Language.Lexers
@@ -68,7 +69,12 @@ namespace Org.Edgerunner.BC.AL.Language.Lexers
             buffer.GetNextChar();
          }
 
-         return new IdentifierToken(text.ToString(), start, buffer.GetBufferPoint(-1), Enum.TryParse(text.ToString(), true, out ReservedWords _));
+         return new IdentifierToken(
+                                    text.ToString(), 
+                                    start, 
+                                    buffer.GetBufferPoint(-1), 
+                                    EnumCache<ReservedWord>.Contains(text.ToString().ToUpperInvariant()),
+                                    EnumCache<Keyword>.Contains(text.ToString().ToUpperInvariant()));
       }
    }
 }

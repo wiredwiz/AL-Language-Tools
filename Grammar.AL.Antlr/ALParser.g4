@@ -1,0 +1,18 @@
+parser grammar ALParser;
+
+options { tokenVocab=ALLexer; }
+
+import ALCodeParser, ALTableParser;
+
+compileUnit
+	: EOF
+   | statement EOF
+	;
+
+/*
+
+applicationObjectType
+   : CODEUNIT | PAGE | PAGEEXTENSION | PAGECUSTOMIZATION | DOTNET | ENUM | ENUMEXTENSION | VALUE | QUERY 
+   | REPORT | TABLE | TABLEEXTENSION | XMLPORT | PROFILE | CONTROLADDIN | REPORTEXTENSION | INTERFACE 
+   | PERMISSIONSET | PERMISSIONSETEXTENSION | ENTITLEMENT;
+ */

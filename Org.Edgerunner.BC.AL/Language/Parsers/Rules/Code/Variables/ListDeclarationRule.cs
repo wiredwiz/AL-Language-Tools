@@ -23,10 +23,6 @@
 // THE SOFTWARE.
 #endregion
 
-using Org.Edgerunner.BC.AL.Language.Parsers.Rules.Terminals;
-using Org.Edgerunner.BC.AL.Language.Tokens;
-using Org.Edgerunner.Language.Lexers;
-using Org.Edgerunner.Language.Parsers;
 using Org.Edgerunner.Pooling;
 
 namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Code.Variables
@@ -35,53 +31,6 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Code.Variables
    {
       public ListDeclarationRule() : base(AlSyntaxNodeType.ListDeclaration, "List Declaration Rule") {}
 
-      /// <summary>
-      /// Parses this rule from the token stream.
-      /// </summary>
-      /// <param name="tokens">The token stream.</param>
-      /// <param name="context">The parser context.</param>
-      /// <param name="parentRule">The parent rule to link to.</param>
-      /// <returns><c>true</c> if parsing was successful, <c>false</c> otherwise.</returns>
-      public virtual bool Parse(TokenStream<AlToken> tokens, AlParser context, AlParserRule parentRule)
-      {
-         try
-         {
-            Enter(context);
-            var token = tokens.Current;
-            parentRule.AddChildNode(this);
-
-            new IdentifierRule(token).Parse(tokens, context, this, "List");
-            Match(context);
-            if (!tokens.TryMoveNext(ref token))
-               return false;
-
-            // Look for identifier
-            var parsed = true;
-            if (!ProcessRuleAndAdvance(new IdentifierRule(token!).Parse(tokens, context, this, "of"), tokens,
-                                       ref token!, ref parsed))
-               return false;
-
-            // look for bracket
-            if (!ProcessRuleAndAdvance(new SymbolRule(token!).Parse(tokens, context, this, "["), tokens,
-                                       ref token!, ref parsed))
-               return false;
-
-            // Now parse our array sub type declaration
-            if (!ProcessRuleAndAdvance(new VariableTypeDeclarationRule().Parse(tokens, context, this), tokens, 
-                                       ref token!, ref parsed))
-               return false;
-
-            // look for bracket
-            if (!new SymbolRule(token!).Parse(tokens, context, this, "]"))
-               parsed = false;
-
-            return parsed;
-         }
-         finally
-         {
-            Exit(context);
-         }
-      }
       public override string GetText()
       {
          var builder = StringBuilderPool.Current.Get();

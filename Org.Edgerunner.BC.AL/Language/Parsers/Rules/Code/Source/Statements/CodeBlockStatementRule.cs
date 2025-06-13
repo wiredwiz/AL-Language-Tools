@@ -1,6 +1,6 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "TraceAttribute.cs">
-// Copyright(c) Thaddeus Ryker 2023
+// <copyright company = "Edgerunner.org" file = "CodeBlockStatementRule.cs">
+// Copyright(c)  2023
 // </copyright>
 // The MIT License (MIT)
 // 
@@ -23,37 +23,13 @@
 // THE SOFTWARE.
 #endregion
 
-using System.Diagnostics;
-using Metalama.Framework.Aspects;
-using Org.Edgerunner.BC.AL.Language.Parsers;
-using Org.Edgerunner.BC.AL.Language.Parsers.Rules;
 using Org.Edgerunner.BC.AL.Language.Tokens;
-using Org.Edgerunner.Language.Parsers;
+using Org.Edgerunner.Language.Lexers;
 
-namespace Org.Edgerunner.BC.AL.Language.Aspects
+namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Code.Source.Statements
 {
-   public class TraceAttribute : OverrideMethodAspect
+   public class CodeBlockStatementRule : AlParserRule
    {
-      public override dynamic? OverrideMethod()
-      {
-         if (meta.This is not ParserRule<AlToken, AlSyntaxNodeType> rule)
-            return meta.Proceed();
-
-         if (meta.Target.Parameters.Count < 2 || meta.Target.Parameters[1].Value is not AlParser parser)
-            return meta.Proceed();
-
-         if (!parser.EnableTracing)
-            return meta.Proceed();
-
-         try
-         {
-            parser.GenerateTraceEvent(rule, TraceEvent.Enter);
-            return meta.Proceed();
-         }
-         finally
-         {
-            parser.GenerateTraceEvent(rule, TraceEvent.Exit);
-         }
-      }
+      public CodeBlockStatementRule() : base(AlSyntaxNodeType.CodeBlockStatement, "Code Block Statement") {}
    }
 }

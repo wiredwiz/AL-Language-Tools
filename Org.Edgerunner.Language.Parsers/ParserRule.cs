@@ -58,6 +58,7 @@ namespace Org.Edgerunner.Language.Parsers
       /// <inheritdoc />
       public virtual IList<ITree> Children { get; } = new List<ITree>();
 
+      /// <inheritdoc />
       public string Name { get; }
 
       /// <inheritdoc />
@@ -100,7 +101,17 @@ namespace Org.Edgerunner.Language.Parsers
          }
       }
 
+      /// <inheritdoc />
       public TType Type { get; }
+
+      /// <inheritdoc />
+      public virtual bool IsError => false;
+
+      /// <summary>
+      /// Gets a value indicating whether this syntax node or any of its children is an error.
+      /// </summary>
+      /// <value><c>true</c> if this node contains errors; otherwise, <c>false</c>.</value>
+      public virtual bool HasErrors { get; } = false;
 
       /// <inheritdoc />
       public virtual string GetText()
@@ -118,44 +129,6 @@ namespace Org.Edgerunner.Language.Parsers
                return text.ToString();
             }
          }
-      }
-
-      /// <summary>
-      /// Generates a parser rule Enter event for this rule.
-      /// </summary>
-      /// <param name="parser">The parser.</param>
-      public virtual void Enter(IParser<TToken, TType> parser)
-      {
-         if (parser.EnableTracing) parser.GenerateTraceEvent(this, TraceEvent.Enter);
-      }
-
-      /// <summary>
-      /// Generates a parser rule Exit event for this rule.
-      /// </summary>
-      /// <param name="parser">The parser.</param>
-      /// <returns>The passed in value.</returns>
-      public virtual void Exit(IParser<TToken, TType> parser)
-      {
-         if (parser.EnableTracing) parser.GenerateTraceEvent(this, TraceEvent.Exit);
-      }
-
-      /// <summary>
-      /// Generates a parser rule Match event for this rule.
-      /// </summary>
-      /// <param name="parser">The parser.</param>
-      public virtual void Match(IParser<TToken, TType> parser)
-      {
-         if (parser.EnableTracing) parser.GenerateTraceEvent(this, TraceEvent.Match);
-      }
-
-      /// <summary>
-      /// Generates a parser rule Consume event for the specified token.
-      /// </summary>
-      /// <param name="parser">The parser.</param>
-      /// <param name="token">The consumed token.</param>
-      public virtual void Consume(IParser<TToken, TType> parser, TToken token)
-      {
-         if (parser.EnableTracing) parser.GenerateTraceEvent(token, TraceEvent.Consume);
       }
 
       /// <inheritdoc />

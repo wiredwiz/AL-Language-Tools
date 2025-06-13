@@ -25,8 +25,6 @@
 
 #endregion
 
-using Org.Edgerunner.BC.AL.Language.Parsers.Rules.Generators;
-using Org.Edgerunner.BC.AL.Language.Parsers.Rules.Terminals;
 using Org.Edgerunner.BC.AL.Language.Tokens;
 using Org.Edgerunner.Language.Lexers;
 using Org.Edgerunner.Language.Parsers;
@@ -47,12 +45,15 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules
       /// <param name="type">The rule type.</param>
       /// <param name="name">The rule name.</param>
       /// <remarks>This overload assumes that the start and end positions are both the same symbol token.</remarks>
-      protected AlParserRule(AlSyntaxNodeType type, string name) : base(type, name) { }
+      protected AlParserRule(AlSyntaxNodeType type, string name) : base(type, name) {}
 
       protected delegate bool ParserHandler(TokenStream<AlToken> tokens,
                                             IParser<AlToken, AlSyntaxNodeType> context,
                                             ParserRule<AlToken, AlSyntaxNodeType> rule);
 
+
+
+      /// <inheritdoc />
       public override string GetText()
       {
          switch (Children.Count)
@@ -87,88 +88,40 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules
          }
       }
 
-      /// <summary>
-      /// Parses a repeating expression with a symbol delimiter.
-      /// </summary>
-      /// <param name="tokens">The token stream.</param>
-      /// <param name="context">The parser context.</param>
-      /// <param name="parentRule">The parent parser rule.</param>
-      /// <param name="delimiter">The delimiter symbol.</param>
-      /// <param name="terminator">The terminator symbol.</param>
-      /// <param name="generator">The parser rule generator.</param>
-      /// <returns><c>true</c> if parsing succeeds, <c>false</c> otherwise.</returns>
-      // ReSharper disable once TooManyArguments
-      protected virtual bool ParseRepeatingDelimitedExpression(
-         TokenStream<AlToken> tokens,
-         AlParser context,
-         AlParserRule parentRule,
-         string delimiter,
-         string terminator,
-         IRuleGenerator generator)
+      /// <inheritdoc />
+      public override bool HasErrors
       {
-         var token = tokens.Current;
-         bool success = true;
-
-         if (token.TokenType == (int)TokenType.Symbol && terminator == token.Value)
-            return true;
-
-         while (token!.TokenType != (int)TokenType.Symbol || terminator != token.Value)
+         get
          {
-            // Look for delimiter token
-            var parses = new SymbolRule(token).Parse(tokens, context, this, delimiter);
-            success = success && parses;
-            if (parses && !tokens.TryMoveNext(ref token)) return false;
+            if (IsError) return true;
 
-            // Now parse the expression
-            parses = generator.Parses(tokens, context, parentRule);
-            success = success && parses;
-            if (parses && !tokens.TryMoveNext(ref token)) return false;
-
-            // If both parsing attempts failed, we move ahead one to prevent infinite looping
-            if (!success)
-               if (tokens.TryMoveNext(ref token))
-                  context.GenerateTraceEvent(tokens.Previous()!, TraceEvent.Consume);
-               else
+            switch (Children.Count)
+            {
+               case 0:
                   return false;
+               case 1:
+                  return ((AlParserRule)Children[0]).IsError;
+               default:
+               {
+                  foreach (var child in Children)
+                     if (((AlParserRule)child).IsError)
+                        return true;
+
+                  return false;
+               }
+            }
          }
-
-         tokens.TryMovePrevious(ref token);
-
-         return success;
       }
 
-      // ReSharper disable once FlagArgument
-      protected virtual bool ProcessRuleAndAdvance(bool ruleResult, TokenStream<AlToken> tokens, ref AlToken token, ref bool parsed)
+      /// <inheritdoc />
+      public override bool IsError
       {
-         if (ruleResult)
+         get
          {
-            if (!tokens.TryMoveNext(ref token!))
-               return false;
-         }
-         else
-            parsed = false;
+            if (Children.Count == 0)
+               return base.IsError;
 
-         return true;
-      }
-
-      protected void ScanForTokenRegisteringErrors(TokenStream<AlToken> tokens, AlParser context, AlParserRule parentRule, TokenType type, string value)
-      {
-         if (tokens.EndOfStream())
-            return;
-
-         if (tokens.Current.TokenType == (int)type &&
-             tokens.Current.Value.ToLowerInvariant() == value.ToLowerInvariant())
-            return;
-
-         var start = tokens.Current;
-
-         // ReSharper disable once ComplexConditionExpression
-         while (!tokens.EndOfStream() &&
-                (tokens.Current.TokenType != (int)type || tokens.Current.Value.ToLowerInvariant() != value.ToLowerInvariant()))
-         {
-            parentRule.AddChildNode(new ErrorNode("Unexpected token", tokens.Current));
-            context.GenerateParserError(start, tokens.Current, "Unexpected token");
-            tokens.MoveNext();
+            return ((AlParserRule)Children[^1]).IsError;
          }
       }
    }

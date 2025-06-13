@@ -200,6 +200,15 @@ namespace Org.Edgerunner.Language.Lexers
       }
 
       /// <summary>
+      /// Determines whether this token stream is empty.
+      /// </summary>
+      /// <returns><c>true</c> if the token stream is empty; otherwise, <c>false</c>.</returns>
+      public virtual bool IsEmpty()
+      {
+         return EndOfStream() && BeginningOfStream();
+      }
+
+      /// <summary>
       /// Returns an enumerator that iterates through the collection.
       /// </summary>
       /// <returns>An enumerator that can be used to iterate through the collection.</returns>

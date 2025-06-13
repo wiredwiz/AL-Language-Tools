@@ -50,6 +50,9 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Terminals
       protected string ErrorText;
 
       /// <inheritdoc />
+      public override bool IsError => true;
+
+      /// <inheritdoc />
       public override string ToString()
       {
          return ErrorText;

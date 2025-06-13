@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "IAssembled.cs">
+// <copyright company = "Edgerunner.org" file = "StatementRule.cs">
 // Copyright(c)  2023
 // </copyright>
 // The MIT License (MIT)
@@ -26,17 +26,13 @@
 using Org.Edgerunner.BC.AL.Language.Tokens;
 using Org.Edgerunner.Language.Lexers;
 
-namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules
+namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Code.Source.Statements
 {
-   public interface IAssembled
+   public class StatementRule : AlParserRule
    {
       /// <summary>
-      /// Attempts to assemble this rule from the token stream using another existing rule.
+      /// Initializes a new instance of the <see cref="StatementRule"/> class.
       /// </summary>
-      /// <param name="tokens">The token stream to read.</param>
-      /// <param name="context">The AL parser.</param>
-      /// <param name="rule">The existing rule to assemble with.</param>
-      /// <returns><c>true</c> if parsing and assembly was successful, <c>false</c> otherwise.</returns>
-      bool AssembleFrom(TokenStream<AlToken> tokens, AlParser context, AlParserRule rule);
+      public StatementRule() : base(AlSyntaxNodeType.Statement, "Statement Rule") {}
    }
 }

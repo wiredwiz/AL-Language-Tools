@@ -42,10 +42,12 @@ namespace Org.Edgerunner.BC.AL.Language.Tokens
       /// <param name="value">The token value.</param>
       /// <param name="start">The token start.</param>
       /// <param name="end">The token end.</param>
-      /// <param name="reservedWord">The reserved word corresponding to the token if there is one.</param>
-      public IdentifierToken(string value, BufferPoint start, BufferPoint end, bool reservedWord = false) : base(value, start, end)
+      /// <param name="isReservedWord">if set to <c>true</c> is a reserved word.</param>
+      /// <param name="isKeyword">if set to <c>true</c> is a keyword.</param>
+      public IdentifierToken(string value, BufferPoint start, BufferPoint end, bool isReservedWord = false, bool isKeyword = false) : base(value, start, end)
       {
-         ReservedWord = reservedWord;
+         IsReservedWord = isReservedWord;
+         IsKeyword = isKeyword;
       }
 
       /// <inheritdoc/>
@@ -55,6 +57,25 @@ namespace Org.Edgerunner.BC.AL.Language.Tokens
       /// Gets a value indicating whether token is a reserved word.
       /// </summary>
       /// <value><c>true</c> if a reserved word; otherwise, <c>false</c>.</value>
-      public bool ReservedWord { get; }
+      public bool IsReservedWord { get; }
+
+      /// <summary>
+      /// Gets a value indicating whether token is a keyword.
+      /// </summary>
+      /// <value><c>true</c> if a keyword; otherwise, <c>false</c>.</value>
+      public bool IsKeyword { get; }
+
+      /// <summary>
+      /// Gets a value indicating whether this instance represents an operator.
+      /// </summary>
+      /// <value><c>true</c> if this instance represents an operator; otherwise, <c>false</c>.</value>
+      public override bool IsOperator => IsBinaryOperator ||
+                                         string.Equals(Value, "NOT", StringComparison.InvariantCultureIgnoreCase) ;
+
+      /// <summary>
+      /// Gets a value indicating whether this instance represents a binary operator.
+      /// </summary>
+      /// <value><c>true</c> if this instance represents a binary operator; otherwise, <c>false</c>.</value>
+      public override bool IsBinaryOperator => Value.ToUpperInvariant() is "DIV" or "MOD" or "AND" or "OR" or "XOR" or "IN";
    }
 }

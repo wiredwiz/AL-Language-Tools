@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "OptionValuesGenerator.cs">
+// <copyright company = "Edgerunner.org" file = "IndexedExpressionRule.cs">
 // Copyright(c)  2023
 // </copyright>
 // The MIT License (MIT)
@@ -23,33 +23,19 @@
 // THE SOFTWARE.
 #endregion
 
+using Org.Edgerunner.BC.AL.Language.Parsers.Rules.Generators;
 using Org.Edgerunner.BC.AL.Language.Parsers.Rules.Terminals;
 using Org.Edgerunner.BC.AL.Language.Tokens;
 using Org.Edgerunner.Language.Lexers;
 
-namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Generators
+namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Code.Source.Expressions
 {
-   /// <summary>
-   /// Class that represents a generator for instances of option values.
-   /// Implements the <see cref="Org.Edgerunner.BC.AL.Language.Parsers.Rules.Generators.IRuleGenerator" />.
-   /// </summary>
-   /// <seealso cref="Org.Edgerunner.BC.AL.Language.Parsers.Rules.Generators.IRuleGenerator" />
-   /// <seealso cref="IdentifierRule"/>
-   public class OptionValueGenerator : IRuleGenerator
+   public class IndexedExpressionRule : AlParserRule
    {
-      public bool Parses(TokenStream<AlToken> tokens, AlParser context, AlParserRule parentRule)
-      {
-         var token = tokens.Current;
-         var tokenValidates = Validator.ValidateToken(
-                                                      token, 
-                                                      context, 
-                                                      parentRule, 
-                                                      TokenType.Identifier, 
-                                                      string.Format(Resources.ExpectedOptionValue, token.Value));
-         if (tokenValidates)
-            return new IdentifierRule(token).Parse(tokens, context, parentRule);
-
-         return false;
-      }
+      /// <summary>
+      /// Initializes a new instance of the <see cref="IndexedExpressionRule"/> class.
+      /// </summary>
+      /// <remarks>This overload assumes that the start and end positions are both the same symbol token.</remarks>
+      public IndexedExpressionRule() : base(AlSyntaxNodeType.IndexedExpression, "Indexed Expression Rule") {}
    }
 }

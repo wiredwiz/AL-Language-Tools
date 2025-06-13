@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "RootRule.cs">
+// <copyright company = "Edgerunner.org" file = "SetExpressionRule.cs">
 // Copyright(c) Thaddeus Ryker 2023
 // </copyright>
 // The MIT License (MIT)
@@ -23,14 +23,13 @@
 // THE SOFTWARE.
 #endregion
 
-namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules
+namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Code.Source.Expressions
 {
-   public class RootRule : AlParserRule
+   public class SetExpressionRule: AlParserRule
    {
       /// <summary>
-      /// Initializes a new instance of the <see cref="RootRule"/> class.
+      /// Initializes a new instance of the <see cref="SetExpressionRule"/> class.
       /// </summary>
-      /// <remarks>This overload assumes that the start and end positions are both the same symbol token.</remarks>
-      public RootRule() : base(AlSyntaxNodeType.Root, "Root Rule") {}
+      public SetExpressionRule() : base(AlSyntaxNodeType.SetExpression, "Set Expression Rule") {}
    }
 }

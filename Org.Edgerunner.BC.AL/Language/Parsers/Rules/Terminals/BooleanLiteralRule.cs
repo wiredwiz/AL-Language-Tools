@@ -37,35 +37,5 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Terminals
    public class BooleanLiteralRule : AlTerminalNode
    {
       public BooleanLiteralRule(AlToken symbol) : base(AlSyntaxNodeType.Boolean, symbol, "Boolean Literal") {}
-
-      /// <summary>
-      /// Parses this rule from the token stream.
-      /// </summary>
-      /// <param name="tokens">The token stream.</param>
-      /// <param name="context">The parser context.</param>
-      /// <param name="parentRule">The parent rule to link to.</param>
-      /// <returns><c>true</c> if parsing was successful, <c>false</c> otherwise.</returns>
-      public virtual bool Parse(TokenStream<AlToken> tokens, AlParser context, AlParserRule parentRule)
-      {
-         try
-         {
-            Enter(context);
-            var token = tokens.Current;
-            var message = string.Format(Resources.ExpectedBoolean, token.Value);
-            var tokenValidates = Validator.ValidateToken(token, context, parentRule, LiteralType.Boolean, message);
-            if (tokenValidates)
-            {
-               context.GenerateTraceEvent(token, TraceEvent.Consume);
-               parentRule.AddChildNode(this);
-               context.GenerateTraceEvent(this, TraceEvent.Match);
-            }
-
-            return tokenValidates;
-         }
-         finally
-         {
-            Exit(context);
-         }
-      }
    }
 }

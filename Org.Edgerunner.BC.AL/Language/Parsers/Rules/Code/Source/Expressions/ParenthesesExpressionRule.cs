@@ -25,8 +25,8 @@
 
 namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Code.Source.Expressions
 {
-   public class ParenthesesExpressionRule
+   public class ParenthesesExpressionRule : AlParserRule
    {
-      
+      public ParenthesesExpressionRule() : base(AlSyntaxNodeType.ParenthesesExpression, "Parentheses Expression Rule") {}
    }
 }

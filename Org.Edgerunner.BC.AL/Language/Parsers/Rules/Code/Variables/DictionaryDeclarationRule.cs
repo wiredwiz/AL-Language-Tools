@@ -23,9 +23,6 @@
 // THE SOFTWARE.
 #endregion
 
-using Org.Edgerunner.BC.AL.Language.Parsers.Rules.Terminals;
-using Org.Edgerunner.BC.AL.Language.Tokens;
-using Org.Edgerunner.Language.Lexers;
 using Org.Edgerunner.Pooling;
 
 namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Code.Variables
@@ -33,60 +30,6 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Code.Variables
    public class DictionaryDeclarationRule : AlParserRule
    {
       public DictionaryDeclarationRule() : base(AlSyntaxNodeType.DictionaryDeclaration, "Dictionary Declaration Rule") {}
-
-      /// <summary>
-      /// Parses this rule from the token stream.
-      /// </summary>
-      /// <param name="tokens">The token stream.</param>
-      /// <param name="context">The parser context.</param>
-      /// <param name="parentRule">The parent rule to link to.</param>
-      /// <returns><c>true</c> if parsing was successful, <c>false</c> otherwise.</returns>
-      public virtual bool Parse(TokenStream<AlToken> tokens, AlParser context, AlParserRule parentRule)
-      {
-         try
-         {
-            Enter(context);
-            var token = tokens.Current;
-            parentRule.AddChildNode(this);
-
-            new IdentifierRule(token).Parse(tokens, context, this, "Dictionary");
-            Match(context);
-            if (!tokens.TryMoveNext(ref token))
-               return false;
-
-            var parsed = true;
-
-            // Look for identifier
-            if (!ProcessRuleAndAdvance(new IdentifierRule(token!).Parse(tokens, context, this, "of"), tokens, ref token!, ref parsed))
-               return false;
-
-            // look for bracket
-            if (!ProcessRuleAndAdvance(new SymbolRule(token).Parse(tokens, context, this, "["), tokens, ref token, ref parsed))
-               return false;
-
-            // Now parse our dictionary key type declaration
-            if (!ProcessRuleAndAdvance(new VariableTypeDeclarationRule().Parse(tokens, context, this), tokens, ref token, ref parsed))
-               return false;
-
-            // look for comma
-            if (!ProcessRuleAndAdvance(new SymbolRule(token).Parse(tokens, context, this, ","), tokens, ref token, ref parsed))
-               return false;
-
-            // Now parse our dictionary value type declaration
-            if (!ProcessRuleAndAdvance(new VariableTypeDeclarationRule().Parse(tokens, context, this), tokens, ref token, ref parsed))
-               return false;
-
-            // look for bracket
-            if (!new SymbolRule(token).Parse(tokens, context, this, "]"))
-               parsed = false;
-
-            return parsed;
-         }
-         finally
-         {
-            Exit(context);
-         }
-      }
 
       public override string GetText()
       {

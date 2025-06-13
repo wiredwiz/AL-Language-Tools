@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "IntegerRuleGenerator.cs">
+// <copyright company = "Edgerunner.org" file = "TextEditorColorPalette.cs">
 // Copyright(c)  2023
 // </copyright>
 // The MIT License (MIT)
@@ -23,23 +23,29 @@
 // THE SOFTWARE.
 #endregion
 
-using Org.Edgerunner.BC.AL.Language.Parsers.Rules.Terminals;
-using Org.Edgerunner.BC.AL.Language.Tokens;
-using Org.Edgerunner.Language.Lexers;
+using FastColoredTextBoxNS.Types;
 
-namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Generators
+namespace ALParser.Demo
 {
    /// <summary>
-   /// Class that represents a generator for instances of integer literals.
-   /// Implements the <see cref="Org.Edgerunner.BC.AL.Language.Parsers.Rules.Generators.IRuleGenerator" />.
+   /// Interface that defines a text editor color mapping palette
    /// </summary>
-   /// <seealso cref="Org.Edgerunner.BC.AL.Language.Parsers.Rules.Generators.IRuleGenerator" />
-   /// <seealso cref="IntegerLiteralRule"/>
-   public class IntegerRuleGenerator : IRuleGenerator
+   public interface ITextEditorColorStyle
    {
-      public bool Parses(TokenStream<AlToken> tokens, AlParser context, AlParserRule parentRule)
-      {
-         return new IntegerLiteralRule(tokens.Current).Parse(tokens, context, parentRule);
-      }
+      Style Default { get; }
+      Style QuotedIdentifiers { get; }
+      Style NumberLiterals { get; }
+      Style StringLiterals { get; }
+      Style OtherLiterals { get; }
+      Style Names { get; }
+      Style Identifiers { get; }
+      Style Keywords { get; }
+      Style StatementKeywords { get; }
+      Style Symbols { get; }
+      Style Operators { get; }
+      Style ComparisonOperators { get; }
+      Style AssignmentOperators { get; }
+      Style BinaryOperators { get; }
+      Style Error { get; }
    }
 }

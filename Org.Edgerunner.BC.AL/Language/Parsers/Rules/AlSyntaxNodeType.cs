@@ -24,12 +24,14 @@
 #endregion
 
 
+using Metalama.Framework.Aspects;
+
 namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules
 {
+   [RunTimeOrCompileTime]
    public enum AlSyntaxNodeType
    {
       Error,
-      Root,
       Integer,
       Decimal,
       Symbol,
@@ -57,7 +59,8 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules
       BinaryExpression,
       MemberAccessExpression,
       ParenthesesExpression,
-      BracketedExpression,
+      SetExpression,
+      IndexedExpression,
       RangeExpression
    }
 }

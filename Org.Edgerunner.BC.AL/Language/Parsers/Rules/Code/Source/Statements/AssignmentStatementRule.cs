@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "ParserState.cs">
+// <copyright company = "Edgerunner.org" file = "AssignmentStatementRule.cs">
 // Copyright(c) Thaddeus Ryker 2023
 // </copyright>
 // The MIT License (MIT)
@@ -23,26 +23,10 @@
 // THE SOFTWARE.
 #endregion
 
-using Org.Edgerunner.Language.Lexers;
-
-namespace Org.Edgerunner.Language.Parsers
+namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Code.Source.Statements
 {
-   /// <summary>
-   /// Class representing the current parser context.
-   /// </summary>
-   public class ParserContext<TToken, TType>
-   where TToken : IToken
+   public class AssignmentStatementRule
    {
-      /// <summary>
-      /// Gets or sets the parser state.
-      /// </summary>
-      /// <value>The state.</value>
-      public virtual int State { get; set; }
-
-      /// <summary>
-      /// Gets a value indicating whether this instance has errors.
-      /// </summary>
-      /// <value><c>true</c> if this instance has errors; otherwise, <c>false</c>.</value>
-      public virtual bool HasErrors { get; protected set; } = false;
+      
    }
 }

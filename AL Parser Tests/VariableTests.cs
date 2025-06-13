@@ -32,8 +32,7 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Tests
 
          // And finally parsing the text declaration tokens
          var parser = new AlParser();
-         var root = new RootRule();
-         new VariableDeclarationRule().Parse(stream, parser, root);
+         var root = parser.ParseVariableDeclaration(stream);
 
          // results in the expected parse tree
          parser.State.Should().Be(0);
@@ -61,8 +60,7 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Tests
 
          // And finally parsing the option declaration tokens
          var parser = new AlParser();
-         var root = new RootRule();
-         new VariableDeclarationRule().Parse(stream, parser, root);
+         var root = parser.ParseVariableDeclaration(stream);
 
          // results in the expected parse tree
          parser.State.Should().Be(0);
@@ -92,8 +90,7 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Tests
 
          // And finally parsing the record declaration tokens
          var parser = new AlParser();
-         var root = new RootRule();
-         new VariableDeclarationRule().Parse(stream, parser, root);
+         var root = parser.ParseVariableDeclaration(stream);
 
          // results in the expected parse tree
          parser.State.Should().Be(0);
@@ -126,8 +123,7 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Tests
 
          // And finally parsing the record declaration tokens
          var parser = new AlParser();
-         var root = new RootRule();
-         new VariableDeclarationRule().Parse(stream, parser, root);
+         var root = parser.ParseVariableDeclaration(stream);
 
          // results in the expected parse tree
          parser.State.Should().Be(0);
@@ -156,8 +152,7 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Tests
 
          // And finally parsing the option declaration tokens
          var parser = new AlParser();
-         var root = new RootRule();
-         new VariableDeclarationRule().Parse(stream, parser, root);
+         var root = parser.ParseVariableDeclaration(stream);
 
          // results in the expected parse tree
          parser.State.Should().Be(0);
@@ -186,8 +181,7 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Tests
 
          // And finally parsing the option declaration tokens
          var parser = new AlParser();
-         var root = new RootRule();
-         new VariableDeclarationRule().Parse(stream, parser, root);
+         var root = parser.ParseVariableDeclaration(stream);
 
          // results in the expected parse tree
          parser.State.Should().Be(0);
@@ -216,8 +210,7 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Tests
 
          // And finally parsing the option declaration tokens
          var parser = new AlParser();
-         var root = new RootRule();
-         new VariableDeclarationRule().Parse(stream, parser, root);
+         var root = parser.ParseVariableDeclaration(stream);
 
          // results in the expected parse tree
          parser.State.Should().Be(0);

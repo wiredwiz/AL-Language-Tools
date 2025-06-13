@@ -48,5 +48,41 @@ namespace Org.Edgerunner.BC.AL.Language.Tokens
 
       /// <inheritdoc/>
       public override int TokenType => (int)Tokens.TokenType.Symbol;
+
+      /// <summary>
+      /// Gets a value indicating whether this instance represents an operator.
+      /// </summary>
+      /// <value><c>true</c> if this instance represents an operator; otherwise, <c>false</c>.</value>
+      public override bool IsOperator
+      {
+         get => Value is "+" or "-" or "*" or "/" or "<>" or "=" or "<" or ">" or "<=" or ">=" or "+=" or "-=" or ":=" or ".." or "::" or ".";
+      }
+
+      /// <summary>
+      /// Gets a value indicating whether this instance represents an assignment operator.
+      /// </summary>
+      /// <value><c>true</c> if this instance represents an assignment operator; otherwise, <c>false</c>.</value>
+      public override bool IsAssignmentOperator
+      {
+         get => Value is ":=" or "+=" or "-=" or "*=" or "/=";
+      }
+
+      /// <summary>
+      /// Gets a value indicating whether this instance represents an comparison operator.
+      /// </summary>
+      /// <value><c>true</c> if this instance represents an comparison operator; otherwise, <c>false</c>.</value>
+      public override bool IsComparisonOperator
+      {
+         get => Value is "<>" or "=" or "<" or ">" or "<=" or ">=";
+      }
+
+      /// <summary>
+      /// Gets a value indicating whether this instance represents a binary operator.
+      /// </summary>
+      /// <value><c>true</c> if this instance represents a binary operator; otherwise, <c>false</c>.</value>
+      public override bool IsBinaryOperator
+      {
+         get => Value is "+" or "-" or "*" or "/" or ".." or "<>" or "=" or "<" or ">" or "<=" or ">=";
+      }
    }
 }

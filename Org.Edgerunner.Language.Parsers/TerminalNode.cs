@@ -34,7 +34,7 @@ namespace Org.Edgerunner.Language.Parsers
    /// <typeparam name="TToken">The type of the t token.</typeparam>
    /// <typeparam name="TType">The type of the t type.</typeparam>
    /// <seealso cref="Org.Edgerunner.Language.Parsers.ParserRule{TToken, TType}" />
-   public abstract class TerminalNode<TToken, TType> : ParserRule<TToken, TType>
+   public abstract class TerminalNode<TToken, TType> : ParserRule<TToken, TType>, ITerminalNode<TToken, TType>
    where TToken : IToken
    {
       /// <summary>
@@ -66,5 +66,8 @@ namespace Org.Edgerunner.Language.Parsers
       {
          return Token.Value;
       }
+
+      /// <inheritdoc />
+      public bool IsError { get; protected set; }
    }
 }

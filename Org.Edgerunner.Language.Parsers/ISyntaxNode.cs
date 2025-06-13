@@ -54,6 +54,18 @@ namespace Org.Edgerunner.Language.Parsers
       TType Type { get; }
 
       /// <summary>
+      /// Gets the node name.
+      /// </summary>
+      /// <value>The node name.</value>
+      string Name { get; }
+
+      /// <summary>
+      /// Gets a value indicating whether this syntax node is indicating an error.
+      /// </summary>
+      /// <value><c>true</c> if this node indicates an error; otherwise, <c>false</c>.</value>
+      public bool IsError { get; }
+
+      /// <summary>
       /// Gets the text that represents this node.
       /// </summary>
       /// <returns>A <see cref="string"/> containing the text.</returns>

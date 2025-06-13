@@ -34,70 +34,21 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Terminals
       public SymbolRule(AlToken symbol) : base(AlSyntaxNodeType.Symbol, symbol, "Symbol Rule") {}
 
       /// <summary>
-      /// Parses a symbol from the token stream.
+      /// Gets a value indicating whether this rule represents an operator.
       /// </summary>
-      /// <param name="tokens">The token stream.</param>
-      /// <param name="context">The parser context.</param>
-      /// <param name="parentRule">The parent rule to link to.</param>
-      /// <param name="expectedValue">The expected identifier value to match against.</param>
-      /// <returns><c>true</c> if parsing was successful, <c>false</c> otherwise.</returns>
-      public virtual bool Parse(TokenStream<AlToken> tokens, AlParser context, AlParserRule parentRule, string expectedValue)
+      /// <value><c>true</c> if this instance represents operator; otherwise, <c>false</c>.</value>
+      public bool IsOperator
       {
-         try
-         {
-            Enter(context);
-            var token = tokens.Current;
-            var message = string.Format(Resources.ExpectedSymbol, expectedValue, token.Value);
-            var tokenValidates = Validator.ValidateToken(token, context, parentRule, TokenType.Symbol, expectedValue, message);
-            if (tokenValidates)
-            {
-               context.GenerateTraceEvent(token, TraceEvent.Consume);
-               parentRule.AddChildNode(this);
-               context.GenerateTraceEvent(this, TraceEvent.Match);
-            }
-
-            return tokenValidates;
-         }
-         finally
-         {
-            Exit(context);
-         }
+         get => ((SymbolToken)Token).IsOperator;
       }
 
       /// <summary>
-      /// Parses a symbol from the stream that matches one of the specified values.
+      /// Gets a value indicating whether this instance represents an assignment operator.
       /// </summary>
-      /// <param name="tokens">The token stream.</param>
-      /// <param name="context">The parser context.</param>
-      /// <param name="parentRule">The parent parser rule to link to.</param>
-      /// <param name="values">The enumeration of allowed values.</param>
-      /// <returns><c>true</c> if parsing was successful, <c>false</c> otherwise.</returns>
-      /// <exception cref="OutOfMemoryException">The length of the resulting set text string overflows the maximum allowed length (<see cref="System.Int32.MaxValue">Int32.MaxValue</see>).</exception>
-      // ReSharper disable once TooManyDeclarations
-      public bool Parse(TokenStream<AlToken> tokens, AlParser context, AlParserRule parentRule, IEnumerable<string> values)
+      /// <value><c>true</c> if this instance represents an assignment operator; otherwise, <c>false</c>.</value>
+      public bool IsAssignmentOperator
       {
-         try
-         {
-            Enter(context);
-            var token = tokens.Current;
-            var enumerable = values as string[] ?? values.ToArray();
-            // ReSharper disable once ExceptionNotDocumented
-            string setText = string.Join(", ", enumerable.Select(i => $"{i}"));
-            var message = string.Format(Resources.ExpectedSymbolFromSet, setText, token.Value);
-            var tokenValidates = Validator.ValidateToken(token, context, parentRule, TokenType.Symbol, enumerable, message);
-            if (tokenValidates)
-            {
-               context.GenerateTraceEvent(token, TraceEvent.Consume);
-               parentRule.AddChildNode(this);
-               context.GenerateTraceEvent(this, TraceEvent.Match);
-            }
-
-            return tokenValidates;
-         }
-         finally
-         {
-            Exit(context);
-         }
+         get => ((SymbolToken)Token).IsAssignmentOperator;
       }
    }
 }

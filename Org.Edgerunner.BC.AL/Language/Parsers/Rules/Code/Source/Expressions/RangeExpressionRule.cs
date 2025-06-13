@@ -25,8 +25,8 @@
 
 namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Code.Source.Expressions
 {
-   public class RangeExpressionRule
+   public class RangeExpressionRule : AlParserRule
    {
-      
+      public RangeExpressionRule() : base(AlSyntaxNodeType.RangeExpression, "Range Expression Rule") {}
    }
 }

@@ -25,8 +25,11 @@
 
 namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Code.Variables
 {
-   public class DotNetTypeDeclarationRule
+   public class DotNetTypeDeclarationRule : AlParserRule
    {
-      
+      /// <summary>
+      /// Initializes a new instance of the <see cref="DotNetTypeDeclarationRule"/> class.
+      /// </summary>
+      public DotNetTypeDeclarationRule() : base(AlSyntaxNodeType.DotNetDeclaration, "DotNet Declaration Rule") {}
    }
 }

@@ -1,6 +1,6 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "BracketedExpressionRule.cs">
-// Copyright(c)  2023
+// <copyright company = "Edgerunner.org" file = "ITerminalNode.cs">
+// Copyright(c) Thaddeus Ryker 2023
 // </copyright>
 // The MIT License (MIT)
 // 
@@ -23,10 +23,18 @@
 // THE SOFTWARE.
 #endregion
 
-namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Code.Source.Expressions
+using Org.Edgerunner.Language.Lexers;
+
+namespace Org.Edgerunner.Language.Parsers
 {
-   public class BracketedExpressionRule
+   /// <summary>
+   /// Interface that defines a terminal syntax node.
+   /// Extends the <see cref="Org.Edgerunner.Language.Parsers.ISyntaxNode{TToken, TSyntax}" />
+   /// </summary>
+   /// <typeparam name="TToken">The type of the language token.</typeparam>
+   /// <typeparam name="TSyntax">The type of the language syntax node type.</typeparam>
+   /// <seealso cref="Org.Edgerunner.Language.Parsers.ISyntaxNode{TToken, TSyntax}" />
+   public interface ITerminalNode<out TToken, out TSyntax> : ISyntaxNode<TToken, TSyntax> where TToken : IToken
    {
-      
    }
 }

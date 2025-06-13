@@ -23,10 +23,15 @@
 // THE SOFTWARE.
 #endregion
 
+using Metalama.Framework.Code.SyntaxBuilders;
+using Org.Edgerunner.BC.AL.Language.Parsers.Rules.Terminals;
+using Org.Edgerunner.BC.AL.Language.Tokens;
+using Org.Edgerunner.Language.Lexers;
+
 namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Code.Source.Expressions
 {
-   public class BinaryExpressionRule
+   public class BinaryExpressionRule : AlParserRule
    {
-      
+      public BinaryExpressionRule() : base(AlSyntaxNodeType.BinaryExpression, "Binary Expression Rule") {}
    }
 }

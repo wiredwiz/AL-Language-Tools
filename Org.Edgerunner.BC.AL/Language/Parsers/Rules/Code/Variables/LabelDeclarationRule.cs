@@ -27,6 +27,9 @@ namespace Org.Edgerunner.BC.AL.Language.Parsers.Rules.Code.Variables
 {
    public class LabelDeclarationRule : AlParserRule
    {
+      /// <summary>
+      /// Initializes a new instance of the <see cref="LabelDeclarationRule"/> class.
+      /// </summary>
       public LabelDeclarationRule() : base(AlSyntaxNodeType.LabelDeclaration, "Label Declaration Rule") {}
    }
 }
