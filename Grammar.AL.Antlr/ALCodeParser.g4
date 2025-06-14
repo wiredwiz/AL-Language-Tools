@@ -150,14 +150,52 @@ enumerationLiteral
    : objectLiteral SCOPE IDENTIFIER
    ;
 
-databaseLiteral
-   : DATABASE SCOPE (enumerationLiteral | objectLiteral)
-   ;
-
-// TODO: Add support for other root system literals like enum, table, page, etc.
-
 systemEnumerationLiteral
-   : databaseLiteral
+   : OBJECTTYPE SCOPE IDENTIFIER #ObjectTypeLiteral
+   | TRANSACTIONTYPE SCOPE IDENTIFIER #TransactionTypeLiteral
+   | EXECUTIONMODE SCOPE IDENTIFIER #ExecutionModeLiteral
+   | SECURITYFILTER SCOPE IDENTIFIER #SecurityFilterLiteral
+   | TEXTENCODING SCOPE IDENTIFIER #TextEncodingLiteral
+   | REPORTFORMAT SCOPE IDENTIFIER #ReportFormatLiteral
+   | DEFAULTLAYOUT SCOPE IDENTIFIER #DefaultLayoutLiteral
+   | CONNECTIONTYPE SCOPE IDENTIFIER #ConnectionTypeLiteral
+   | CLIENTTYPE SCOPE IDENTIFIER #ClientTypeLiteral
+   | COMMITBEHAVIOR SCOPE IDENTIFIER #CommitBehaviorLiteral
+   | DATASCOPE SCOPE IDENTIFIER #DataScopeLiteral
+   | DATACLASSIFICATION SCOPE IDENTIFIER #DataClassificationLiteral
+   | ACTION SCOPE IDENTIFIER #ActionLiteral
+   | AUDITCATEGORY SCOPE IDENTIFIER #AuditCategoryLiteral
+   | EXECUTIONCONTEXT SCOPE IDENTIFIER #ExecutionContextLiteral
+   | ERRORBEHAVIOR SCOPE IDENTIFIER #ErrorBehaviorLiteral
+   | ERRORTYPE SCOPE IDENTIFIER #ErrorTypeLiteral
+   | ERRORCONTEXT SCOPE IDENTIFIER #ErrorContextLiteral
+   | FIELDCLASS SCOPE IDENTIFIER #FieldClassLiteral
+   | FIELDTYPE SCOPE IDENTIFIER #FieldTypeLiteral
+   | INHERENTPERMISSIONSSCOPE SCOPE IDENTIFIER #InherentPermissionsScopeLiteral
+   | ISOLATIONLEVEL SCOPE IDENTIFIER #IsolationLevelLiteral
+   | NOTIFICATIONSCOPE SCOPE IDENTIFIER #NotificationScopeLiteral
+   | OBJECTTYPE SCOPE IDENTIFIER #ObjectTypeLiteral
+   | PAGEBACKGROUNDTASKERRORLEVEL SCOPE IDENTIFIER #PageBackgroundTaskErrorLevelLiteral
+   | PERMISSIONOBJECTTYPE SCOPE IDENTIFIER #PermissionObjectTypeLiteral
+   | REPORTLAYOUTTYPE SCOPE IDENTIFIER #ReportLayoutTypeLiteral
+   | SECURITYOPERATIONRESULT SCOPE IDENTIFIER #SecurityOperationResultLiteral
+   | TABLECONNECTIONTYPE SCOPE IDENTIFIER #TableConnectionTypeLiteral
+   | TELEMETRYSCOPE SCOPE IDENTIFIER #TelemetryScopeLiteral
+   | TESTPERMISSIONS SCOPE IDENTIFIER #TestPermissionsLiteral
+   | TRANSACTIONMODEL SCOPE IDENTIFIER #TransactionModelLiteral
+   | TRANSACTIONTYPE SCOPE IDENTIFIER #TransactionTypeLiteral
+   | VERBOSITY SCOPE IDENTIFIER #VerbosityLiteral
+   | WEBSERVICEACTIONRESULTCODE SCOPE IDENTIFIER #WebServiceActionResultCodeLiteral
+   | CODEUNIT SCOPE objectLiteral #CodeunitLiteral
+   | PAGE SCOPE objectLiteral #PageLiteral
+   | PAGEEXTENSION SCOPE objectLiteral #PageExtensionLiteral
+   | QUERY SCOPE objectLiteral #QueryLiteral
+   | REPORT SCOPE objectLiteral #ReportLiteral
+   | XMLPORT SCOPE objectLiteral #XmlPortLiteral
+   | DATABASE SCOPE objectLiteral #DatabaseLiteral
+   | ENUM SCOPE objectLiteral #EnumLiteral
+   | TESTPAGE SCOPE objectLiteral #TestPageLiteral
+   | TESTREQUESTPAGE SCOPE objectLiteral #TestRequestPageLiteral
    ;
 
 /*

@@ -194,6 +194,10 @@ ASSISTEDIT
    : A S S I S T E D I T
    ;
 
+AUDITCATEGORY
+   : A U D I T C A T E G O R Y
+   ;
+
 AUTOCALCFIELD
    : A U T O C A L C F I E L D
    ;
@@ -472,6 +476,10 @@ COMMANDLINE
 
 COMMIT
    : C O M M I T
+   ;
+
+COMMITBEHAVIOR
+   : C O M M I T B E H A V I O R
    ;
 
 COMPANYNAME
@@ -922,6 +930,14 @@ ERROR
    : E R R O R
    ;
 
+ERRORBEHAVIOR
+   : E R R O R B E H A V I O R
+   ;
+
+ERRORCONTEXT
+   : E R R O R C O N T E X T
+   ;
+
 ERRORINFO
    : E R R O R I N F O
    ;
@@ -1342,6 +1358,10 @@ INFOOTERBAR
 
 INFRAME
    : I N F R A M E
+   ;
+
+INHERENTPERMISSIONSSCOPE
+   : I N H E R E N T P E R M I S S I O N S S C O P E
    ;
 
 INIT
@@ -2212,6 +2232,10 @@ PERMANENTASSIST
    : P E R M A N E N T A S S I S T
    ;
 
+PERMISSIONOBJECTTYPE
+   : P E R M I S S I O N O B J E C T T Y P E
+   ;
+
 PERMISSIONS
    : P E R M I S S I O N S
    ;
@@ -2376,6 +2400,10 @@ REPORTFORMAT
    : R E P O R T F O R M A T
    ;
 
+REPORTLAYOUTTYPE
+   : R E P O R T L A Y O U T T Y P E
+   ;
+
 REQFILTERFIELDS
    : R E Q F I L T E R F I E L D S
    ;
@@ -2498,6 +2526,10 @@ SECURITYFILTER
 
 SECURITYFILTERING
    : S E C U R I T Y F I L T E R I N G
+   ;
+
+SECURITYOPERATIONRESULT
+   : S E C U R I T Y O P E R A T I O N R E S U L T
    ;
 
 SEEK
@@ -2788,6 +2820,10 @@ TABLERELATION
    : T A B L E R E L A T I O N
    ;
 
+TELEMETRYSCOPE
+   : T E L E M E T R Y S C O P E
+   ;
+
 TEMPORARY
    : T E M P O R A R Y
    ;
@@ -2802,6 +2838,10 @@ TESTACTION
 
 TESTFIELD
    : T E S T F I E L D
+   ;
+
+TESTPAGE
+   : T E S T P A G E
    ;
 
 TESTPERMISSIONS
