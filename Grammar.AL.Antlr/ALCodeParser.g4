@@ -633,4 +633,4 @@ codeunitProperties
    : codeunitProperty*;
 
 codeunitDeclaration
-   : namespaceDeclaration? usingDeclarations? {TokenMatches("CodeUnit")}? IDENTIFIER objectId? objectName LEFTCBRACE codeunitProperties? codeDeclarations? RIGHTCBRACE;
+   : namespaceDeclaration? usingDeclarations? CODEUNIT objectId? objectName LEFTCBRACE codeunitProperties? codeDeclarations? RIGHTCBRACE;
