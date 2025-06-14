@@ -151,7 +151,7 @@ enumerationLiteral
    ;
 
 databaseLiteral
-   : {TokenMatches("database")}? IDENTIFIER SCOPE (enumerationLiteral | objectLiteral)
+   : DATABASE SCOPE (enumerationLiteral | objectLiteral)
    ;
 
 // TODO: Add support for other root system literals like enum, table, page, etc.
@@ -177,14 +177,14 @@ keyIdentifierListProperty
    ;
 
 permissionSpecifier
-   : {TokenMatches("tabledata")}? IDENTIFIER objectId EQUAL IDENTIFIER
+   : TABLEDATA objectId EQUAL IDENTIFIER
    ;
 
 permissionSpecifiers
    : permissionSpecifier (COMMA permissionSpecifier)*;
 
 permissionsProperty
-   : {TokenMatches("permissions")}? IDENTIFIER EQUAL permissionSpecifiers SEMICOLON
+   : PERMISSIONS EQUAL permissionSpecifiers SEMICOLON
    ;
 
 /*
@@ -290,16 +290,60 @@ dimensions
    ;
 
 variableTypeDeclaration
-   : {TokenMatches("dictionary")}? IDENTIFIER OF LEFTBRACKET dictionaryKey COMMA dictionaryDataType RIGHTBRACKET #DictionaryVariable
-   | {TokenMatches("list")}? IDENTIFIER OF LEFTBRACKET variableTypeDeclaration RIGHTBRACKET #ListVariable
+   : DICTIONARY OF LEFTBRACKET dictionaryKey COMMA dictionaryDataType RIGHTBRACKET #DictionaryVariable
+   | LIST OF LEFTBRACKET variableTypeDeclaration RIGHTBRACKET #ListVariable
    | ARRAY LEFTBRACKET dimensions RIGHTBRACKET OF variableTypeDeclaration #ArrayVariable
-   | {TokenMatches(VarAppObjects)}? IDENTIFIER objectId #ApplicationObjectVariable
-   | {TokenMatches("label")}? IDENTIFIER labelText (COMMA labelArgs)? #LabelVariable
-   | {TokenMatches("record")}? IDENTIFIER objectId TEMPORARY? #RecordVariable
-   | {TokenMatches("text")}? IDENTIFIER sizeDeclaration? #TextVariable
-   | {TokenMatches("code")}? IDENTIFIER sizeDeclaration #CodeVariable
-   | {TokenMatches("textconst")}? IDENTIFIER IDENTIFIER EQUAL STRING_LITERAL #TextConstantVariable
-   | {TokenMatches(VariableTypes)}? IDENTIFIER #SimpleVariable
+   | LABEL labelText (COMMA labelArgs)? #LabelVariable
+   | RECORD objectId TEMPORARY? #RecordVariable
+   | TEXT sizeDeclaration? #TextVariable
+   | CODE sizeDeclaration #CodeVariable
+   | TEXTCONST IDENTIFIER EQUAL STRING_LITERAL #TextConstantVariable
+   | INTEGER #IntegerVariable
+   | DECIMAL #DecimalVariable
+   | BOOLEAN #BooleanVariable
+   | CHAR #CharVariable
+   | DATE #DateVariable
+   | TIME #TimeVariable
+   | DATETIME #DatetimeVariable
+   | DURATION #DurationVariable
+   | GUID #GuidVariable
+   | OPTION #OptionVariable
+   | INSTREAM #InStreamVariable
+   | OUTSTREAM #OutStreamVariable
+   | FILE #FileVariable
+   | LABEL #LabelVariable
+   | VARIANT #VariantVariable
+   | BIGINTEGER #BigIntegerVariable
+   | BYTE #ByteVariable
+   | RECORD #RecordVariable
+   | RECORDREF #RecordRefVariable
+   | FIELDREF #FieldRefVariable
+   | KEYREF #KeyRefVariable
+   | RECORDID #RecordIdVariable
+   | HTTPCLIENT #HttpClientVariable
+   | HTTPHEADERS #HttpHeadersVariable
+   | HTTPREQUESTMESSAGE #HttpRequestMessageVariable
+   | HTTPRESPONSEMESSAGE #HttpResponseMessageVariable
+   | HTTPCONTENT #HttpContentVariable
+   | JSONOBJECT #JsonObjectVariable
+   | JSONARRAY #JsonArrayVariable
+   | JSONVALUE #JsonValueVariable
+   | JSONTOKEN #JsonTokenVariable
+   | XMLDOCUMENT #XmlDocumentVariable
+   | XMLELEMENT #XmlElementVariable
+   | XMLATTRIBUTE #XmlAttributeVariable
+   | XMLNODE #XmlNodeVariable
+   | TEXTBUILDER #TextBuilderVariable
+   | FILTERPAGEBUILDER #FilterPageBuilderVariable
+   | NOTIFICATION #NotificationVariable
+   | SESSIONSETTINGS #SessionSettingsVariable
+   | CODEUNIT objectId #CodeunitVariable
+   | PAGE objectId #PageVariable
+   | DOTNET objectId #DotNetVariable
+   | ENUM objectId #EnumVariable
+   | QUERY objectId #QueryVariable
+   | REPORT objectId #ReportVariable
+   | XMLPORT objectId #XmlPortVariable
    ;
 
 parameterName
