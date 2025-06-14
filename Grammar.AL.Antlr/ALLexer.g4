@@ -2616,10 +2616,6 @@ SIZABLE
    : S I Z A B L E
    ;
 
-SKIP
-   : S K I P
-   ;
-
 SLEEP
    : S L E E P
    ;
