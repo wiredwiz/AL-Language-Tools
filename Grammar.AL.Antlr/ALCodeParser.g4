@@ -239,7 +239,6 @@ variableTypeDeclaration
    | JSONVALUE #JsonValueVariable
    | KEYREF #KeyRefVariable
    | LABEL labelText (COMMA labelArgs)? #LabelVariable
-   | LABEL #LabelVariable
    | LIST OF LEFTBRACKET variableTypeDeclaration RIGHTBRACKET #ListVariable
    | MODULEDEPENDENCYINFO #ModuleDependencyInfoVariable
    | MODULEINFO #ModuleInfoVariable
@@ -249,7 +248,6 @@ variableTypeDeclaration
    | PAGE objectId #PageVariable
    | QUERY objectId #QueryVariable
    | RECORD objectId TEMPORARY? #RecordVariable
-   | RECORD #RecordVariable
    | RECORDID #RecordIdVariable
    | RECORDREF #RecordRefVariable
    | REPORT objectId #ReportVariable
