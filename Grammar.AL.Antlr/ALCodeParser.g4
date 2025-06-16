@@ -207,9 +207,7 @@ optionValueList
    ;
 
 variableTypeDeclaration
-   : DICTIONARY OF LEFTBRACKET dictionaryKey COMMA dictionaryDataType RIGHTBRACKET #DictionaryVariable
-   | LIST OF LEFTBRACKET variableTypeDeclaration RIGHTBRACKET #ListVariable
-   | ARRAY LEFTBRACKET dimensions RIGHTBRACKET OF variableTypeDeclaration #ArrayVariable
+   : ARRAY LEFTBRACKET dimensions RIGHTBRACKET OF variableTypeDeclaration #ArrayVariable
    | BIGINTEGER #BigIntegerVariable
    | BLOB #BlobVariable
    | BOOLEAN #BooleanVariable
@@ -220,6 +218,7 @@ variableTypeDeclaration
    | DATE #DateVariable
    | DATETIME #DatetimeVariable
    | DECIMAL #DecimalVariable
+   | DICTIONARY OF LEFTBRACKET dictionaryKey COMMA dictionaryDataType RIGHTBRACKET #DictionaryVariable
    | DOTNET objectId #DotNetVariable
    | DURATION #DurationVariable
    | ENUM objectId #EnumVariable
@@ -241,6 +240,7 @@ variableTypeDeclaration
    | KEYREF #KeyRefVariable
    | LABEL labelText (COMMA labelArgs)? #LabelVariable
    | LABEL #LabelVariable
+   | LIST OF LEFTBRACKET variableTypeDeclaration RIGHTBRACKET #ListVariable
    | MODULEDEPENDENCYINFO #ModuleDependencyInfoVariable
    | MODULEINFO #ModuleInfoVariable
    | NOTIFICATION #NotificationVariable
