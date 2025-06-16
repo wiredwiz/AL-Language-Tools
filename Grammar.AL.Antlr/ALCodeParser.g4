@@ -210,60 +210,60 @@ variableTypeDeclaration
    : DICTIONARY OF LEFTBRACKET dictionaryKey COMMA dictionaryDataType RIGHTBRACKET #DictionaryVariable
    | LIST OF LEFTBRACKET variableTypeDeclaration RIGHTBRACKET #ListVariable
    | ARRAY LEFTBRACKET dimensions RIGHTBRACKET OF variableTypeDeclaration #ArrayVariable
-   | LABEL labelText (COMMA labelArgs)? #LabelVariable
-   | RECORD objectId TEMPORARY? #RecordVariable
-   | TEXT sizeDeclaration? #TextVariable
-   | CODE sizeDeclaration #CodeVariable
-   | TEXTCONST identifier EQUAL STRING_LITERAL #TextConstantVariable
-   | INTEGER #IntegerVariable
-   | DECIMAL #DecimalVariable
+   | BIGINTEGER #BigIntegerVariable
    | BLOB #BlobVariable
    | BOOLEAN #BooleanVariable
-   | CHAR #CharVariable
-   | DATE #DateVariable
-   | TIME #TimeVariable
-   | DATETIME #DatetimeVariable
-   | DURATION #DurationVariable
-   | GUID #GuidVariable
-   | OPTION #OptionVariable
-   | INSTREAM #InStreamVariable
-   | OUTSTREAM #OutStreamVariable
-   | FILE #FileVariable
-   | LABEL #LabelVariable
-   | VARIANT #VariantVariable
-   | VERSION #VersionVariable
-   | BIGINTEGER #BigIntegerVariable
    | BYTE #ByteVariable
-   | RECORD #RecordVariable
-   | RECORDREF #RecordRefVariable
+   | CHAR #CharVariable
+   | CODE sizeDeclaration #CodeVariable
+   | CODEUNIT objectId #CodeunitVariable
+   | DATE #DateVariable
+   | DATETIME #DatetimeVariable
+   | DECIMAL #DecimalVariable
+   | DOTNET objectId #DotNetVariable
+   | DURATION #DurationVariable
+   | ENUM objectId #EnumVariable
    | FIELDREF #FieldRefVariable
-   | KEYREF #KeyRefVariable
-   | RECORDID #RecordIdVariable
+   | FILE #FileVariable
+   | FILTERPAGEBUILDER #FilterPageBuilderVariable
+   | GUID #GuidVariable
    | HTTPCLIENT #HttpClientVariable
+   | HTTPCONTENT #HttpContentVariable
    | HTTPHEADERS #HttpHeadersVariable
    | HTTPREQUESTMESSAGE #HttpRequestMessageVariable
    | HTTPRESPONSEMESSAGE #HttpResponseMessageVariable
-   | HTTPCONTENT #HttpContentVariable
-   | JSONOBJECT #JsonObjectVariable
+   | INSTREAM #InStreamVariable
+   | INTEGER #IntegerVariable
    | JSONARRAY #JsonArrayVariable
-   | JSONVALUE #JsonValueVariable
+   | JSONOBJECT #JsonObjectVariable
    | JSONTOKEN #JsonTokenVariable
-   | MODULEINFO #ModuleInfoVariable
+   | JSONVALUE #JsonValueVariable
+   | KEYREF #KeyRefVariable
+   | LABEL labelText (COMMA labelArgs)? #LabelVariable
+   | LABEL #LabelVariable
    | MODULEDEPENDENCYINFO #ModuleDependencyInfoVariable
+   | MODULEINFO #ModuleInfoVariable
+   | NOTIFICATION #NotificationVariable
+   | OPTION #OptionVariable
+   | OUTSTREAM #OutStreamVariable
+   | PAGE objectId #PageVariable
+   | QUERY objectId #QueryVariable
+   | RECORD objectId TEMPORARY? #RecordVariable
+   | RECORD #RecordVariable
+   | RECORDID #RecordIdVariable
+   | RECORDREF #RecordRefVariable
+   | REPORT objectId #ReportVariable
+   | SESSIONSETTINGS #SessionSettingsVariable
+   | TEXT sizeDeclaration? #TextVariable
+   | TEXTBUILDER #TextBuilderVariable
+   | TEXTCONST identifier EQUAL STRING_LITERAL #TextConstantVariable
+   | TIME #TimeVariable
+   | VARIANT #VariantVariable
+   | VERSION #VersionVariable
+   | XMLATTRIBUTE #XmlAttributeVariable
    | XMLDOCUMENT #XmlDocumentVariable
    | XMLELEMENT #XmlElementVariable
-   | XMLATTRIBUTE #XmlAttributeVariable
    | XMLNODE #XmlNodeVariable
-   | TEXTBUILDER #TextBuilderVariable
-   | FILTERPAGEBUILDER #FilterPageBuilderVariable
-   | NOTIFICATION #NotificationVariable
-   | SESSIONSETTINGS #SessionSettingsVariable
-   | CODEUNIT objectId #CodeunitVariable
-   | PAGE objectId #PageVariable
-   | DOTNET objectId #DotNetVariable
-   | ENUM objectId #EnumVariable
-   | QUERY objectId #QueryVariable
-   | REPORT objectId #ReportVariable
    | XMLPORT objectId #XmlPortVariable
    ;
 
