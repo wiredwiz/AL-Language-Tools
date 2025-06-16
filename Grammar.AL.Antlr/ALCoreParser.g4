@@ -888,3 +888,12 @@ systemEnumerationLiteral
    | TESTPAGE SCOPE objectLiteral #TestPageLiteral
    | TESTREQUESTPAGE SCOPE objectLiteral #TestRequestPageLiteral
    ;
+
+namespaceDeclaration
+   : {TokenMatches("namespace")}? identifier namespaceIdentifier SEMICOLON;
+
+usingDeclaration
+   : {TokenMatches("using")}? identifier namespaceIdentifier SEMICOLON;
+
+usingDeclarations
+   : usingDeclaration+;
