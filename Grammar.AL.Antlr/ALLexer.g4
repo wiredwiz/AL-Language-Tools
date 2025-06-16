@@ -1564,6 +1564,10 @@ KEY
    : K E Y
    ;
 
+KEYS
+   : K E Y S
+   ;
+
 KEYCOUNT
    : K E Y C O U N T
    ;

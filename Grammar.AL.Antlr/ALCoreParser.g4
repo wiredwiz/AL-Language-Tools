@@ -2,6 +2,53 @@ parser grammar ALCoreParser;
 
 options { tokenVocab=ALLexer; }
 
+@parser::members
+{  // Define our member text lists
+      List<string> SimpleFieldTypes = new List<string>()
+      {
+         "integer", "biginteger", "decimal", "enum", "boolean", "binary", "blob", "date", "time", "datetime", "dateformula", "duration", "recordid", "tablefilter", "option", "guid"
+      };
+
+      // Positioning keywords for various entities (Groups, Areas, Actions, Controls)
+      List<string> GroupPosKeywords = new List<string>()
+      {
+         "addfirst", "addlast", "addafter", "addbefore", "movefirst", "movelast", "moveafter", "movebefore", "modify"
+      };
+
+      List<string> AreaPosKeywords = new List<string>()
+      {
+         "addfirst", "addlast", "movefirst", "movelast"
+      };
+
+      List<string> ActionPosKeywords = new List<string>()
+      {
+         "addafter", "addbefore", "moveafter", "movebefore", "modify"
+      };
+
+      List<string> ControlPosKeywords = new List<string>()
+      {
+         "addafter", "addbefore", "moveafter", "movebefore", "modify"
+      };
+
+      List<string> ObsoleteStateValues = new List<string>()
+      {
+         "pending", "no"
+      };
+
+
+      // Define helper methods for token text matching
+
+      bool TokenMatches(string text)
+      {
+         return _input.Lt(1).Text.ToLowerInvariant() == text.ToLowerInvariant();
+      }
+
+      bool TokenMatches(List<string> values)
+      {
+         return values.Contains(_input.Lt(1).Text.ToLowerInvariant());
+      }
+}
+
 /*
  * Generic constructs
  */
@@ -372,6 +419,7 @@ identifier
    | KEYGROUPS
    | KEYINDEX
    | KEYREF
+   | KEYS
    | LABEL
    | LANGUAGE
    | LEADERDOTS

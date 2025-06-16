@@ -9,12 +9,12 @@ import ALCodeParser;
  */
 
 fieldValue
-   : IDENTIFIER 
-   | INTEGER_LITERAL 
-   | FLOAT_LITERAL 
-   | DATE_LITERAL 
-   | TIME_LITERAL 
-   | DATETIME_LITERAL 
+   : identifier
+   | INTEGER_LITERAL
+   | FLOAT_LITERAL
+   | DATE_LITERAL
+   | TIME_LITERAL
+   | DATETIME_LITERAL
    | STRING_LITERAL
    | booleanLiteral
    ;
@@ -32,11 +32,11 @@ compoundFilterRule
    ;
 
 tableReference
-   : IDENTIFIER
+   : identifier
    ;
 
 fieldReference
-   : IDENTIFIER
+   : identifier
    ;
 
 qualifiedFieldReference
@@ -48,10 +48,10 @@ qualifiedFieldReference
  */
 
 tableRelationFilter
-   : IDENTIFIER EQUAL 
-        ({TokenMatches("field")}? IDENTIFIER LEFTPAREN IDENTIFIER RIGHTPAREN 
-        | {TokenMatches("const")}? IDENTIFIER LEFTPAREN fieldValue RIGHTPAREN
-        | {TokenMatches("filter")}? IDENTIFIER LEFTPAREN (EQUAL|NOTEQUAL|LESSTHAN|GREATERTHAN|LESSTHANEQUAL|GREATERTHANEQUAL) fieldValue RIGHTPAREN)
+   : IDENTIFIER EQUAL
+        (FIELD LEFTPAREN identifier RIGHTPAREN
+        | CONST LEFTPAREN fieldValue RIGHTPAREN
+        | FILTER LEFTPAREN (EQUAL|NOTEQUAL|LESSTHAN|GREATERTHAN|LESSTHANEQUAL|GREATERTHANEQUAL) fieldValue RIGHTPAREN)
    ;
 
 tableRelationFilters
@@ -86,10 +86,10 @@ tableRelation
 calcFormulaTableFilterValue
    : CONST LEFTPAREN fieldValue RIGHTPAREN
    | FILTER LEFTPAREN compoundFilterRule RIGHTPAREN
-   | FIELD LEFTPAREN IDENTIFIER RIGHTPAREN
-   | FIELD LEFTPAREN UPPERLIMIT LEFTPAREN IDENTIFIER RIGHTPAREN RIGHTPAREN
-   | FIELD LEFTPAREN FILTER LEFTPAREN IDENTIFIER RIGHTPAREN RIGHTPAREN
-   | FIELD LEFTPAREN UPPERLIMIT LEFTPAREN FILTER LEFTPAREN IDENTIFIER RIGHTPAREN RIGHTPAREN RIGHTPAREN
+   | FIELD LEFTPAREN identifier RIGHTPAREN
+   | FIELD LEFTPAREN UPPERLIMIT LEFTPAREN identifier RIGHTPAREN RIGHTPAREN
+   | FIELD LEFTPAREN FILTER LEFTPAREN identifier RIGHTPAREN RIGHTPAREN
+   | FIELD LEFTPAREN UPPERLIMIT LEFTPAREN FILTER LEFTPAREN identifier RIGHTPAREN RIGHTPAREN RIGHTPAREN
    ;
 
 calcFormulaTableFilter
@@ -119,7 +119,7 @@ calcFormulaSum
 calcFormulaAverage
    : MINUS? AVERAGE LEFTPAREN qualifiedFieldReference calcFormulaWhereClause? RIGHTPAREN
    ;
-   
+
 calcFormulaMin
    : MIN LEFTPAREN qualifiedFieldReference calcFormulaWhereClause? RIGHTPAREN
    ;
@@ -155,7 +155,7 @@ tableKey
    ;
 
 tableKeys
-   : KEY LEFTCBRACE tableKey*? RIGHTCBRACE
+   : KEYS LEFTCBRACE tableKey*? RIGHTCBRACE
    ;
 
 /*
@@ -174,7 +174,7 @@ tableProperty
    : multiLangaugeCaptionPropertty
    | permissionsProperty
    | keyIdentifierListProperty
-   | keyValueProperty   
+   | keyValueProperty
    ;
 
 tableProperties
@@ -187,10 +187,25 @@ tableProperties
 
 tableFieldId : INTEGER_LITERAL;
 
-tableFieldName : IDENTIFIER;
+tableFieldName : identifier;
 
 tableFieldType
-   : {TokenMatches(SimpleFieldTypes)}? IDENTIFIER
+   : INTEGER
+   | BIGINTEGER
+   | DECIMAL
+   | ENUM
+   | BOOLEAN
+   | BINARY
+   | BLOB
+   | DATE
+   | TIME
+   | DATETIME
+   | DATEFORMULA
+   | DURATION
+   | RECORDID
+   | TABLEFILTER
+   | OPTION
+   | GUID
    | CODE sizeDeclaration
    | TEXT sizeDeclaration
    ;
@@ -200,7 +215,7 @@ tableFieldProperty
    | CALCFORMULA EQUAL calcForumla SEMICOLON
    | multiLangaugeCaptionPropertty
    | keyIdentifierListProperty
-   | keyValueProperty   
+   | keyValueProperty
    ;
 
 tableFieldEntity
@@ -214,7 +229,7 @@ tableFieldGroupName
    ;
 
 fieldNames
-   : IDENTIFIER (SEMICOLON IDENTIFIER)*?
+   : identifier (SEMICOLON identifier)*?
    ;
 
 tableFieldGroup
@@ -244,7 +259,7 @@ tableEntities
    ;
 
 table
-   : TABLE INTEGER_LITERAL IDENTIFIER LEFTCBRACE tableProperties tableEntities? codeDeclarations? RIGHTCBRACE
+   : TABLE INTEGER_LITERAL identifier LEFTCBRACE tableProperties tableEntities? codeDeclarations? RIGHTCBRACE
    ;
 
 tableExtFieldGroup
@@ -266,6 +281,6 @@ tableExtEntities
    ;
 
 tableExtension
-   : TABLEEXTENSION INTEGER_LITERAL IDENTIFIER EXTENDS IDENTIFIER 
+   : TABLEEXTENSION INTEGER_LITERAL identifier EXTENDS identifier
       LEFTCBRACE tableProperties tableExtEntities? codeDeclarations? RIGHTCBRACE
    ;
