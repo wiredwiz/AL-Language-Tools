@@ -217,6 +217,7 @@ variableTypeDeclaration
    | TEXTCONST identifier EQUAL STRING_LITERAL #TextConstantVariable
    | INTEGER #IntegerVariable
    | DECIMAL #DecimalVariable
+   | BLOB #BlobVariable
    | BOOLEAN #BooleanVariable
    | CHAR #CharVariable
    | DATE #DateVariable
@@ -230,6 +231,7 @@ variableTypeDeclaration
    | FILE #FileVariable
    | LABEL #LabelVariable
    | VARIANT #VariantVariable
+   | VERSION #VersionVariable
    | BIGINTEGER #BigIntegerVariable
    | BYTE #ByteVariable
    | RECORD #RecordVariable
@@ -246,6 +248,8 @@ variableTypeDeclaration
    | JSONARRAY #JsonArrayVariable
    | JSONVALUE #JsonValueVariable
    | JSONTOKEN #JsonTokenVariable
+   | MODULEINFO #ModuleInfoVariable
+   | MODULEDEPENDENCYINFO #ModuleDependencyInfoVariable
    | XMLDOCUMENT #XmlDocumentVariable
    | XMLELEMENT #XmlElementVariable
    | XMLATTRIBUTE #XmlAttributeVariable
