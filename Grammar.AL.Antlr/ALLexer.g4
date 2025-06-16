@@ -986,6 +986,10 @@ EXTENDEDDATATYPE
    : E X T E N D E D D A T A T Y P E
    ;
 
+EXTENDS
+   : E X T E N D S
+   ;
+
 FIELD
    : F I E L D
    ;
@@ -1018,6 +1022,14 @@ FIELDEXIST
    : F I E L D E X I S T
    ;
 
+FIELDGROUP
+   : F I E L D G R O U P
+   ;
+
+FIELDGROUPS
+   : F I E L D G R O U P S
+   ;
+
 FIELDINDEX
    : F I E L D I N D E X
    ;
@@ -1032,6 +1044,10 @@ FIELDNO
 
 FIELDREF
    : F I E L D R E F
+   ;
+
+FIELDS
+   : F I E L D S
    ;
 
 FIELDSEPARATOR
@@ -1790,6 +1806,10 @@ MULTIPLENEWLINES
 
 NAME
    : N A M E
+   ;
+
+NAMESPACE
+   : N A M E S P A C E
    ;
 
 NEWPAGEPERGROUP
@@ -3018,6 +3038,10 @@ USEREQUESTPAGE
 
 USERID
    : U S E R I D
+   ;
+
+USING
+   : U S I N G
    ;
 
 USESYSTEMPRINTER

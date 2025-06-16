@@ -108,12 +108,797 @@ options { tokenVocab=ALLexer; }
  * Generic constructs
  */
 
+identifier
+   : IDENTIFIER
+   | ABS
+   | ACTION
+   | ACTIONREF
+   | ACTIVATE
+   | ACTIVE
+   | ACTIVECONTROLONOPEN
+   | ADDLINK
+   | ADDTEXT
+   | ALTSEARCHFIELD
+   | APPLICATIONPATH
+   | ARRAY
+   | ARRAYLEN
+   | ASCENDING
+   | ASSERTERROR
+   | ASSISTEDIT
+   | AUDITCATEGORY
+   | AUTOCALCFIELD
+   | AUTOENTER
+   | AUTOFORMATEXPR
+   | AUTOFORMATTYPE
+   | AUTOINCREMENT
+   | AUTOMATION
+   | AUTOPOSITION
+   | AUTOREPEAT
+   | AUTOREPLACE
+   | AUTOSAVE
+   | AUTOSPLITKEY
+   | AUTOUPDATE
+   | AVERAGE
+   | BACKCOLOR
+   | BACKTRANSPARENT
+   | BACKUPKEY
+   | BEEP
+   | BEGIN
+   | BIGINTEGER
+   | BIGTEXT
+   | BINARY
+   | BITMAP
+   | BITMAPLIST
+   | BITMAPPOS
+   | BLANKNUMBERS
+   | BLANKZERO
+   | BLOB
+   | BOOLEAN
+   | BORDER
+   | BORDERCOLOR
+   | BORDERSTYLE
+   | BORDERWIDTH
+   | BOTTOMMARGIN
+   | BREAK
+   | BYTE
+   | CALCDATE
+   | CALCFIELD
+   | CALCFIELDS
+   | CALCFORMULA
+   | CALCSUM
+   | CALCSUMS
+   | CALLFIELDVALIDATE
+   | CANCEL
+   | CAPTION
+   | CAPTIONBAR
+   | CAPTIONCLASS
+   | CAPTIONML
+   | CARDPAGEID
+   | CASE
+   | CHANGECOMPANY
+   | CHAR
+   | CHARALLOWED
+   | CHARTPARTID
+   | CHECKLICENSEFILE
+   | CLASS
+   | CLEAR
+   | CLEARALL
+   | CLEARLASTERROR
+   | CLEARMARKS
+   | CLEARONLOOKUP
+   | CLIENTTYPE
+   | CLOSE
+   | CLOSINGDATE
+   | CLOSINGDATES
+   | CLUSTERED
+   | CODE
+   | CODECOVERAGELOG
+   | CODEUNIT
+   | COMMANDLINE
+   | COMMIT
+   | COMMITBEHAVIOR
+   | COMPANYNAME
+   | COMPLETIONTRIGGERERRORLEVEL
+   | COMPRESSARRAY
+   | COMPRESSED
+   | CONFIRM
+   | CONNECTIONTYPE
+   | CONSISTENT
+   | CONST
+   | CONTAINERTYPE
+   | CONTEXTURL
+   | CONTINUE
+   | CONTROLADDIN
+   | CONTROLTYPE
+   | CONVERTSTR
+   | COPY
+   | COPYARRAY
+   | COPYFILTER
+   | COPYFILTERS
+   | COPYLINKS
+   | COPYSTR
+   | COPYSTREAM
+   | COUNT
+   | COUNTAPPROX
+   | CREATE
+   | CREATEDATETIME
+   | CREATEGUID
+   | CREATEINSTREAM
+   | CREATEOUTSTREAM
+   | CREATETEMPFILE
+   | CURRENTDATETIME
+   | CURRENTEXECUTIONMODE
+   | CURRENTKEY
+   | CURRENTKEYINDEX
+   | CURRENTTRANSACTIONTYPE
+   | CURRPAGE
+   | CURRREPORT
+   | CUSTOMACTION
+   | DATABASE
+   | DATACAPTIONEXPR
+   | DATACAPTIONFIELDS
+   | DATACLASSIFICATION
+   | DATAITEMINDENT
+   | DATAITEMLINK
+   | DATAITEMLINKREFERENCE
+   | DATAITEMSEPARATOR
+   | DATAITEMTABLE
+   | DATAITEMTABLEVIEW
+   | DATALENGTH
+   | DATAPERCOMPANY
+   | DATASCOPE
+   | DATATRANSFER
+   | DATE
+   | DATE2DMY
+   | DATE2DWY
+   | DATEFORMULA
+   | DATETIME
+   | DATI2VARIANT
+   | DEBUGGER
+   | DECIMAL
+   | DECIMALPLACES
+   | DECIMALPLACESMAX
+   | DECIMALPLACESMIN
+   | DEFAULT
+   | DEFAULTFIELDSVALIDATION
+   | DEFAULTLAYOUT
+   | DELAYEDINSERT
+   | DELCHR
+   | DELETE
+   | DELETEALL
+   | DELETEALLOWED
+   | DELETELINK
+   | DELETELINKS
+   | DELSTR
+   | DESCRIPTION
+   | DEVICEFONTNAME
+   | DIALOG
+   | DICTIONARY
+   | DIMENSIONS
+   | DIRECTION
+   | DIVISOR
+   | DMY2DATE
+   | DO
+   | DOTNET
+   | DOTNETASSEMBLY
+   | DOTNETTYPEDECLARATION
+   | DOWNLOAD
+   | DOWNLOADFROMSTREAM
+   | DOWNTO
+   | DRILLDOWN
+   | DRILLDOWNPAGEID
+   | DROPDOWN
+   | DT2DATE
+   | DT2TIME
+   | DUPLICATE
+   | DURATION
+   | DWY2DATE
+   | EDITABLE
+   | ELLIPSIS
+   | ELSE
+   | ENABLED
+   | ENABLEDIFERROR
+   | ENABLEDIFINSERTION
+   | ENABLEDIFSELECTION
+   | ENCODING
+   | END
+   | ENTITLEMENT
+   | ENUM
+   | ENUMEXTENSION
+   | ENVIRON
+   | EOS
+   | ERASE
+   | ERROR
+   | ERRORBEHAVIOR
+   | ERRORCONTEXT
+   | ERRORINFO
+   | ERRORTYPE
+   | EVALUATE
+   | EXECUTIONCONTEXT
+   | EXECUTIONMODE
+   | EVENT
+   | EXIST
+   | EXISTS
+   | EXIT
+   | EXPORT
+   | EXPORTOBJECTS
+   | EXTENDEDDATATYPE
+   | EXTENDS
+   | FIELD
+   | FIELDACTIVE
+   | FIELDCAPTION
+   | FIELDCLASS
+   | FIELDCOUNT
+   | FIELDENDDELIMITER
+   | FIELDERROR
+   | FIELDEXIST
+   | FIELDGROUP
+   | FIELDGROUPS
+   | FIELDINDEX
+   | FIELDNAME
+   | FIELDNO
+   | FIELDREF
+   | FIELDSEPARATOR
+   | FIELDTYPE
+   | FIELDSTARTDELIMITER
+   | FIELDVALIDATE
+   | FILE
+   | FILEFORMAT
+   | FILENAME
+   | FILTER
+   | FILTERGROUP
+   | FILTERPAGEBUILDER
+   | FIND
+   | FINDFIRST
+   | FINDLAST
+   | FINDSET
+   | FOCUSABLE
+   | FOCUSONCLICK
+   | FONTBOLD
+   | FONTITALIC
+   | FONTNAME
+   | FONTSIZE
+   | FONTSTRIKETHRU
+   | FONTUNDERLINE
+   | FOR
+   | FOREACH
+   | FORECOLOR
+   | FORMAT
+   | FREEZECOLUMNID
+   | FUNCTION
+   | FUNCTIONTYPE
+   | GET
+   | GETFILTER
+   | GETFILTERS
+   | GETLASTERRORTEXT
+   | GETPOSITION
+   | GETRANGEMAX
+   | GETRANGEMIN
+   | GETRECORD
+   | GETSTAMP
+   | GETSUBTEXT
+   | GETTABLE
+   | GETURL
+   | GETVIEW
+   | GLOBALLANGUAGE
+   | GROUPTOTALFIELDS
+   | GROUPTYPE
+   | GUIALLOWED
+   | GUID
+   | HANDLERFUNCTIONS
+   | HASFILTER
+   | HASLINKS
+   | HASVALUE
+   | HEADINGHEIGHT
+   | HEIGHT
+   | HIDEVALUE
+   | HORZALIGN
+   | HORZGLUE
+   | HORZGRID
+   | HTTPCONTENT
+   | HTTPHEADERS
+   | HTTPCLIENT
+   | HTTPREQUESTMESSAGE
+   | HTTPRESPONSEMESSAGE
+   | HYPERLINK
+   | ID
+   | IF
+   | IMAGE
+   | IMPLEMENTS
+   | IMPORT
+   | IMPORTANCE
+   | IMPORTOBJECTS
+   | IN
+   | INCLUDEINDATASET
+   | INCOLUMN
+   | INCOLUMNHEADING
+   | INCSTR
+   | INDATASET
+   | INDENT
+   | INDENTATION
+   | INDENTATIONCOLUMNNAME
+   | INDENTATIONCONTROLS
+   | INFOOTERBAR
+   | INFRAME
+   | INHERENTPERMISSIONSSCOPE
+   | INIT
+   | INITVALUE
+   | INLINEEDITING
+   | INMATRIX
+   | INMATRIXHEADING
+   | INPAGE
+   | INPUT
+   | INSERT
+   | INSERTALLOWED
+   | INSSTR
+   | INSTREAM
+   | INSTRUCTIONALTEXTML
+   | INTEGER
+   | INTERFACE
+   | INTERNAL
+   | INVALIDACTIONAPPEARANCE
+   | ISACTION
+   | ISAUTOMATION
+   | ISBINARY
+   | ISBOOLEAN
+   | ISCHAR
+   | ISCLEAR
+   | ISCODE
+   | ISCODEUNIT
+   | ISDATE
+   | ISDATEFORMULA
+   | ISDECIMAL
+   | ISEMPTY
+   | ISFILE
+   | ISINSTREAM
+   | ISINTEGER
+   | ISNULLGUID
+   | ISOLATIONLEVEL
+   | ISOPTION
+   | ISOUTSTREAM
+   | ISRECORD
+   | ISTEXT
+   | ISTIME
+   | ISTRANSACTIONTYPE
+   | JOKER
+   | JSONTOKEN
+   | JSONVALUE
+   | JSONARRAY
+   | JSONOBJECT
+   | KEEPWITHNEXT
+   | KEY
+   | KEYCOUNT
+   | KEYGROUPDISABLE
+   | KEYGROUPENABLE
+   | KEYGROUPENABLED
+   | KEYGROUPS
+   | KEYINDEX
+   | KEYREF
+   | LABEL
+   | LANGUAGE
+   | LEADERDOTS
+   | LEFTMARGIN
+   | LEN
+   | LENGTH
+   | LINKEDINTRANSACTION
+   | LINKEDOBJECT
+   | LINKFIELDS
+   | LINKSALLOWED
+   | LINKTABLE
+   | LINKTABLEFORCEINSERT
+   | LIST
+   | LOCAL
+   | LOCKTABLE
+   | LOCKTIMEOUT
+   | LOGHEIGHT
+   | LOGWIDTH
+   | LOOKUP
+   | LOOKUPMODE
+   | LOOKUPPAGEID
+   | LOWERCASE
+   | MAINTAINSIFTINDEX
+   | MAINTAINSQLINDEX
+   | MARK
+   | MARKEDONLY
+   | MATRIXCOLUMNWIDTH
+   | MATRIXSOURCETABLE
+   | MAX
+   | MAXIMIZABLE
+   | MAXIMIZEDONOPEN
+   | MAXITERATION
+   | MAXLENGTH
+   | MAXOCCURS
+   | MAXSTRLEN
+   | MAXVALUE
+   | MEDIA
+   | MEDIASET
+   | MENUITEMTYPE
+   | MENULEVEL
+   | MESSAGE
+   | MIN
+   | MINIMIZABLE
+   | MINIMIZEDONOPEN
+   | MINOCCURS
+   | MINVALUE
+   | MODIFY
+   | MODIFYALL
+   | MODIFYALLOWED
+   | MODULEDEPENDENCYINFO
+   | MODULEINFO
+   | MULTILINE
+   | MULTIPLENEWLINES
+   | NAME
+   | NAMESPACE
+   | NEWPAGEPERGROUP
+   | NEXT
+   | NEXTCONTROL
+   | NODENAME
+   | NODETYPE
+   | NONE
+   | NOTIFICATION
+   | NOTIFICATIONSCOPE
+   | NORMALDATE
+   | NOTBLANK
+   | NUMBER
+   | NUMERIC
+   | OBJECTTYPE
+   | OCCURRENCE
+   | OCX
+   | OF
+   | ONACTION
+   | ONACTIVATE
+   | ONAFTERASSIGNFIELD
+   | ONAFTERASSIGNVARIABLE
+   | ONAFTEREXPORTRECORD
+   | ONAFTERFORMATFIELD
+   | ONAFTERGETFIELD
+   | ONAFTERGETRECORD
+   | ONAFTERIMPORTRECORD
+   | ONAFTERINITRECORD
+   | ONAFTERINPUT
+   | ONAFTERINSERTRECORD
+   | ONAFTERMODIFYRECORD
+   | ONAFTERTESTRUN
+   | ONAFTERVALIDATE
+   | ONASSISTEDIT
+   | ONBEFOREEVALUATEFIELD
+   | ONBEFOREEXPORTRECORD
+   | ONBEFOREIMPORTRECORD
+   | ONBEFOREINPUT
+   | ONBEFOREINSERTRECORD
+   | ONBEFOREMODIFYRECORD
+   | ONBEFOREPASSFIELD
+   | ONBEFOREPASSVARIABLE
+   | ONBEFOREPUTRECORD
+   | ONBEFORETESTRUN
+   | ONCLOSEPAGE
+   | ONCONTROLADDIN
+   | ONDEACTIVATE
+   | ONDELETE
+   | ONDELETERECORD
+   | ONDRILLDOWN
+   | ONFINDRECORD
+   | ONFORMAT
+   | ONINIT
+   | ONINITREPORT
+   | ONINITXMLPORT
+   | ONINPUTCHANGE
+   | ONINSERT
+   | ONINSERTRECORD
+   | ONLOOKUP
+   | ONMODIFY
+   | ONMODIFYRECORD
+   | ONNEWRECORD
+   | ONNEXTRECORD
+   | ONOPENPAGE
+   | ONPOSTDATAITEM
+   | ONPOSTREPORT
+   | ONPOSTSECTION
+   | ONPOSTXMLPORT
+   | ONPREDATAITEM
+   | ONPREREPORT
+   | ONPRESECTION
+   | ONPREXMLITEM
+   | ONPREXMLPORT
+   | ONPUSH
+   | ONQUERYCLOSEPAGE
+   | ONRENAME
+   | ONTIMER
+   | ONVALIDATE
+   | OPEN
+   | OPTION
+   | OPTIONCAPTION
+   | OPTIONCAPTIONML
+   | OPTIONSTRING
+   | OPTIONVALUE
+   | ORDER
+   | ORIENTATION
+   | OSVERSION
+   | OUTSTREAM
+   | PADCHAR
+   | PADSTR
+   | PAGE
+   | PAGEBACKGROUNDTASKERRORLEVEL
+   | PAGECUSTOMIZATION
+   | PAGEEXTENSION
+   | PAGENAMES
+   | PAGENAMESML
+   | PAGENO
+   | PAGERESULT
+   | PAGEPARTID
+   | PAGETYPE
+   | PAPERSIZE
+   | PAPERSOURCE
+   | PAPERSOURCEDEFAULTPAGE
+   | PAPERSOURCEFIRSTPAGE
+   | PAPERSOURCELASTPAGE
+   | PAPERSOURCEOTHERPAGES
+   | PARENTCONTROL
+   | PARTTYPE
+   | PASSWORDTEXT
+   | PASTEISVALID
+   | PERCENTAGE
+   | PERMANENTASSIST
+   | PERMISSIONOBJECTTYPE
+   | PERMISSIONS
+   | PERMISSIONSET
+   | PERMISSIONSETEXTENSION
+   | PLACEINBOTTOM
+   | POPULATEALLFIELDS
+   | POS
+   | POWER
+   | PREVIEW
+   | PRINTONEVERYPAGE
+   | PRINTONLYIFDETAIL
+   | PROCEDURE
+   | PROCESSINGONLY
+   | PROFILE
+   | PROGRAM
+   | PROMOTED
+   | PROMOTEDCATEGORY
+   | PROMOTEDISBIG
+   | PROTECTED
+   | PROVIDERID
+   | PUSHACTION
+   | QUERY
+   | QUERYREPLACE
+   | QUIT
+   | RANDOM
+   | RANDOMIZE
+   | READ
+   | READCONSISTENCY
+   | READPERMISSION
+   | READTEXT
+   | REC
+   | RECORD
+   | RECORDID
+   | RECORDLEVELLOCKING
+   | RECORDREF
+   | RECORDSEPARATOR
+   | RELATION
+   | RENAME
+   | REPEAT
+   | REPORT
+   | REPORTEXTENSION
+   | REPORTFORMAT
+   | REPORTLAYOUTTYPE
+   | REQFILTERFIELDS
+   | REQFILTERHEADING
+   | REQFILTERHEADINGML
+   | REQUESTOPTIONSPAGE
+   | RESET
+   | RIGHTMARGIN
+   | ROUND
+   | ROUNDDATETIME
+   | ROWHEIGHT
+   | RUN
+   | RUNCOMMAND
+   | RUNMODAL
+   | RUNOBJECT
+   | RUNONCLIENT
+   | RUNPAGELINK
+   | RUNPAGEONREC
+   | RUNPAGEVIEW
+   | SAVEASEXCEL
+   | SAVEASHTML
+   | SAVEASPDF
+   | SAVEASXML
+   | SAVECOLUMNWIDTHS
+   | SAVECONTROLINFO
+   | SAVEPOSANDSIZE
+   | SAVERECORD
+   | SAVEVALUES
+   | SECRETTEXT
+   | SECTIONHEIGHT
+   | SECTIONWIDTH
+   | SECURITYFILTER
+   | SECURITYFILTERING
+   | SECURITYOPERATIONRESULT
+   | SEEK
+   | SELECTLATESTVERSION
+   | SELECTSTR
+   | SERIALNUMBER
+   | SESSIONSETTINGS
+   | SETAUTOCALCFIELDS
+   | SETCURRENTKEY
+   | SETFILTER
+   | SETPERMISSIONFILTER
+   | SETPOSITION
+   | SETRANGE
+   | SETRECFILTER
+   | SETRECORD
+   | SETSELECTIONFILTER
+   | SETSTAMP
+   | SETTABLE
+   | SETTABLEVIEW
+   | SETVIEW
+   | SHAPESTYLE
+   | SHELL
+   | SHORTCUTKEY
+   | SHOWASTREE
+   | SHOWCAPTION
+   | SHOWPRINTSTATUS
+   | SHOWSTATUS
+   | SID
+   | SIGNDISPLACEMENT
+   | SINGLEINSTANCE
+   | SIZABLE
+   | SLEEP
+   | SORTING
+   | SOURCEEXPR
+   | SOURCEFIELD
+   | SOURCETABLE
+   | SOURCETABLEPLACEMENT
+   | SOURCETABLERECORD
+   | SOURCETABLETEMPORARY
+   | SOURCETABLEVIEW
+   | SOURCETYPE
+   | SQLINDEX
+   | STARTPOS
+   | STARTSESSION
+   | STOPSESSION
+   | STRCHECKSUM
+   | STRLEN
+   | STRMENU
+   | STRPOS
+   | STRSUBSTNO
+   | STYLE
+   | STYLEEXPR
+   | SUBPAGELINK
+   | SUBPAGEVIEW
+   | SUBTYPE
+   | SUM
+   | SUMINDEXFIELDS
+   | SUPPRESSDISPOSE
+   | SYNCHRONIZEALLLOGINS
+   | SYNCHRONIZESINGLELOGIN
+   | SYSTEM
+   | SYSTEMACTION
+   | SYSTEMPARTID
+   | TABLE
+   | TABLEBOXID
+   | TABLECAPTION
+   | TABLECONNECTIONTYPE
+   | TABLEDATA
+   | TABLEEXTENSION
+   | TABLEFILTER
+   | TABLEIDEXPR
+   | TABLENAME
+   | TABLENO
+   | TABLERELATION
+   | TELEMETRYSCOPE
+   | TEMPORARY
+   | TEMPORARYPATH
+   | TESTACTION
+   | TESTFIELD
+   | TESTPAGE
+   | TESTPERMISSIONS
+   | TESTREQUESTPAGE
+   | TESTTABLERELATION
+   | TEXT
+   | TEXTBUILDER
+   | TEXTCONST
+   | TEXTENCODING
+   | TEXTMODE
+   | TEXTPOS
+   | TEXTTYPE
+   | THEN
+   | TIME
+   | TIMERINTERVAL
+   | TITLE
+   | TO
+   | TODAY
+   | TOOLTIP
+   | TOOLTIPML
+   | TOPLINEONLY
+   | TOPMARGIN
+   | TOTALFIELDS
+   | TOTALSCAUSEDBY
+   | TRANSACTIONMODEL
+   | TRANSACTIONTYPE
+   | TRANSFERFIELDS
+   | TRIGGER
+   | UNTIL
+   | TRUNC
+   | TYPE
+   | UPDATE
+   | UPDATECONTROLS
+   | UPDATEEDITABLE
+   | UPDATEFONTBOLD
+   | UPDATEFORECOLOR
+   | UPDATEINDENT
+   | UPDATEONACTION
+   | UPDATEONACTIVATE
+   | UPDATESELECTED
+   | UPLOAD
+   | UPLOADINTOSTREAM
+   | UPPERCASE
+   | UPPERLIMIT
+   | USEREQUESTPAGE
+   | USERID
+   | USESYSTEMPRINTER
+   | USING
+   | VALIDATE
+   | VALIDATETABLERELATION
+   | VALUE
+   | VALUESALLOWED
+   | VAR
+   | VARIABLEACTIVE
+   | VARIABLENAME
+   | VARIANT
+   | VARIANT2DATE
+   | VARIANT2TIME
+   | VERBOSITY
+   | VERSION
+   | VERTALIGN
+   | VERTGLUE
+   | VERTGRID
+   | VIEW
+   | VIEWS
+   | VISIBLE
+   | WEBSERVICEACTIONCONTEXT
+   | WEBSERVICEACTIONRESULTCODE
+   | WHERE
+   | WHILE
+   | WIDTH
+   | WINDOWSLANGUAGE
+   | WITH
+   | WITHEVENTS
+   | WORDDATE
+   | WRITE
+   | WRITEMODE
+   | WRITEPERMISSION
+   | WRITETEXT
+   | XMLATTRIBUTE
+   | XMLATTRIBUTECOLLECTION
+   | XMLCOMMENT
+   | XMLCDATA
+   | XMLDECLARATION
+   | XMLDOCUMENT
+   | XMLDOCUMENTTYPE
+   | XMLELEMENT
+   | XMLNAMESPACEMANAGER
+   | XMLNAMETABLE
+   | XMLNODE
+   | XMLNODELIST
+   | XMLPORT
+   | XMLPROCESSINGINSTRUCTION
+   | XMLREADOPTIONS
+   | XMLTEXT
+   | XMLVERSIONNO
+   | XMLWRITEOPTIONS
+   | XPOS
+   | XREC
+   | YIELD
+   | YPOS
+   ;
+
 namespaceIdentifier
-   : IDENTIFIER namespaceAccessor?
+   : identifier namespaceAccessor?
    ;
 
 namespaceAccessor
-   : PERIOD IDENTIFIER namespaceAccessor?
+   : PERIOD identifier namespaceAccessor?
    ;
 
 objectId
@@ -121,15 +906,15 @@ objectId
    | qualifiedObjectId;
 
 objectName
-   : IDENTIFIER
+   : identifier
    ;
 
 simpleObjectId
-   : IDENTIFIER
+   : identifier
    | INTEGER_LITERAL;
 
 qualifiedObjectId
-   : namespaceIdentifier PERIOD IDENTIFIER
+   : namespaceIdentifier PERIOD identifier
    ;
 
 booleanLiteral
@@ -143,49 +928,49 @@ numberLiteral
    ;
 
 objectLiteral
-   : (namespaceIdentifier PERIOD)? IDENTIFIER
+   : (namespaceIdentifier PERIOD)? identifier
    ;
 
 enumerationLiteral
-   : objectLiteral SCOPE IDENTIFIER
+   : objectLiteral SCOPE identifier
    ;
 
 systemEnumerationLiteral
-   : OBJECTTYPE SCOPE IDENTIFIER #ObjectTypeLiteral
-   | TRANSACTIONTYPE SCOPE IDENTIFIER #TransactionTypeLiteral
-   | EXECUTIONMODE SCOPE IDENTIFIER #ExecutionModeLiteral
-   | SECURITYFILTER SCOPE IDENTIFIER #SecurityFilterLiteral
-   | TEXTENCODING SCOPE IDENTIFIER #TextEncodingLiteral
-   | REPORTFORMAT SCOPE IDENTIFIER #ReportFormatLiteral
-   | DEFAULTLAYOUT SCOPE IDENTIFIER #DefaultLayoutLiteral
-   | CONNECTIONTYPE SCOPE IDENTIFIER #ConnectionTypeLiteral
-   | CLIENTTYPE SCOPE IDENTIFIER #ClientTypeLiteral
-   | COMMITBEHAVIOR SCOPE IDENTIFIER #CommitBehaviorLiteral
-   | DATASCOPE SCOPE IDENTIFIER #DataScopeLiteral
-   | DATACLASSIFICATION SCOPE IDENTIFIER #DataClassificationLiteral
-   | ACTION SCOPE IDENTIFIER #ActionLiteral
-   | AUDITCATEGORY SCOPE IDENTIFIER #AuditCategoryLiteral
-   | EXECUTIONCONTEXT SCOPE IDENTIFIER #ExecutionContextLiteral
-   | ERRORBEHAVIOR SCOPE IDENTIFIER #ErrorBehaviorLiteral
-   | ERRORTYPE SCOPE IDENTIFIER #ErrorTypeLiteral
-   | ERRORCONTEXT SCOPE IDENTIFIER #ErrorContextLiteral
-   | FIELDCLASS SCOPE IDENTIFIER #FieldClassLiteral
-   | FIELDTYPE SCOPE IDENTIFIER #FieldTypeLiteral
-   | INHERENTPERMISSIONSSCOPE SCOPE IDENTIFIER #InherentPermissionsScopeLiteral
-   | ISOLATIONLEVEL SCOPE IDENTIFIER #IsolationLevelLiteral
-   | NOTIFICATIONSCOPE SCOPE IDENTIFIER #NotificationScopeLiteral
-   | OBJECTTYPE SCOPE IDENTIFIER #ObjectTypeLiteral
-   | PAGEBACKGROUNDTASKERRORLEVEL SCOPE IDENTIFIER #PageBackgroundTaskErrorLevelLiteral
-   | PERMISSIONOBJECTTYPE SCOPE IDENTIFIER #PermissionObjectTypeLiteral
-   | REPORTLAYOUTTYPE SCOPE IDENTIFIER #ReportLayoutTypeLiteral
-   | SECURITYOPERATIONRESULT SCOPE IDENTIFIER #SecurityOperationResultLiteral
-   | TABLECONNECTIONTYPE SCOPE IDENTIFIER #TableConnectionTypeLiteral
-   | TELEMETRYSCOPE SCOPE IDENTIFIER #TelemetryScopeLiteral
-   | TESTPERMISSIONS SCOPE IDENTIFIER #TestPermissionsLiteral
-   | TRANSACTIONMODEL SCOPE IDENTIFIER #TransactionModelLiteral
-   | TRANSACTIONTYPE SCOPE IDENTIFIER #TransactionTypeLiteral
-   | VERBOSITY SCOPE IDENTIFIER #VerbosityLiteral
-   | WEBSERVICEACTIONRESULTCODE SCOPE IDENTIFIER #WebServiceActionResultCodeLiteral
+   : OBJECTTYPE SCOPE identifier #ObjectTypeLiteral
+   | TRANSACTIONTYPE SCOPE identifier #TransactionTypeLiteral
+   | EXECUTIONMODE SCOPE identifier #ExecutionModeLiteral
+   | SECURITYFILTER SCOPE identifier #SecurityFilterLiteral
+   | TEXTENCODING SCOPE identifier #TextEncodingLiteral
+   | REPORTFORMAT SCOPE identifier #ReportFormatLiteral
+   | DEFAULTLAYOUT SCOPE identifier #DefaultLayoutLiteral
+   | CONNECTIONTYPE SCOPE identifier #ConnectionTypeLiteral
+   | CLIENTTYPE SCOPE identifier #ClientTypeLiteral
+   | COMMITBEHAVIOR SCOPE identifier #CommitBehaviorLiteral
+   | DATASCOPE SCOPE identifier #DataScopeLiteral
+   | DATACLASSIFICATION SCOPE identifier #DataClassificationLiteral
+   | ACTION SCOPE identifier #ActionLiteral
+   | AUDITCATEGORY SCOPE identifier #AuditCategoryLiteral
+   | EXECUTIONCONTEXT SCOPE identifier #ExecutionContextLiteral
+   | ERRORBEHAVIOR SCOPE identifier #ErrorBehaviorLiteral
+   | ERRORTYPE SCOPE identifier #ErrorTypeLiteral
+   | ERRORCONTEXT SCOPE identifier #ErrorContextLiteral
+   | FIELDCLASS SCOPE identifier #FieldClassLiteral
+   | FIELDTYPE SCOPE identifier #FieldTypeLiteral
+   | INHERENTPERMISSIONSSCOPE SCOPE identifier #InherentPermissionsScopeLiteral
+   | ISOLATIONLEVEL SCOPE identifier #IsolationLevelLiteral
+   | NOTIFICATIONSCOPE SCOPE identifier #NotificationScopeLiteral
+   | OBJECTTYPE SCOPE identifier #ObjectTypeLiteral
+   | PAGEBACKGROUNDTASKERRORLEVEL SCOPE identifier #PageBackgroundTaskErrorLevelLiteral
+   | PERMISSIONOBJECTTYPE SCOPE identifier #PermissionObjectTypeLiteral
+   | REPORTLAYOUTTYPE SCOPE identifier #ReportLayoutTypeLiteral
+   | SECURITYOPERATIONRESULT SCOPE identifier #SecurityOperationResultLiteral
+   | TABLECONNECTIONTYPE SCOPE identifier #TableConnectionTypeLiteral
+   | TELEMETRYSCOPE SCOPE identifier #TelemetryScopeLiteral
+   | TESTPERMISSIONS SCOPE identifier #TestPermissionsLiteral
+   | TRANSACTIONMODEL SCOPE identifier #TransactionModelLiteral
+   | TRANSACTIONTYPE SCOPE identifier #TransactionTypeLiteral
+   | VERBOSITY SCOPE identifier #VerbosityLiteral
+   | WEBSERVICEACTIONRESULTCODE SCOPE identifier #WebServiceActionResultCodeLiteral
    | CODEUNIT SCOPE objectLiteral #CodeunitLiteral
    | PAGE SCOPE objectLiteral #PageLiteral
    | PAGEEXTENSION SCOPE objectLiteral #PageExtensionLiteral
@@ -203,19 +988,19 @@ systemEnumerationLiteral
  */
 
 keyValueProperty
-   : IDENTIFIER EQUAL (STRING_LITERAL | INTEGER_LITERAL | FLOAT_LITERAL | IDENTIFIER | booleanLiteral) SEMICOLON
+   : identifier EQUAL (STRING_LITERAL | INTEGER_LITERAL | FLOAT_LITERAL | identifier | booleanLiteral) SEMICOLON
    ;
 
 identifierList
-   : IDENTIFIER (COMMA IDENTIFIER)*
+   : identifier (COMMA identifier)*
    ;
 
 keyIdentifierListProperty
-   : IDENTIFIER EQUAL identifierList? SEMICOLON
+   : identifier EQUAL identifierList? SEMICOLON
    ;
 
 permissionSpecifier
-   : TABLEDATA objectId EQUAL IDENTIFIER
+   : TABLEDATA objectId EQUAL identifier
    ;
 
 permissionSpecifiers
@@ -232,7 +1017,7 @@ permissionsProperty
 sizeDeclaration : LEFTBRACKET INTEGER_LITERAL RIGHTBRACKET;
 
 builtinType
-   : IDENTIFIER;
+   : identifier;
    /*
    : ACTION | ARRAY | AUTOMATION | BIGINTEGER | BIGTEXT | BLOB | BOOLEAN | BYTE | CHAR | CLIENTTYPE | CODE
    | CODEUNIT | COMPLETIONTRIGGERERRORLEVEL | CONNECTIONTYPE | DATABASE | DATACLASSIFICATION | DATASCOPE
@@ -256,26 +1041,26 @@ builtinType
  */
 
 methodName
-   : IDENTIFIER;
+   : identifier;
 
 methodDeclaration
-   : methodAttribute*? LOCAL? PROCEDURE IDENTIFIER LEFTPAREN parameterList? RIGHTPAREN returnValue? varBlock? statementBlock SEMICOLON;
+   : methodAttribute*? LOCAL? PROCEDURE identifier LEFTPAREN parameterList? RIGHTPAREN returnValue? varBlock? statementBlock SEMICOLON;
 
 /*
  * Method attributes
  */
 
 attributeIdentifier
-   : IDENTIFIER COLON;
+   : identifier COLON;
 
 attributeArgument
-   : (attributeIdentifier)? (STRING_LITERAL | INTEGER_LITERAL	| FLOAT_LITERAL | booleanLiteral | systemEnumerationLiteral | enumerationLiteral);
+   : (attributeIdentifier)? (STRING_LITERAL | INTEGER_LITERAL	| FLOAT_LITERAL | identifier | booleanLiteral | systemEnumerationLiteral | enumerationLiteral);
 
 attributeArgumentList
    : attributeArgument (COMMA attributeArgument)*?;
 
 methodAttribute
-   : LEFTBRACKET IDENTIFIER (LEFTPAREN attributeArgumentList? RIGHTPAREN)? RIGHTBRACKET;
+   : LEFTBRACKET identifier (LEFTPAREN attributeArgumentList? RIGHTPAREN)? RIGHTBRACKET;
 
 /*
  * Variables
@@ -294,15 +1079,15 @@ labelText
    ;
 
 labelMaxLength
-   : {TokenMatches("MaxLength")}? IDENTIFIER EQUAL INTEGER_LITERAL
+   : {TokenMatches("MaxLength")}? identifier EQUAL INTEGER_LITERAL
    ;
 
 labelComment
-   : {TokenMatches("Comment")}? IDENTIFIER EQUAL STRING_LITERAL
+   : {TokenMatches("Comment")}? identifier EQUAL STRING_LITERAL
    ;
 
 labelLocked
-   : {TokenMatches("Locked")}? IDENTIFIER EQUAL (TRUE | FALSE)
+   : {TokenMatches("Locked")}? identifier EQUAL (TRUE | FALSE)
    ;
 
 labelArgument
@@ -316,7 +1101,7 @@ labelArgs
    ;
 
 optionValue
-   : IDENTIFIER
+   : identifier
    ;
 
 optionValueList
@@ -335,7 +1120,7 @@ variableTypeDeclaration
    | RECORD objectId TEMPORARY? #RecordVariable
    | TEXT sizeDeclaration? #TextVariable
    | CODE sizeDeclaration #CodeVariable
-   | TEXTCONST IDENTIFIER EQUAL STRING_LITERAL #TextConstantVariable
+   | TEXTCONST identifier EQUAL STRING_LITERAL #TextConstantVariable
    | INTEGER #IntegerVariable
    | DECIMAL #DecimalVariable
    | BOOLEAN #BooleanVariable
@@ -385,7 +1170,7 @@ variableTypeDeclaration
    ;
 
 parameterName
-   : IDENTIFIER
+   : identifier
    ;
 
 parameterDeclaration
@@ -397,7 +1182,7 @@ parameterList
    ;
 
 variableName
-   : IDENTIFIER;
+   : identifier;
 
 variableNameList
 	: variableName (COMMA variableName)*
@@ -420,7 +1205,7 @@ protectedVarBlock
    ;
 
 returnValue
-   : IDENTIFIER? returnType
+   : identifier? returnType
    ;
 
 returnType
@@ -431,7 +1216,7 @@ returnType
  * Trigger declarations
  */
 
-triggerName : IDENTIFIER;
+triggerName : identifier;
 
 triggerDeclaration
    : TRIGGER triggerName LEFTPAREN parameterList? RIGHTPAREN returnValue? varBlock? statementBlock SEMICOLON;
@@ -483,7 +1268,7 @@ forValue
    ;
 
 forControl
-   : FOR IDENTIFIER ASSGN expression (TO | DOWNTO) expression DO;
+   : FOR identifier ASSGN expression (TO | DOWNTO) expression DO;
 
 forStatement
    : forControl statement;
@@ -493,7 +1278,7 @@ forStatement
  */
 
 forEachControl:
-	FOREACH IDENTIFIER IN expression DO;
+	FOREACH identifier IN expression DO;
 
 forEachStatement: forEachControl statement;
 
@@ -555,7 +1340,7 @@ repeatUntilStatement
  */
 
 withControl
-   : WITH IDENTIFIER DO;
+   : WITH identifier DO;
 
 withStatement
    : withControl statement;
@@ -600,7 +1385,7 @@ statementList
 
 indexAccessorValue
    : INTEGER_LITERAL
-   | IDENTIFIER
+   | identifier
    ;
 
 indexAccessorSet
@@ -618,11 +1403,11 @@ expression
    | STRING_LITERAL #StringLiteralExpression
    | FLOAT_LITERAL #FloatLiteralExpression
    | INTEGER_LITERAL	#IntegerLiteralExpression
-   | IDENTIFIER #IdentifierExpression
+   | identifier #IdentifierExpression
    | expression PERIOD methodName LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
    | methodName LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
-   | expression SCOPE IDENTIFIER # ScopeExpression
-   | expression PERIOD IDENTIFIER #MemberAccessExpression
+   | expression SCOPE identifier # ScopeExpression
+   | expression PERIOD identifier #MemberAccessExpression
    | expression LEFTBRACKET indexAccessorSet RIGHTBRACKET #IndexExpression
    | LEFTBRACKET valueSet? RIGHTBRACKET #SetExpression
    | NOT expression #NotExpression
@@ -650,18 +1435,18 @@ methodCallArguments
 */
 
 namespaceDeclaration
-   : {TokenMatches("namespace")}? IDENTIFIER namespaceIdentifier SEMICOLON;
+   : {TokenMatches("namespace")}? identifier namespaceIdentifier SEMICOLON;
 
 usingDeclaration
-   : {TokenMatches("using")}? IDENTIFIER namespaceIdentifier SEMICOLON;
+   : {TokenMatches("using")}? identifier namespaceIdentifier SEMICOLON;
 
 usingDeclarations
-   : usingDeclaration*;
+   : usingDeclaration+;
 
 codeunitProperty
-   : {TokenMatches("Obsolete")}? IDENTIFIER EQUAL STRING_LITERAL SEMICOLON
-   | {TokenMatches("ObsoleteState")}? IDENTIFIER EQUAL {TokenMatches(ObsoleteStateValues)}? IDENTIFIER SEMICOLON
-   | {TokenMatches("ObsoleteTag")}? IDENTIFIER EQUAL STRING_LITERAL SEMICOLON
+   : {TokenMatches("Obsolete")}? identifier EQUAL STRING_LITERAL SEMICOLON
+   | {TokenMatches("ObsoleteState")}? identifier EQUAL {TokenMatches(ObsoleteStateValues)}? identifier SEMICOLON
+   | {TokenMatches("ObsoleteTag")}? identifier EQUAL STRING_LITERAL SEMICOLON
    | permissionsProperty
    | keyValueProperty
    | keyIdentifierListProperty
@@ -671,4 +1456,4 @@ codeunitProperties
    : codeunitProperty*;
 
 codeunitDeclaration
-   : namespaceDeclaration? usingDeclarations? CODEUNIT objectId? objectName LEFTCBRACE codeunitProperties? codeDeclarations? RIGHTCBRACE;
+   : namespaceDeclaration? usingDeclarations? CODEUNIT objectId? objectName LEFTCBRACE codeunitProperties codeDeclarations RIGHTCBRACE;

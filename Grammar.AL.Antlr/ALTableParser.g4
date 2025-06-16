@@ -59,7 +59,7 @@ tableRelationFilters
    ;
 
 tableRelationWhereClause
-   : {TokenMatches("where")}? IDENTIFIER LEFTPAREN tableRelationFilters RIGHTPAREN
+   : WHERE LEFTPAREN tableRelationFilters RIGHTPAREN
    ;
 
 fieldRelationClause
@@ -84,12 +84,12 @@ tableRelation
  */
 
 calcFormulaTableFilterValue
-   : {TokenMatches("const")}? IDENTIFIER LEFTPAREN fieldValue RIGHTPAREN
-   | {TokenMatches("filter")}? IDENTIFIER LEFTPAREN compoundFilterRule RIGHTPAREN
-   | {TokenMatches("field")}? IDENTIFIER LEFTPAREN IDENTIFIER RIGHTPAREN
-   | {TokenMatches("field")}? IDENTIFIER LEFTPAREN {TokenMatches("upperlimit")}? IDENTIFIER LEFTPAREN IDENTIFIER RIGHTPAREN RIGHTPAREN
-   | {TokenMatches("field")}? IDENTIFIER LEFTPAREN {TokenMatches("filter")}? IDENTIFIER LEFTPAREN IDENTIFIER RIGHTPAREN RIGHTPAREN
-   | {TokenMatches("field")}? IDENTIFIER LEFTPAREN {TokenMatches("upperlimit")}? IDENTIFIER LEFTPAREN {TokenMatches("filter")}? IDENTIFIER LEFTPAREN IDENTIFIER RIGHTPAREN RIGHTPAREN RIGHTPAREN
+   : CONST LEFTPAREN fieldValue RIGHTPAREN
+   | FILTER LEFTPAREN compoundFilterRule RIGHTPAREN
+   | FIELD LEFTPAREN IDENTIFIER RIGHTPAREN
+   | FIELD LEFTPAREN UPPERLIMIT LEFTPAREN IDENTIFIER RIGHTPAREN RIGHTPAREN
+   | FIELD LEFTPAREN FILTER LEFTPAREN IDENTIFIER RIGHTPAREN RIGHTPAREN
+   | FIELD LEFTPAREN UPPERLIMIT LEFTPAREN FILTER LEFTPAREN IDENTIFIER RIGHTPAREN RIGHTPAREN RIGHTPAREN
    ;
 
 calcFormulaTableFilter
@@ -101,35 +101,35 @@ calcFormulaTableFilters
    ;
 
 calcFormulaWhereClause
-   : {TokenMatches("where")}? IDENTIFIER LEFTPAREN calcFormulaTableFilters RIGHTPAREN
+   : WHERE LEFTPAREN calcFormulaTableFilters RIGHTPAREN
    ;
 
 calcFormulaExist
-   : MINUS? {TokenMatches("exist")}? IDENTIFIER LEFTPAREN tableReference calcFormulaWhereClause? RIGHTPAREN
+   : MINUS? EXIST LEFTPAREN tableReference calcFormulaWhereClause? RIGHTPAREN
    ;
 
 calcFormulaCount
-   : {TokenMatches("count")}? IDENTIFIER LEFTPAREN tableReference calcFormulaWhereClause? RIGHTPAREN
+   : COUNT LEFTPAREN tableReference calcFormulaWhereClause? RIGHTPAREN
    ;
 
 calcFormulaSum
-   : MINUS? {TokenMatches("sum")}? IDENTIFIER LEFTPAREN qualifiedFieldReference calcFormulaWhereClause? RIGHTPAREN
+   : MINUS? SUM LEFTPAREN qualifiedFieldReference calcFormulaWhereClause? RIGHTPAREN
    ;
 
 calcFormulaAverage
-   : MINUS? {TokenMatches("average")}? IDENTIFIER LEFTPAREN qualifiedFieldReference calcFormulaWhereClause? RIGHTPAREN
+   : MINUS? AVERAGE LEFTPAREN qualifiedFieldReference calcFormulaWhereClause? RIGHTPAREN
    ;
    
 calcFormulaMin
-   : {TokenMatches("min")}? IDENTIFIER LEFTPAREN qualifiedFieldReference calcFormulaWhereClause? RIGHTPAREN
+   : MIN LEFTPAREN qualifiedFieldReference calcFormulaWhereClause? RIGHTPAREN
    ;
 
 calcFormulaMax
-   : {TokenMatches("max")}? IDENTIFIER LEFTPAREN qualifiedFieldReference calcFormulaWhereClause? RIGHTPAREN
+   : MAX LEFTPAREN qualifiedFieldReference calcFormulaWhereClause? RIGHTPAREN
    ;
 
 calcFormulaLookup
-   : {TokenMatches("lookup")}? IDENTIFIER LEFTPAREN qualifiedFieldReference calcFormulaWhereClause? RIGHTPAREN
+   : LOOKUP LEFTPAREN qualifiedFieldReference calcFormulaWhereClause? RIGHTPAREN
    ;
 
 calcForumla
@@ -151,11 +151,11 @@ keyProperties
    ;
 
 tableKey
-   : {TokenMatches("key")}? IDENTIFIER LEFTPAREN fieldNames RIGHTPAREN LEFTCBRACE keyProperties RIGHTCBRACE
+   : KEY LEFTPAREN fieldNames RIGHTPAREN LEFTCBRACE keyProperties RIGHTCBRACE
    ;
 
 tableKeys
-   : {TokenMatches("keys")}? IDENTIFIER LEFTCBRACE tableKey*? RIGHTCBRACE
+   : KEY LEFTCBRACE tableKey*? RIGHTCBRACE
    ;
 
 /*
@@ -167,7 +167,7 @@ languageCaption
    ;
 
 multiLangaugeCaptionPropertty
-   : {TokenMatches("captionml")}? IDENTIFIER EQUAL languageCaption (COMMA languageCaption)*? SEMICOLON
+   : CAPTIONML EQUAL languageCaption (COMMA languageCaption)*? SEMICOLON
    ;
 
 tableProperty
@@ -178,7 +178,7 @@ tableProperty
    ;
 
 tableProperties
-   : tableProperty*?
+   : tableProperty*
    ;
 
 /*
@@ -191,13 +191,13 @@ tableFieldName : IDENTIFIER;
 
 tableFieldType
    : {TokenMatches(SimpleFieldTypes)}? IDENTIFIER
-   | {TokenMatches("code")}? IDENTIFIER sizeDeclaration
-   | {TokenMatches("text")}? IDENTIFIER sizeDeclaration
+   | CODE sizeDeclaration
+   | TEXT sizeDeclaration
    ;
 
 tableFieldProperty
-   : {TokenMatches("tablerelation")}? IDENTIFIER EQUAL tableRelation SEMICOLON
-   | {TokenMatches("calcformula")}? IDENTIFIER EQUAL calcForumla SEMICOLON
+   : TABLERELATION EQUAL tableRelation SEMICOLON
+   | CALCFORMULA EQUAL calcForumla SEMICOLON
    | multiLangaugeCaptionPropertty
    | keyIdentifierListProperty
    | keyValueProperty   
@@ -209,7 +209,7 @@ tableFieldEntity
    ;
 
 tableFieldGroupName
-   : {TokenMatches("dropdown")}? IDENTIFIER
+   : DROPDOWN
    | {TokenMatches("brick")}? IDENTIFIER
    ;
 
@@ -218,19 +218,19 @@ fieldNames
    ;
 
 tableFieldGroup
-   : {TokenMatches("fieldgroup")}? IDENTIFIER LEFTPAREN tableFieldGroupName SEMICOLON fieldNames RIGHTPAREN LEFTCBRACE keyValueProperty*? RIGHTCBRACE
+   : FIELDGROUP LEFTPAREN tableFieldGroupName SEMICOLON fieldNames RIGHTPAREN LEFTCBRACE keyValueProperty*? RIGHTCBRACE
    ;
 
 tableFieldGroups
-   : {TokenMatches("fieldgroups")}? IDENTIFIER LEFTCBRACE tableFieldGroup*? RIGHTCBRACE
+   : FIELDGROUPS LEFTCBRACE tableFieldGroup*? RIGHTCBRACE
    ;
 
 tableField
-   : {TokenMatches("field")}? IDENTIFIER LEFTPAREN tableFieldId SEMICOLON tableFieldName SEMICOLON tableFieldType RIGHTPAREN LEFTCBRACE tableFieldEntity*? RIGHTCBRACE
+   : FIELD LEFTPAREN tableFieldId SEMICOLON tableFieldName SEMICOLON tableFieldType RIGHTPAREN LEFTCBRACE tableFieldEntity*? RIGHTCBRACE
    ;
 
 tableFields
-   : {TokenMatches("fields")}? IDENTIFIER LEFTCBRACE tableField*? RIGHTCBRACE
+   : FIELDS LEFTCBRACE tableField*? RIGHTCBRACE
    ;
 
 tableEntity
@@ -244,7 +244,7 @@ tableEntities
    ;
 
 table
-   : {TokenMatches("table")}? IDENTIFIER INTEGER_LITERAL IDENTIFIER LEFTCBRACE tableProperties tableEntities? codeDeclarations? RIGHTCBRACE
+   : TABLE INTEGER_LITERAL IDENTIFIER LEFTCBRACE tableProperties tableEntities? codeDeclarations? RIGHTCBRACE
    ;
 
 tableExtFieldGroup
@@ -252,7 +252,7 @@ tableExtFieldGroup
    ;
 
 tableExtFieldGroups
-   : {TokenMatches("fieldgroups")}? IDENTIFIER LEFTCBRACE tableExtFieldGroup*? RIGHTCBRACE
+   : FIELDGROUPS LEFTCBRACE tableExtFieldGroup*? RIGHTCBRACE
    ;
 
 tableExtEntity
@@ -266,6 +266,6 @@ tableExtEntities
    ;
 
 tableExtension
-   : {TokenMatches("tableextension")}? IDENTIFIER INTEGER_LITERAL IDENTIFIER {TokenMatches("extends")}? IDENTIFIER IDENTIFIER 
+   : TABLEEXTENSION INTEGER_LITERAL IDENTIFIER EXTENDS IDENTIFIER 
       LEFTCBRACE tableProperties tableExtEntities? codeDeclarations? RIGHTCBRACE
    ;
