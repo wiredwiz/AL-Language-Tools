@@ -151,7 +151,7 @@ keyProperties
    ;
 
 tableKey
-   : KEY LEFTPAREN fieldNames RIGHTPAREN LEFTCBRACE keyProperties RIGHTCBRACE
+   : KEY LEFTPAREN identifier SEMICOLON fieldNames RIGHTPAREN LEFTCBRACE keyProperties RIGHTCBRACE
    ;
 
 tableKeys
@@ -229,7 +229,7 @@ tableFieldGroupName
    ;
 
 fieldNames
-   : identifier (SEMICOLON identifier)*?
+   : identifier (COMMA identifier)*?
    ;
 
 tableFieldGroup
