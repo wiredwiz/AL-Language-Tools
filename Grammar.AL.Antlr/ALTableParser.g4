@@ -193,7 +193,7 @@ tableFieldType
    : INTEGER
    | BIGINTEGER
    | DECIMAL
-   | ENUM
+   | ENUM identifier
    | BOOLEAN
    | BINARY
    | BLOB
@@ -259,7 +259,7 @@ tableEntities
    ;
 
 table
-   : TABLE INTEGER_LITERAL identifier LEFTCBRACE tableProperties tableEntities? codeDeclarations? RIGHTCBRACE
+   : namespaceDeclaration? usingDeclarations? TABLE INTEGER_LITERAL identifier LEFTCBRACE tableProperties tableEntities? codeDeclarations? RIGHTCBRACE
    ;
 
 tableExtFieldGroup
