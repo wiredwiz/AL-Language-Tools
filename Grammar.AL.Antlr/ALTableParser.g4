@@ -166,12 +166,20 @@ languageCaption
    : IDENTIFIER EQUAL STRING_LITERAL
    ;
 
-multiLangaugeCaptionPropertty
+multiLanguageCaptionProperty
    : CAPTIONML EQUAL languageCaption (COMMA languageCaption)*? SEMICOLON
    ;
 
+accessByPermProperty
+   : {TokenMatches("AccessByPermission")}? identifier EQUAL TABLEDATA objectId EQUAL identifier SEMICOLON
+   ;
+
+decimalPlacesProperty
+   : {TokenMatches("DecimalPlaces")}? identifier EQUAL INTEGER_LITERAL COLON INTEGER_LITERAL SEMICOLON
+   ;
+
 tableProperty
-   : multiLangaugeCaptionPropertty
+   : multiLanguageCaptionProperty
    | permissionsProperty
    | keyIdentifierListProperty
    | keyValueProperty
@@ -213,9 +221,11 @@ tableFieldType
 tableFieldProperty
    : TABLERELATION EQUAL tableRelation SEMICOLON
    | CALCFORMULA EQUAL calcForumla SEMICOLON
-   | multiLangaugeCaptionPropertty
+   | multiLanguageCaptionProperty
    | keyIdentifierListProperty
    | keyValueProperty
+   | accessByPermProperty
+   | decimalPlacesProperty
    ;
 
 tableFieldEntity
