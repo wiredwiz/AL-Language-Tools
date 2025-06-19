@@ -181,6 +181,9 @@ parameterList
    : parameterDeclaration (SEMICOLON parameterDeclaration)*
    ;
 
+variableAttribute
+   : LEFTBRACKET identifier (LEFTPAREN attributeArgumentList? RIGHTPAREN)? RIGHTBRACKET;
+
 variableName
    : identifier;
 
@@ -189,7 +192,7 @@ variableNameList
    ;
 
 variableDeclaration
-   : variableNameList COLON variableTypeDeclaration SEMICOLON
+   : variableAttribute? variableNameList COLON variableTypeDeclaration SEMICOLON
    ;
 
 variableDeclarations
@@ -201,7 +204,7 @@ varBlock
    ;
 
 protectedVarBlock
-   : PROTECTED VAR variableDeclaration
+   : PROTECTED VAR variableDeclarations
    ;
 
 returnValue
@@ -247,7 +250,7 @@ ifElse
    : ELSE statement?;
 
 ifStatement
-   : ifCondition statement (ifElse)?;
+   : ifCondition statement? (ifElse)?;
 
 /*
  * AL WHILE statement logic
@@ -257,7 +260,7 @@ whileConditional
    : WHILE expression DO;
 
 whileStatement
-   : whileConditional statement;
+   : whileConditional statement?;
 
 /*
  * AL FOR statement logic
@@ -271,7 +274,7 @@ forControl
    : FOR identifier ASSGN expression (TO | DOWNTO) expression DO;
 
 forStatement
-   : forControl statement;
+   : forControl statement?;
 
 /*
  * AL FOREACH statement logic
@@ -280,7 +283,7 @@ forStatement
 forEachControl:
 	FOREACH identifier IN expression DO;
 
-forEachStatement: forEachControl statement;
+forEachStatement: forEachControl statement?;
 
 /*
  * AL CASE statement logic
@@ -332,7 +335,7 @@ untilCondition
    : UNTIL expression;
 
 repeatUntilStatement
-   : REPEAT statementList SEMICOLON? untilCondition;
+   : REPEAT statementList? SEMICOLON? untilCondition;
 
 /*
  * AL WITH statement logic
@@ -343,7 +346,7 @@ withControl
    : WITH identifier DO;
 
 withStatement
-   : withControl statement;
+   : withControl statement?;
 
 /*
  *AL Exit statement logic
@@ -370,14 +373,14 @@ statementLine
    | expression;
 
 statementBlock
-   : BEGIN statementList END;
+   : BEGIN statementList? END;
 
 statement
    : (statementLine | statementBlock)
    ;
 
 statementList
-   : (statementLine (SEMICOLON statementLine?)*?)?;
+   : statementLine (SEMICOLON statementLine?)*?;
 
 /*
  * AL expression logic
