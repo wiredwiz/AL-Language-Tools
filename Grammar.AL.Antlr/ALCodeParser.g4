@@ -10,16 +10,21 @@ import ALCoreParser;
  * method declarations, control structures, expressions and codeunits.
  */
 
-
 /*
  * Method
  */
+
+methodAccessModifier
+   : LOCAL
+   | PROTECTED
+   | INTERNAL
+   ;
 
 methodName
    : identifier;
 
 methodDeclaration
-   : methodAttribute*? LOCAL? PROCEDURE identifier LEFTPAREN parameterList? RIGHTPAREN returnValue? varBlock? statementBlock SEMICOLON;
+   : methodAttribute*? methodAccessModifier* PROCEDURE identifier LEFTPAREN parameterList? RIGHTPAREN returnValue? SEMICOLON? varBlock? statementBlock SEMICOLON;
 
 /*
  * Method attributes
@@ -93,8 +98,10 @@ variableTypeDeclaration
    | CODE sizeDeclaration #CodeVariable
    | CODEUNIT objectId #CodeunitVariable
    | DATE #DateVariable
+   | DATEFORMULA #DateFormulaVariable
    | DATETIME #DatetimeVariable
    | DECIMAL #DecimalVariable
+   | DIALOG #DialogVariable
    | DICTIONARY OF LEFTBRACKET dictionaryKey COMMA dictionaryDataType RIGHTBRACKET #DictionaryVariable
    | DOTNET objectId #DotNetVariable
    | DURATION #DurationVariable
@@ -110,6 +117,7 @@ variableTypeDeclaration
    | HTTPRESPONSEMESSAGE #HttpResponseMessageVariable
    | INSTREAM #InStreamVariable
    | INTEGER #IntegerVariable
+   | INTERFACE objectId #InterfaceVariable
    | JSONARRAY #JsonArrayVariable
    | JSONOBJECT #JsonObjectVariable
    | JSONTOKEN #JsonTokenVariable
@@ -120,7 +128,7 @@ variableTypeDeclaration
    | MODULEDEPENDENCYINFO #ModuleDependencyInfoVariable
    | MODULEINFO #ModuleInfoVariable
    | NOTIFICATION #NotificationVariable
-   | OPTION #OptionVariable
+   | OPTION optionValueList? #OptionVariable
    | OUTSTREAM #OutStreamVariable
    | PAGE objectId #PageVariable
    | QUERY objectId #QueryVariable

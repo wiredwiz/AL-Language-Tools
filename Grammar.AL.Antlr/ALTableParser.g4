@@ -73,6 +73,7 @@ tableFieldProperty
    | accessByPermProperty
    | decimalPlacesProperty
    | autoformatExpressionProperty
+   | expressionProperty
    ;
 
 tableFieldEntity

@@ -8,6 +8,10 @@ keyValueProperty
    : identifier EQUAL (STRING_LITERAL | INTEGER_LITERAL | FLOAT_LITERAL | identifier | booleanLiteral) SEMICOLON
    ;
 
+expressionProperty
+   : identifier EQUAL expression SEMICOLON
+   ;
+
 identifierList
    : identifier (COMMA identifier)*
    ;

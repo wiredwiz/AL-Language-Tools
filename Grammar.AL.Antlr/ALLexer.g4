@@ -1,18 +1,161 @@
 lexer grammar ALLexer;
 
-channels { COMMENTS_CHANNEL }
+channels {
+   COMMENTS,
+   DIRECTIVE
+}
+/*
+ * fragments
+ */
+
+// Because AL is case insensitive, we define fragments for each letter that we use further down
+
+fragment A : [aA];
+fragment B : [bB];
+fragment C : [cC];
+fragment D : [dD];
+fragment E : [eE];
+fragment F : [fF];
+fragment G : [gG];
+fragment H : [hH];
+fragment I : [iI];
+fragment J : [jJ];
+fragment K : [kK];
+fragment L : [lL];
+fragment M : [mM];
+fragment N : [nN];
+fragment O : [oO];
+fragment P : [pP];
+fragment Q : [qQ];
+fragment R : [rR];
+fragment S : [sS];
+fragment T : [tT];
+fragment U : [uU];
+fragment V : [vV];
+fragment W : [wW];
+fragment X : [xX];
+fragment Y : [yY];
+fragment Z : [zZ];
+
+fragment LOWERCASELETTER
+	: [a-z] ;
+
+fragment UPPERCASELETTER
+	: [A-Z] ;
+
+fragment EXPONENT_NOTATION
+	: ('E' | 'e');
+
+fragment EXPONENT_SIGN
+	: ('-' | '+');
+
+fragment DIGIT
+	: [0-9] ;
+
+fragment HEXDIGIT : [0-9] | [A-F] | [a-f];
+
+fragment INTEGER_SUFFIX
+   : [uU] [lL]? [lL]? | [lL] [lL]?;
+
+fragment FLOAT_SUFFIX
+   : [fF];
+
+fragment ESC
+	: '\'\'' ;
+
+fragment INPUT_CHARACTER
+	: ~[\r\n\u0085\u2028\u2029];
+
+/*
+ * boolean
+ */
+
+TRUE
+   : T R U E;
+
+FALSE
+   : F A L S E;
+
+/*
+ * date
+ */
+
+DATE_LITERAL
+   : DIGIT+ D;
+
+/*
+ * time
+ */
+
+TIME_LITERAL
+   : DIGIT+ ([.] DIGIT+)? T;
+
+/*
+ * datetime
+ */
+
+DATETIME_LITERAL
+   : DIGIT+ D T;
+
+/*
+ * numbers
+ */
+
+INTEGER_LITERAL
+   : DIGIT+
+   | ('0' X HEXDIGIT*? | DIGIT+) (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)? (INTEGER_SUFFIX | FLOAT_SUFFIX)?
+   ;
+
+FLOAT_LITERAL
+	: (DIGIT+ [.] (DIGIT*)? {_input.La(1) != '.'}? (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)?
+	| [.] DIGIT+ (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)?
+	| DIGIT+ EXPONENT_NOTATION EXPONENT_SIGN DIGIT+) (INTEGER_SUFFIX | FLOAT_SUFFIX)?
+	;
+
+/*
+ * strings
+ */
+
+STRING_LITERAL
+	: '\'' ( ESC | ~['\r\n])* '\'';
+
+/*
+ * identifiers
+ */
+
+IDENTIFIER
+	: (LETTER | DIGIT | UNDERSCORE)+
+   | '"' ~["]+ '"'
+	;
+
+UNDERSCORE
+	: '_';
+
+LETTER
+	: LOWERCASELETTER
+	| UPPERCASELETTER
+	;
+
+/*
+ * comments
+ */
 
 SINGLE_LINE_COMMENT
-	: '//' INPUT_CHARACTER* -> channel(COMMENTS_CHANNEL);
+	: '//' INPUT_CHARACTER* -> channel(COMMENTS);
 
 DELIMITED_COMMENT
-	: '/*' .*? '*/' -> channel(COMMENTS_CHANNEL);
+	: '/*' .*? '*/' -> channel(COMMENTS);
 
 WS
 	:	[ \t\r\n] -> channel(HIDDEN)
 	;
 
-// SYMBOLS
+/*
+ * Symbols
+ */
+
+HASH
+   : '#' -> mode(DIRECTIVE_MODE), skip;
 
 SCOPE
    : '::';
@@ -132,7 +275,9 @@ XOR
    : X O R
    ;
 
-// WORDS
+/*
+ * keywords
+ */
 
 ABS
    : A B S
@@ -3264,139 +3409,24 @@ YPOS
    : Y P O S
    ;
 
-/*
- * boolean
- */
-
-TRUE
-   : T R U E;
-
-FALSE
-   : F A L S E;
-
-/*
- * date
- */
-
-DATE_LITERAL
-   : DIGIT+ D;
-
-/*
- * time
- */
-
-TIME_LITERAL
-   : DIGIT+ ([.] DIGIT+)? T;
-
-/*
- * datetime
- */
-
-DATETIME_LITERAL
-   : DIGIT+ D T;
-
-/*
- * numbers
- */
-
-INTEGER_LITERAL
-   : DIGIT+
-   | ('0' X HEXDIGIT*? | DIGIT+) (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)? (INTEGER_SUFFIX | FLOAT_SUFFIX)?
-   ;
-
-FLOAT_LITERAL
-	: (DIGIT+ [.] (DIGIT*)? {_input.La(1) != '.'}? (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)?
-	| [.] DIGIT+ (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)?
-	| DIGIT+ EXPONENT_NOTATION EXPONENT_SIGN DIGIT+) (INTEGER_SUFFIX | FLOAT_SUFFIX)?
-	;
-
-/*
- * strings
- */
-
-STRING_LITERAL
-	: '\'' ( ESC | ~['\r\n])* '\'';
-
-/*
- * identifiers
- */
-
-IDENTIFIER
-	: (LETTER | DIGIT | UNDERSCORE)+
-   | '"' ~["]+ '"'
-	;
-
-UNDERSCORE
-	: '_';
-
-LETTER
-	: LOWERCASELETTER
-	| UPPERCASELETTER
-	;
 
 /*
  * preprocessor directives
  */
 
+mode DIRECTIVE_MODE;
+
+DIRECTIVE_WHITESPACES  : WS+ -> channel(HIDDEN);
+
+DEFINE                 : 'define'                -> channel(DIRECTIVE);
+UNDEF                  : 'undef'                 -> channel(DIRECTIVE);
+DIRECTIVE_IF           : 'if'                    -> channel(DIRECTIVE), type(IF);
+ELIF                   : 'elif'                  -> channel(DIRECTIVE);
+DIRECTIVE_ELSE         : 'else'                  -> channel(DIRECTIVE), type(ELSE);
+ENDIF                  : 'endif'                 -> channel(DIRECTIVE);
+REGION                 : 'region' WS*    -> channel(DIRECTIVE), mode(DIRECTIVE_TEXT);
+ENDREGION              : 'endregion' WS* -> channel(DIRECTIVE), mode(DIRECTIVE_TEXT);
+PRAGMA                 : 'pragma' WS+    -> channel(DIRECTIVE), mode(DIRECTIVE_TEXT);
+
 PREPROCESSOR_DIRECTIVE
-   : '#' ~[\r\n]* '\r'? '\n' -> channel(COMMENTS_CHANNEL);
-
-/*
- * fragments
- */
-
-fragment LOWERCASELETTER
-	: [a-z] ;
-
-fragment UPPERCASELETTER
-	: [A-Z] ;
-
-fragment EXPONENT_NOTATION
-	: ('E' | 'e');
-
-fragment EXPONENT_SIGN
-	: ('-' | '+');
-
-fragment DIGIT
-	: [0-9] ;
-
-fragment HEXDIGIT : [0-9] | [A-F] | [a-f];
-
-fragment INTEGER_SUFFIX
-   : [uU] [lL]? [lL]? | [lL] [lL]?;
-
-fragment FLOAT_SUFFIX
-   : [fF];
-
-fragment ESC
-	: '\'\'' ;
-
-fragment INPUT_CHARACTER
-	: ~[\r\n\u0085\u2028\u2029];
-
-fragment A : [aA];
-fragment B : [bB];
-fragment C : [cC];
-fragment D : [dD];
-fragment E : [eE];
-fragment F : [fF];
-fragment G : [gG];
-fragment H : [hH];
-fragment I : [iI];
-fragment J : [jJ];
-fragment K : [kK];
-fragment L : [lL];
-fragment M : [mM];
-fragment N : [nN];
-fragment O : [oO];
-fragment P : [pP];
-fragment Q : [qQ];
-fragment R : [rR];
-fragment S : [sS];
-fragment T : [tT];
-fragment U : [uU];
-fragment V : [vV];
-fragment W : [wW];
-fragment X : [xX];
-fragment Y : [yY];
-fragment Z : [zZ];
+   : '#' ~[\r\n]* '\r'? '\n' -> channel(COMMENTS);
