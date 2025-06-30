@@ -40,6 +40,7 @@ fieldValue
    | DATETIME_LITERAL
    | STRING_LITERAL
    | booleanLiteral
+   | systemEnumerationLiteral
    ;
 
 comparisonFilter
