@@ -2,7 +2,7 @@ parser grammar ALCodeunitParser;
 
 options { tokenVocab=ALLexer; }
 
-import ALCodeParser;
+import ALCodeParser, ALPropertyParser;
 
 /*
 * Codeunit structure

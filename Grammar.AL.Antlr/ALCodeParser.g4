@@ -12,33 +12,6 @@ import ALCoreParser;
 
 
 /*
- * Property declarations
- */
-
-keyValueProperty
-   : identifier EQUAL (STRING_LITERAL | INTEGER_LITERAL | FLOAT_LITERAL | identifier | booleanLiteral) SEMICOLON
-   ;
-
-identifierList
-   : identifier (COMMA identifier)*
-   ;
-
-keyIdentifierListProperty
-   : identifier EQUAL identifierList? SEMICOLON
-   ;
-
-permissionSpecifier
-   : TABLEDATA objectId EQUAL identifier
-   ;
-
-permissionSpecifiers
-   : permissionSpecifier (COMMA permissionSpecifier)*;
-
-permissionsProperty
-   : PERMISSIONS EQUAL permissionSpecifiers SEMICOLON
-   ;
-
-/*
  * Method
  */
 
