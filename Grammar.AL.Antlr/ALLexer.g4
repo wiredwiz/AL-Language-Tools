@@ -66,213 +66,13 @@ fragment ESC
 fragment INPUT_CHARACTER
 	: ~[\r\n\u0085\u2028\u2029];
 
-/*
- * boolean
- */
-
-TRUE
-   : T R U E;
-
-FALSE
-   : F A L S E;
-
-/*
- * date
- */
-
-DATE_LITERAL
-   : DIGIT+ D;
-
-/*
- * time
- */
-
-TIME_LITERAL
-   : DIGIT+ ([.] DIGIT+)? T;
-
-/*
- * datetime
- */
-
-DATETIME_LITERAL
-   : DIGIT+ D T;
-
-/*
- * numbers
- */
-
-INTEGER_LITERAL
-   : DIGIT+
-   | ('0' X HEXDIGIT*? | DIGIT+) (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)? (INTEGER_SUFFIX | FLOAT_SUFFIX)?
-   ;
-
-FLOAT_LITERAL
-	: (DIGIT+ [.] (DIGIT*)? {_input.La(1) != '.'}? (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)?
-	| [.] DIGIT+ (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)?
-	| DIGIT+ EXPONENT_NOTATION EXPONENT_SIGN DIGIT+) (INTEGER_SUFFIX | FLOAT_SUFFIX)?
-	;
-
-/*
- * strings
- */
-
-STRING_LITERAL
-	: '\'' ( ESC | ~['\r\n])* '\'';
-
-/*
- * identifiers
- */
-
-IDENTIFIER
-	: (LETTER | DIGIT | UNDERSCORE)+
-   | '"' ~["]+ '"'
-	;
-
-UNDERSCORE
-	: '_';
-
-LETTER
-	: LOWERCASELETTER
-	| UPPERCASELETTER
-	;
-
-/*
- * comments
- */
-
-SINGLE_LINE_COMMENT
-	: '//' INPUT_CHARACTER* -> channel(COMMENTS);
-
-DELIMITED_COMMENT
-	: '/*' .*? '*/' -> channel(COMMENTS);
-
-WS
-	:	[ \t\r\n] -> channel(HIDDEN)
-	;
-
-/*
- * Symbols
- */
-
-HASH
-   : '#' -> mode(DIRECTIVE_MODE), skip;
-
-SCOPE
-   : '::';
-
-RANGE
-   : '..';
-
-SEMICOLON
-   : ';';
-
-COLON
-   : ':';
-
-COMMA
-   : ',';
-
-PERIOD
-   : '.';
-
-GREATERTHANEQUAL
-   : '>=';
-
-LESSTHANEQUAL
-   : '<=';
-
-NOTEQUAL
-   : '<>';
-
-EQUAL
-   : '=';
-
-ASSGN
-   : ':=';
-
-MULTIPLY_ASSGN
-   : '*=';
-
-DIV_ASSGN
-   : '/=';
-
-ADD_ASSGN
-   : '+=';
-
-MINUS_ASSGN
-   : '-=';
-
-ASTERISK
-   : '*';
-
-BACKSLASH
-   : '/';
-
-PLUS
-   : '+';
-
-MINUS
-   : '-';
-
-LESSTHAN
-   : '<';
-
-GREATERTHAN
-   : '>';
-
-LEFTPAREN
-   : '(';
-
-RIGHTPAREN
-   : ')';
-
-LEFTBRACKET
-   : '[';
-
-RIGHTBRACKET
-   : ']';
-
-LEFTCBRACE
-   : '{';
-
-RIGHTCBRACE
-   : '}';
-
-PIPE
-   : '|';
-
-AMPERSAND
-   : '&';
-
-CONDITION
-   : '?' ;
-
-/*
- * operator keywords
- */
-
-AND
-   : A N D
-   ;
-
-DIV
-   : D I V
-   ;
-
-MOD
-   : M O D
-   ;
-
-NOT
-   : N O T
-   ;
-
-OR
-   : O R
-   ;
-
-XOR
-   : X O R
+fragment NEW_LINE
+   : '\r\n'
+   | '\r'
+   | '\n'
+   | '\u0085' // <Next Line CHARACTER (U+0085)>'
+   | '\u2028' //'<Line Separator CHARACTER (U+2028)>'
+   | '\u2029' //'<Paragraph Separator CHARACTER (U+2029)>'
    ;
 
 /*
@@ -3409,6 +3209,218 @@ YPOS
    : Y P O S
    ;
 
+/*
+ * boolean
+ */
+
+TRUE
+   : T R U E;
+
+FALSE
+   : F A L S E;
+
+/*
+ * date
+ */
+
+DATE_LITERAL
+   : DIGIT+ D;
+
+/*
+ * time
+ */
+
+TIME_LITERAL
+   : DIGIT+ ([.] DIGIT+)? T;
+
+/*
+ * datetime
+ */
+
+DATETIME_LITERAL
+   : DIGIT+ D T;
+
+/*
+ * numbers
+ */
+
+INTEGER_LITERAL
+   : DIGIT+
+   | ('0' X HEXDIGIT*? | DIGIT+) (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)? (INTEGER_SUFFIX | FLOAT_SUFFIX)?
+   ;
+
+FLOAT_LITERAL
+	: (DIGIT+ [.] (DIGIT*)? {_input.La(1) != '.'}? (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)?
+	| [.] DIGIT+ (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)?
+	| DIGIT+ EXPONENT_NOTATION EXPONENT_SIGN DIGIT+) (INTEGER_SUFFIX | FLOAT_SUFFIX)?
+	;
+
+/*
+ * strings
+ */
+
+STRING_LITERAL
+	: '\'' ( ESC | ~['\r\n])* '\'';
+
+/*
+ * identifiers
+ */
+
+IDENTIFIER
+	: (LETTER | DIGIT | UNDERSCORE)+
+   | '"' ~["]+ '"'
+	;
+
+UNDERSCORE
+	: '_';
+
+LETTER
+	: LOWERCASELETTER
+	| UPPERCASELETTER
+	;
+
+/*
+ * comments
+ */
+
+SINGLE_LINE_COMMENT
+	: '//' INPUT_CHARACTER* -> channel(COMMENTS);
+
+DELIMITED_COMMENT
+	: '/*' .*? '*/' -> channel(COMMENTS);
+
+WS
+	:	[ \t]+ -> channel(HIDDEN)
+	;
+
+NEWLINE
+   :	NEW_LINE+ -> channel(HIDDEN)
+	;
+
+/*
+ * Symbols
+ */
+
+HASH
+   : '#' -> mode(DIRECTIVE_MODE), skip;
+
+SCOPE
+   : '::';
+
+RANGE
+   : '..';
+
+SEMICOLON
+   : ';';
+
+COLON
+   : ':';
+
+COMMA
+   : ',';
+
+PERIOD
+   : '.';
+
+GREATERTHANEQUAL
+   : '>=';
+
+LESSTHANEQUAL
+   : '<=';
+
+NOTEQUAL
+   : '<>';
+
+EQUAL
+   : '=';
+
+ASSGN
+   : ':=';
+
+MULTIPLY_ASSGN
+   : '*=';
+
+DIV_ASSGN
+   : '/=';
+
+ADD_ASSGN
+   : '+=';
+
+MINUS_ASSGN
+   : '-=';
+
+ASTERISK
+   : '*';
+
+BACKSLASH
+   : '/';
+
+PLUS
+   : '+';
+
+MINUS
+   : '-';
+
+LESSTHAN
+   : '<';
+
+GREATERTHAN
+   : '>';
+
+LEFTPAREN
+   : '(';
+
+RIGHTPAREN
+   : ')';
+
+LEFTBRACKET
+   : '[';
+
+RIGHTBRACKET
+   : ']';
+
+LEFTCBRACE
+   : '{';
+
+RIGHTCBRACE
+   : '}';
+
+PIPE
+   : '|';
+
+AMPERSAND
+   : '&';
+
+CONDITION
+   : '?' ;
+
+/*
+ * operator keywords
+ */
+
+AND
+   : A N D
+   ;
+
+DIV
+   : D I V
+   ;
+
+MOD
+   : M O D
+   ;
+
+NOT
+   : N O T
+   ;
+
+OR
+   : O R
+   ;
+
+XOR
+   : X O R
+   ;
 
 /*
  * preprocessor directives
@@ -3416,17 +3428,26 @@ YPOS
 
 mode DIRECTIVE_MODE;
 
-DIRECTIVE_WHITESPACES  : WS+ -> channel(HIDDEN);
-
+DIRECTIVE_WHITESPACES  : WS+                     -> channel(HIDDEN);
 DEFINE                 : 'define'                -> channel(DIRECTIVE);
 UNDEF                  : 'undef'                 -> channel(DIRECTIVE);
 DIRECTIVE_IF           : 'if'                    -> channel(DIRECTIVE), type(IF);
 ELIF                   : 'elif'                  -> channel(DIRECTIVE);
 DIRECTIVE_ELSE         : 'else'                  -> channel(DIRECTIVE), type(ELSE);
 ENDIF                  : 'endif'                 -> channel(DIRECTIVE);
-REGION                 : 'region' WS*    -> channel(DIRECTIVE), mode(DIRECTIVE_TEXT);
-ENDREGION              : 'endregion' WS* -> channel(DIRECTIVE), mode(DIRECTIVE_TEXT);
-PRAGMA                 : 'pragma' WS+    -> channel(DIRECTIVE), mode(DIRECTIVE_TEXT);
+REGION                 : 'region' WS*            -> channel(DIRECTIVE), mode(DIRECTIVE_TEXT_MODE);
+ENDREGION              : 'endregion' WS*         -> channel(DIRECTIVE), mode(DIRECTIVE_TEXT_MODE);
+PRAGMA                 : 'pragma' WS+            -> channel(DIRECTIVE), mode(DIRECTIVE_TEXT_MODE);
+DIRECTIVE_OPEN_PARENS  : '('                     -> channel(DIRECTIVE), type(LEFTPAREN);
+DIRECTIVE_CLOSE_PARENS : ')'                     -> channel(DIRECTIVE), type(RIGHTPAREN);
+BANG                   : '!'                     -> channel(DIRECTIVE);
+OP_AND                 : '&&'                    -> channel(DIRECTIVE);
+OP_OR                  : '||'                    -> channel(DIRECTIVE);
 
-PREPROCESSOR_DIRECTIVE
-   : '#' ~[\r\n]* '\r'? '\n' -> channel(COMMENTS);
+DIRECTIVE_IDENT        : (LETTER | DIGIT | UNDERSCORE)+ -> channel(DIRECTIVE), type(IDENTIFIER);
+DIRECTIVE_NEW_LINE     : NEW_LINE+ -> channel(DIRECTIVE), mode(DEFAULT_MODE);
+
+mode DIRECTIVE_TEXT_MODE;
+
+DIRECTIVE_TEXT         : ~[\r\n\u0085\u2028\u2029]+ -> channel(DIRECTIVE);
+TEXT_NEW_LINE          : NEW_LINE+ -> channel(DIRECTIVE), type(DIRECTIVE_NEW_LINE), mode(DEFAULT_MODE);
