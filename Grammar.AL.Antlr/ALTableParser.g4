@@ -66,7 +66,7 @@ tableFieldType
 
 tableFieldProperty
    : TABLERELATION EQUAL tableRelation SEMICOLON
-   | CALCFORMULA EQUAL calcForumla SEMICOLON
+   | CALCFORMULA EQUAL calcFormula SEMICOLON
    | multiLanguageCaptionProperty
    | keyIdentifierListProperty
    | keyValueProperty

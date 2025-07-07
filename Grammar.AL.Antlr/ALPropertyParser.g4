@@ -160,7 +160,7 @@ calcFormulaLookup
    : LOOKUP LEFTPAREN qualifiedFieldReference calcFormulaWhereClause? RIGHTPAREN
    ;
 
-calcForumla
+calcFormula
    : calcFormulaExist
    | calcFormulaCount
    | calcFormulaSum
