@@ -878,10 +878,6 @@ DATETIME
    : D A T E T I M E
    ;
 
-DATI2VARIANT
-   : D A T I [2] V A R I A N T
-   ;
-
 DEBUGGER
    : D E B U G G E R
    ;
