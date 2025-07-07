@@ -917,10 +917,10 @@ systemEnumerationLiteral
    ;
 
 namespaceDeclaration
-   : {TokenMatches("namespace")}? identifier namespaceIdentifier SEMICOLON;
+   : NAMESPACE namespaceIdentifier SEMICOLON;
 
 usingDeclaration
-   : {TokenMatches("using")}? identifier namespaceIdentifier SEMICOLON;
+   : USING namespaceIdentifier SEMICOLON;
 
 usingDeclarations
    : usingDeclaration+;
