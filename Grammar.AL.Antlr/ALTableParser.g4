@@ -139,6 +139,6 @@ tableExtEntities
    ;
 
 tableExtension
-   : TABLEEXTENSION INTEGER_LITERAL identifier EXTENDS identifier
+   : namespaceDeclaration? usingDeclarations? TABLEEXTENSION INTEGER_LITERAL identifier EXTENDS identifier
       LEFTCBRACE tableProperties tableExtEntities? codeDeclarations? RIGHTCBRACE
    ;
