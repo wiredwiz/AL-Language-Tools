@@ -261,8 +261,12 @@ forStatement
  * AL FOREACH statement logic
  */
 
+enumeratorExpression
+   : expression
+   ;
+
 forEachControl:
-	FOREACH identifier IN expression DO;
+	FOREACH identifier IN enumeratorExpression DO;
 
 forEachStatement: forEachControl statement?;
 
