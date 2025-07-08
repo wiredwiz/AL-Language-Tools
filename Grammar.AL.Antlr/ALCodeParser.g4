@@ -284,7 +284,7 @@ caseValueCondition
    : (caseSet | caseRange) COLON statement?;
 
 caseElse
-   : ELSE statement? SEMICOLON?;
+   : ELSE statement?;
 
 caseBody
    : (caseValueCondition SEMICOLON caseValueCondition)*? (SEMICOLON caseElse)?;
