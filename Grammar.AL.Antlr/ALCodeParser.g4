@@ -391,10 +391,11 @@ expression
    | STRING_LITERAL #StringLiteralExpression
    | FLOAT_LITERAL #FloatLiteralExpression
    | INTEGER_LITERAL	#IntegerLiteralExpression
+   | systemEnumerationLiteral #SystemEnumerationLiteralExpression
    | identifier #IdentifierExpression
    | expression PERIOD methodName LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
    | methodName LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
-   | expression SCOPE identifier # ScopeExpression
+   | expression SCOPE identifier #ScopeExpression
    | expression PERIOD identifier #MemberAccessExpression
    | expression LEFTBRACKET indexAccessorSet RIGHTBRACKET #IndexExpression
    | LEFTBRACKET valueSet? RIGHTBRACKET #SetExpression
