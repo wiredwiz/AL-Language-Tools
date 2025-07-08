@@ -35,6 +35,10 @@ permissionsProperty
  * Field related rules
  */
 
+fieldEnumLiteral
+   : identifier SCOPE identifier
+   ;
+
 fieldValue
    : identifier
    | INTEGER_LITERAL
@@ -45,6 +49,7 @@ fieldValue
    | STRING_LITERAL
    | booleanLiteral
    | systemEnumerationLiteral
+   | fieldEnumLiteral
    ;
 
 comparisonFilter
