@@ -231,7 +231,7 @@ ifElse
    : ELSE statement?;
 
 ifStatement
-   : ifCondition statement? (ifElse)?;
+   : ifCondition (statement ifElse?)?;
 
 /*
  * AL WHILE statement logic
@@ -287,7 +287,7 @@ caseElse
    : ELSE statement? SEMICOLON?;
 
 caseBody
-   : (caseValueCondition (SEMICOLON caseValueCondition?)*?)? caseElse?;
+   : (caseValueCondition (SEMICOLON caseValueCondition)*? SEMICOLON?)? caseElse?;
 
 caseControl
    : CASE expression OF;
@@ -361,7 +361,7 @@ statement
    ;
 
 statementList
-   : statementLine (SEMICOLON statementLine?)*?;
+   : statementLine (SEMICOLON statementLine)*? SEMICOLON?;
 
 /*
  * AL expression logic
