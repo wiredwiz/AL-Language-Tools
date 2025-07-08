@@ -354,14 +354,14 @@ statementLine
    | expression;
 
 statementBlock
-   : BEGIN statementList? END;
+   : BEGIN statementList? SEMICOLON? END;
 
 statement
    : (statementLine | statementBlock)
    ;
 
 statementList
-   : statementLine (SEMICOLON statementLine)*? SEMICOLON?;
+   : statementLine (SEMICOLON statementLine)*?;
 
 /*
  * AL expression logic
