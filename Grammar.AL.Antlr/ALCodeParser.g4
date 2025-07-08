@@ -287,13 +287,13 @@ caseElse
    : ELSE statement? SEMICOLON?;
 
 caseBody
-   : (caseValueCondition (SEMICOLON caseValueCondition)*? SEMICOLON?)? caseElse?;
+   : (caseValueCondition SEMICOLON caseValueCondition)*? (SEMICOLON caseElse)?;
 
 caseControl
    : CASE expression OF;
 
 caseStatement
-   : caseControl caseBody END;
+   : caseControl caseBody SEMICOLON? END;
 
 /*
  * AL CONTINUE statement logic
