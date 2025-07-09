@@ -7,6 +7,10 @@ directiveTerminator
     | EOF
     ;
 
+warningList
+    : IDENTIFIER (COMMA IDENTIFIER)*
+    ;
+
 directiveExpression
     : IDENTIFIER
     | LEFTPAREN directiveExpression RIGHTPAREN
@@ -18,7 +22,8 @@ directiveExpression
 preprocessorDirective
     : DEFINE IDENTIFIER directiveTerminator
     | UNDEF IDENTIFIER directiveTerminator
-    | PRAGMA DIRECTIVE_TEXT directiveTerminator
+    | PRAGMA IMPLICITWITH (DISABLE | RESTORE) directiveTerminator
+    | PRAGMA WARNING (DISABLE | RESTORE) warningList directiveTerminator
     | REGION DIRECTIVE_TEXT directiveTerminator
     | ENDREGION DIRECTIVE_TEXT directiveTerminator
     | IF directiveExpression directiveTerminator

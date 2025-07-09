@@ -3483,21 +3483,26 @@ LETTER
 
 mode DIRECTIVE_MODE;
 
-DIRECTIVE_WHITESPACES  : WHITE_SPACE+                     -> channel(HIDDEN);
-DEFINE                 : 'define'                -> channel(DIRECTIVE);
-UNDEF                  : 'undef'                 -> channel(DIRECTIVE);
-DIRECTIVE_IF           : 'if'                    -> channel(DIRECTIVE), type(IF);
-ELIF                   : 'elif'                  -> channel(DIRECTIVE);
-DIRECTIVE_ELSE         : 'else'                  -> channel(DIRECTIVE), type(ELSE);
-ENDIF                  : 'endif'                 -> channel(DIRECTIVE);
-REGION                 : 'region' WHITE_SPACE*            -> channel(DIRECTIVE), mode(DIRECTIVE_TEXT_MODE);
-ENDREGION              : 'endregion' WHITE_SPACE*         -> channel(DIRECTIVE), mode(DIRECTIVE_TEXT_MODE);
-PRAGMA                 : 'pragma' WHITE_SPACE+            -> channel(DIRECTIVE), mode(DIRECTIVE_TEXT_MODE);
-DIRECTIVE_OPEN_PARENS  : '('                     -> channel(DIRECTIVE), type(LEFTPAREN);
-DIRECTIVE_CLOSE_PARENS : ')'                     -> channel(DIRECTIVE), type(RIGHTPAREN);
-BANG                   : '!'                     -> channel(DIRECTIVE);
-OP_AND                 : '&&'                    -> channel(DIRECTIVE);
-OP_OR                  : '||'                    -> channel(DIRECTIVE);
+DIRECTIVE_WHITESPACES  : WHITE_SPACE+                    -> channel(HIDDEN);
+DEFINE                 : D E F I N E                     -> channel(DIRECTIVE);
+UNDEF                  : U N D E F                       -> channel(DIRECTIVE);
+DIRECTIVE_IF           : I F                             -> channel(DIRECTIVE), type(IF);
+ELIF                   : E L I F                         -> channel(DIRECTIVE);
+DIRECTIVE_ELSE         : E L S E                         -> channel(DIRECTIVE), type(ELSE);
+ENDIF                  : E N D I F                       -> channel(DIRECTIVE);
+REGION                 : R E G I O N WHITE_SPACE*        -> channel(DIRECTIVE), mode(DIRECTIVE_TEXT_MODE);
+ENDREGION              : E N D R E G I O N WHITE_SPACE*  -> channel(DIRECTIVE), mode(DIRECTIVE_TEXT_MODE);
+PRAGMA                 : P R A G M A WHITE_SPACE+        -> channel(DIRECTIVE);
+DIRECTIVE_OPEN_PARENS  : '('                             -> channel(DIRECTIVE), type(LEFTPAREN);
+DIRECTIVE_CLOSE_PARENS : ')'                             -> channel(DIRECTIVE), type(RIGHTPAREN);
+BANG                   : '!'                             -> channel(DIRECTIVE);
+OP_AND                 : '&&'                            -> channel(DIRECTIVE);
+OP_OR                  : '||'                            -> channel(DIRECTIVE);
+DIRECTIVE_COMMA        : ','                             -> channel(DIRECTIVE), type(COMMA);
+WARNING                : W A R N I N G                   -> channel(DIRECTIVE);
+IMPLICITWITH           : I M P L I C I T W I T H         -> channel(DIRECTIVE);
+DISABLE                : D I S A B L E                   -> channel(DIRECTIVE);
+RESTORE                : R E S T O R E                   -> channel(DIRECTIVE);
 
 DIRECTIVE_IDENT        : (LETTER | DIGIT | UNDERSCORE)+ -> channel(DIRECTIVE), type(IDENTIFIER);
 DIRECTIVE_NEW_LINE     : NEW_LINE+ -> channel(DIRECTIVE), mode(DEFAULT_MODE);
