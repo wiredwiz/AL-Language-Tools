@@ -330,6 +330,18 @@ ACTIVECONTROLONOPEN
    : A C T I V E C O N T R O L O N O P E N
    ;
 
+ADDBEFORE
+   : A D D B E F O R E
+   ;
+
+ADDFIRST
+   : A D D F I R S T
+   ;
+
+ADDLAST
+   : A D D L A S T
+   ;
+
 ADDLINK
    : A D D L I N K
    ;
@@ -1966,6 +1978,22 @@ MODULEDEPENDENCYINFO
 
 MODULEINFO
    : M O D U L E I N F O
+   ;
+
+MOVEAFTER
+   : M O V E A F T E R
+   ;
+
+MOVEBEFORE
+   : M O V E B E F O R E
+   ;
+
+MOVEFIRST
+   : M O V E F I R S T
+   ;
+
+MOVELAST
+   : M O V E L A S T
    ;
 
 MULTILINE
