@@ -33,5 +33,5 @@ preprocessorDirective
     ;
 
 compileDirectives
-    : preprocessorDirective*
+    : preprocessorDirective* EOF
     ;
