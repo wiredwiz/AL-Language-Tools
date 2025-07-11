@@ -291,7 +291,7 @@ caseElse
    : ELSE statement?;
 
 caseBody
-   : (caseValueCondition SEMICOLON caseValueCondition)*? (SEMICOLON caseElse)?;
+   : caseValueCondition (SEMICOLON caseValueCondition)*? (SEMICOLON caseElse)?;
 
 caseControl
    : CASE expression OF;
