@@ -314,6 +314,10 @@ ACTION
    : A C T I O N
    ;
 
+ACTIONS
+   : A C T I O N S
+   ;
+
 ACTIONREF
    : A C T I O N R E F
    ;
@@ -356,6 +360,10 @@ ALTSEARCHFIELD
 
 APPLICATIONPATH
    : A P P L I C A T I O N P A T H
+   ;
+
+AREA
+   : A R E A
    ;
 
 ARRAY
@@ -780,6 +788,10 @@ CREATEOUTSTREAM
 
 CREATETEMPFILE
    : C R E A T E T E M P F I L E
+   ;
+
+CUEGROUP
+   : C U E G R O U P
    ;
 
 CURRENTDATETIME
@@ -1402,6 +1414,10 @@ GLOBALLANGUAGE
    : G L O B A L L A N G U A G E
    ;
 
+GROUP
+   : G R O U P
+   ;
+
 GROUPTOTALFIELDS
    : G R O U P T O T A L F I E L D S
    ;
@@ -1782,6 +1798,10 @@ LABEL
 
 LANGUAGE
    : L A N G U A G E
+   ;
+
+LAYOUT
+   : L A Y O U T
    ;
 
 LEADERDOTS
@@ -2606,6 +2626,10 @@ RENAME
 
 REPEAT
    : R E P E A T
+   ;
+
+REPEATER
+   : R E P E A T E R
    ;
 
 REPORT
