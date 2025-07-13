@@ -297,7 +297,7 @@ caseControl
    : CASE expression OF;
 
 caseStatement
-   : caseControl caseBody SEMICOLON? END;
+   : caseControl caseBody? SEMICOLON? END;
 
 /*
  * AL CONTINUE statement logic
