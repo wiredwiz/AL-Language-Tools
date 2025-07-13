@@ -52,8 +52,8 @@
 	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/WRAP_PARAMETERS_STYLE/@EntryValue">CHOP_IF_LONG</s:String>
 	
 	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderRegionName/@EntryValue">MIT License</s:String>
-	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">&lt;copyright company = "Edgerunner.org" file = "${File.FileName}"&gt;&#xD;
-Copyright(c) ${User.Name} ${CurrentDate.Year}&#xD;
+	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">&lt;copyright company = "Edgerunner.org" file = "$FILENAME$"&gt;&#xD;
+Copyright(c) $USER_NAME$ $CURRENT_YEAR$&#xD;
 &lt;/copyright&gt;&#xD;
 The MIT License (MIT)&#xD;
 &#xD;
