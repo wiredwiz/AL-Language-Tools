@@ -139,7 +139,7 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       /// An in expression
       /// </summary>
       /// <example>2 in [1, 5, 10, 2]</example>
-      In,
+      InRange,
 
       /// <summary>
       /// An is equal expression.

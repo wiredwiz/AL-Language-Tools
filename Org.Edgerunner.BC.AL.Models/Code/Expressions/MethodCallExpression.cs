@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "SetExpression.cs">
+// <copyright company = "Edgerunner.org" file = "MethodCallExpression.cs">
 // Copyright(c)  2025
 // </copyright>
 // The MIT License (MIT)
@@ -23,26 +23,41 @@
 // THE SOFTWARE.
 #endregion
 
-using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
 {
    /// <summary>
-   /// Class that represents an AL set expression.
-   /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.IExpression" />
+   /// Class that represents an AL method call expression.
+   /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.ExpressionBase" />
    /// </summary>
-   /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.IExpression" />
-   public class SetExpression : ExpressionBase
+   /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.ExpressionBase" />
+   public class MethodCallExpression : ExpressionBase
    {
-      
-
       /// <summary>
       /// Gets or the expression type.
       /// </summary>
       /// <value>The expression type.</value>
-      public override ExpressionType Type => ExpressionType.Scope;
+      public override ExpressionType Type => ExpressionType.MethodCall;
+
+      /// <summary>
+      /// Gets or sets the source.
+      /// </summary>
+      /// <value>The source.</value>
+      public IExpression Source { get; set; }
+
+      /// <summary>
+      /// Gets or sets the name of the method.
+      /// </summary>
+      /// <value>The name of the method.</value>
+      public string MethodName { get; set; }
+
+      /// <summary>
+      /// Gets or sets the parameters.
+      /// </summary>
+      /// <value>The parameters.</value>
+      public List<IExpression> Parameters { get; set; }
 
       /// <summary>
       /// Formats this instance as code text.
@@ -51,9 +66,13 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       /// <param name="builder">The string builder to populate.</param>
       public override void Format(CodeFormatter formatter, StringBuilder builder)
       {
-         formatter.FormatBraces(builder, "[");
-         formatter.FormatSetWithSeparator(Children, builder);
-         formatter.FormatBraces(builder, "]");
+         if (Source != null)
+            Source.Format(formatter, builder);
+         builder.Append(".");
+         builder.Append(MethodName);
+         formatter.FormatBraces(builder, "(");
+         formatter.FormatSetWithSeparator(Parameters, builder);
+         formatter.FormatBraces(builder, ")");
       }
    }
 }

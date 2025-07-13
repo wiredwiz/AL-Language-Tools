@@ -23,6 +23,10 @@
 // THE SOFTWARE.
 #endregion
 
+using Org.Edgerunner.BC.AL.Models.Code.Expressions;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Org.Edgerunner.BC.AL.Models
@@ -124,6 +128,27 @@ namespace Org.Edgerunner.BC.AL.Models
       {
          builder.Append(separator);
          if (PadSeparator) builder.Append(" ");
+      }
+
+      /// <summary>
+      /// Formats the set of expressions with a separator.
+      /// </summary>
+      /// <param name="expressions">The expressions.</param>
+      /// <param name="builder">The builder.</param>
+      public void FormatSetWithSeparator(List<IExpression> expressions, StringBuilder builder)
+      {
+         if (expressions.Count == 1)
+            expressions[0].Format(this, builder);
+         if (expressions.Count > 0)
+         {
+            for (int i = 0; i < expressions.Count - 1; i++)
+            {
+               expressions[0].Format(this, builder);
+               FormatSeparator(builder, ",");
+            }
+
+            expressions[expressions.Count - 1].Format(this, builder);
+         }
       }
 
       /// <summary>

@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "SetExpression.cs">
+// <copyright company = "Edgerunner.org" file = "AndExpression.cs">
 // Copyright(c)  2025
 // </copyright>
 // The MIT License (MIT)
@@ -23,26 +23,17 @@
 // THE SOFTWARE.
 #endregion
 
-using System;
-using System.Linq;
 using System.Text;
 
 namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
 {
-   /// <summary>
-   /// Class that represents an AL set expression.
-   /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.IExpression" />
-   /// </summary>
-   /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.IExpression" />
-   public class SetExpression : ExpressionBase
+   public class AndExpression : BinaryExpressionBase
    {
-      
-
       /// <summary>
       /// Gets or the expression type.
       /// </summary>
       /// <value>The expression type.</value>
-      public override ExpressionType Type => ExpressionType.Scope;
+      public override ExpressionType Type => ExpressionType.Add;
 
       /// <summary>
       /// Formats this instance as code text.
@@ -51,9 +42,9 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       /// <param name="builder">The string builder to populate.</param>
       public override void Format(CodeFormatter formatter, StringBuilder builder)
       {
-         formatter.FormatBraces(builder, "[");
-         formatter.FormatSetWithSeparator(Children, builder);
-         formatter.FormatBraces(builder, "]");
+         Left.Format(formatter, builder);
+         builder.Append(" and ");
+         Right.Format(formatter, builder);
       }
    }
 }

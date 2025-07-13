@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "SetExpression.cs">
+// <copyright company = "Edgerunner.org" file = "NotExpression.cs">
 // Copyright(c)  2025
 // </copyright>
 // The MIT License (MIT)
@@ -23,26 +23,37 @@
 // THE SOFTWARE.
 #endregion
 
-using System;
-using System.Linq;
 using System.Text;
 
 namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
 {
    /// <summary>
-   /// Class that represents an AL set expression.
-   /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.IExpression" />
+   /// Class that represents an AL not expression.
+   /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.ExpressionBase" />
    /// </summary>
-   /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.IExpression" />
-   public class SetExpression : ExpressionBase
+   /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.ExpressionBase" />
+   public class NotExpression : ExpressionBase
    {
-      
+      /// <summary>
+      /// Initializes a new instance of the <see cref="NotExpression"/> class.
+      /// </summary>
+      /// <param name="value">The value.</param>
+      public NotExpression(IExpression value)
+      {
+         Value = value;
+      }
 
       /// <summary>
       /// Gets or the expression type.
       /// </summary>
       /// <value>The expression type.</value>
-      public override ExpressionType Type => ExpressionType.Scope;
+      public override ExpressionType Type => ExpressionType.Not;
+
+      /// <summary>
+      /// Gets or sets the value.
+      /// </summary>
+      /// <value>The value.</value>
+      public IExpression Value { get; set; }
 
       /// <summary>
       /// Formats this instance as code text.
@@ -51,9 +62,8 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       /// <param name="builder">The string builder to populate.</param>
       public override void Format(CodeFormatter formatter, StringBuilder builder)
       {
-         formatter.FormatBraces(builder, "[");
-         formatter.FormatSetWithSeparator(Children, builder);
-         formatter.FormatBraces(builder, "]");
+         builder.Append("not ");
+         Value.Format(formatter, builder);
       }
    }
 }
