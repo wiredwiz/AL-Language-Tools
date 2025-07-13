@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "IExpression.cs">
+// <copyright company = "Edgerunner.org" file = "ExpressionBase.cs">
 // Copyright(c)  2025
 // </copyright>
 // The MIT License (MIT)
@@ -29,27 +29,29 @@ using System.Text;
 namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
 {
    /// <summary>
-   /// Interface that represents an AL code expression.
+   /// Class representing a base for an AL expression.
+   /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.IExpression" />
    /// </summary>
-   public interface IExpression
+   /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.IExpression" />
+   public abstract class ExpressionBase : IExpression
    {
       /// <summary>
       /// Gets or the expression type.
       /// </summary>
       /// <value>The expression type.</value>
-      ExpressionType Type { get; }
+      public abstract ExpressionType Type { get; }
 
       /// <summary>
       /// Gets or sets the children.
       /// </summary>
       /// <value>The child expressions.</value>
-      List<IExpression> Children { get; set; }
+      public List<IExpression> Children { get; set; }
 
       /// <summary>
       /// Formats this instance as code text.
       /// </summary>
       /// <param name="formatter">The code formatter.</param>
       /// <param name="builder">The string builder to populate.</param>
-      void Format(CodeFormatter formatter, StringBuilder builder);
+      public abstract void Format(CodeFormatter formatter, StringBuilder builder);
    }
 }

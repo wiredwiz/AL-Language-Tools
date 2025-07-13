@@ -24,6 +24,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
@@ -51,30 +52,16 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       public ExpressionType Type => ExpressionType.StringLiteral;
 
       /// <summary>
+      /// Gets or sets the children.
+      /// </summary>
+      /// <value>The child expressions.</value>
+      public List<IExpression> Children { get; set; }
+
+      /// <summary>
       /// Gets or sets the value.
       /// </summary>
       /// <value>The value.</value>
       public string Value { get; set; }
-
-      /// <summary>
-      /// Gets or sets the left side of the expression.
-      /// </summary>
-      /// <value>The left side expression.</value>
-      public IExpression Left
-      {
-         get => null;
-         set => throw new InvalidOperationException("You cannot assign a left side expression to a literal expression");
-      }
-
-      /// <summary>
-      /// Gets or sets the right side of the expression.
-      /// </summary>
-      /// <value>The right side expression.</value>
-      public IExpression Right
-      {
-         get => null;
-         set => throw new InvalidOperationException("You cannot assign a right side expression to a literal expression");
-      }
 
       /// <inheritdoc />
       public void Format(CodeFormatter formatter, StringBuilder builder)

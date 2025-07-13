@@ -69,6 +69,12 @@ namespace Org.Edgerunner.BC.AL.Models
       public bool PadInsideBraces { get; set; }
 
       /// <summary>
+      /// Gets or sets a value indicating whether to pad separator characters.
+      /// </summary>
+      /// <value><c>true</c> if [pad separator]; otherwise, <c>false</c>.</value>
+      public bool PadSeparator { get; set; }
+
+      /// <summary>
       /// Gets or sets the indentation level.
       /// </summary>
       /// <value>The indentation level.</value>
@@ -107,6 +113,17 @@ namespace Org.Edgerunner.BC.AL.Models
             if (brace == "}" && PadInsideBraces) builder.Append(" ");
             builder.Append(brace);
          }
+      }
+
+      /// <summary>
+      /// Formats a code separator.
+      /// </summary>
+      /// <param name="builder">The builder.</param>
+      /// <param name="separator">The separator.</param>
+      public void FormatSeparator(StringBuilder builder, string separator)
+      {
+         builder.Append(separator);
+         if (PadSeparator) builder.Append(" ");
       }
 
       /// <summary>

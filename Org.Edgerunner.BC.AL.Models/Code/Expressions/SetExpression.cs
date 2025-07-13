@@ -24,6 +24,7 @@
 #endregion
 
 using System;
+using System.Linq;
 using System.Text;
 
 namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
@@ -33,54 +34,39 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
    /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.IExpression" />
    /// </summary>
    /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.IExpression" />
-   public class SetExpression : IExpression
+   public class SetExpression : ExpressionBase
    {
-      /// <summary>
-      /// Initializes a new instance of the <see cref="SetExpression"/> class.
-      /// </summary>
-      /// <param name="leftExpression">The left expression.</param>
-      /// <param name="rightExpression">The right expression.</param>
-      public SetExpression(IExpression leftExpression, IExpression rightExpression)
-      {
-         Left = leftExpression;
-         Right = rightExpression;
-      }
+      
 
       /// <summary>
       /// Gets or the expression type.
       /// </summary>
       /// <value>The expression type.</value>
-      public ExpressionType Type => ExpressionType.Scope;
-
-      /// <summary>
-      /// Gets or sets the left side of the expression.
-      /// </summary>
-      /// <value>The left side expression.</value>
-      public IExpression Left { get; set; }
-
-      /// <summary>
-      /// Gets or sets the right side of the expression.
-      /// </summary>
-      /// <value>The right side expression.</value>
-      public IExpression Right { get; set; }
-
+      public override ExpressionType Type => ExpressionType.Scope;
 
       /// <summary>
       /// Formats this instance as code text.
       /// </summary>
       /// <param name="formatter">The code formatter.</param>
       /// <param name="builder">The string builder to populate.</param>
-      /// <exception cref="InvalidOperationException">Left side or right side of scope expression is empty.</exception>
-      public void Format(CodeFormatter formatter, StringBuilder builder)
+      public override void Format(CodeFormatter formatter, StringBuilder builder)
       {
-         if (Left == null)
-            throw new InvalidOperationException("Left side of scope expression must not be empty");
-         if (Right == null)
-            throw new InvalidOperationException("Right side of scope expression must not be empty");
+         formatter.FormatBraces(builder, "[");
 
-         Left.Format(formatter, builder);
-         formatter.FormatMathOperator(builder, "::");
-         Right.Format(formatter, builder);
+         if (Children.Count == 1)
+            Children[0].Format(formatter, builder);
+         if (Children.Count > 0)
+         {
+            for (int i = 0; i < Children.Count - 1; i++)
+            {
+               Children[0].Format(formatter, builder);
+               formatter.FormatSeparator(builder, ",");
+            }
+
+            Children[Children.Count - 1].Format(formatter, builder);
+         }
+
+         formatter.FormatBraces(builder, "]");
       }
    }
 }

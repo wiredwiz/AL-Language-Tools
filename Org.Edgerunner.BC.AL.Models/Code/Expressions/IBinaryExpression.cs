@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "IExpression.cs">
+// <copyright company = "Edgerunner.org" file = "IBinaryExpression.cs">
 // Copyright(c)  2025
 // </copyright>
 // The MIT License (MIT)
@@ -23,33 +23,25 @@
 // THE SOFTWARE.
 #endregion
 
-using System.Collections.Generic;
-using System.Text;
-
 namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
 {
    /// <summary>
-   /// Interface that represents an AL code expression.
+   /// Interface that represents an AL binary expression.
+   /// Extends the <see cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.IExpression" />
    /// </summary>
-   public interface IExpression
+   /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.IExpression" />
+   public interface IBinaryExpression : IExpression
    {
       /// <summary>
-      /// Gets or the expression type.
+      /// Gets or sets the left side of the expression.
       /// </summary>
-      /// <value>The expression type.</value>
-      ExpressionType Type { get; }
+      /// <value>The left side expression.</value>
+      IExpression Left { get; set; }
 
       /// <summary>
-      /// Gets or sets the children.
+      /// Gets or sets the right side of the expression.
       /// </summary>
-      /// <value>The child expressions.</value>
-      List<IExpression> Children { get; set; }
-
-      /// <summary>
-      /// Formats this instance as code text.
-      /// </summary>
-      /// <param name="formatter">The code formatter.</param>
-      /// <param name="builder">The string builder to populate.</param>
-      void Format(CodeFormatter formatter, StringBuilder builder);
+      /// <value>The right side expression.</value>
+      IExpression Right { get; set; }
    }
 }

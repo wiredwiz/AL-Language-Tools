@@ -33,7 +33,7 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
    /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.IExpression" />
    /// </summary>
    /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.IExpression" />
-   public class ScopeExpression : IExpression
+   public class ScopeExpression : BinaryExpressionBase
    {
       /// <summary>
       /// Initializes a new instance of the <see cref="ScopeExpression"/> class.
@@ -50,20 +50,7 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       /// Gets or the expression type.
       /// </summary>
       /// <value>The expression type.</value>
-      public ExpressionType Type => ExpressionType.Scope;
-
-      /// <summary>
-      /// Gets or sets the left side of the expression.
-      /// </summary>
-      /// <value>The left side expression.</value>
-      public IExpression Left { get; set; }
-
-      /// <summary>
-      /// Gets or sets the right side of the expression.
-      /// </summary>
-      /// <value>The right side expression.</value>
-      public IExpression Right { get; set; }
-
+      public override ExpressionType Type => ExpressionType.Scope;
 
       /// <summary>
       /// Formats this instance as code text.
@@ -71,7 +58,7 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       /// <param name="formatter">The code formatter.</param>
       /// <param name="builder">The string builder to populate.</param>
       /// <exception cref="InvalidOperationException">Left side or right side of scope expression is empty.</exception>
-      public void Format(CodeFormatter formatter, StringBuilder builder)
+      public override void Format(CodeFormatter formatter, StringBuilder builder)
       {
          if (Left == null)
             throw new InvalidOperationException("Left side of scope expression must not be empty");
