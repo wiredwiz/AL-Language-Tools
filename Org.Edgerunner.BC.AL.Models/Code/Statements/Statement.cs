@@ -64,6 +64,7 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Statements
       /// <param name="builder">The builder.</param>
       public void Format(CodeFormatter formatter, StringBuilder builder)
       {
+         builder.Append(formatter.GetIndentationPadding());
          Expression.Format(formatter, builder);
          builder.Append(";");
          builder.Append("\r\n");

@@ -100,7 +100,7 @@ namespace Org.Edgerunner.BC.AL.Models
       /// Gets or sets a value indicating whether to indent begin blocks within the parent statement.
       /// </summary>
       /// <value><c>true</c> if [indent begin blocks]; otherwise, <c>false</c>.</value>
-      public bool IndentBeginBlocks { get; set; }
+      public bool IndentBeginBlocks { get; set; } = true;
 
       /// <summary>
       /// Appends the new line terminator.

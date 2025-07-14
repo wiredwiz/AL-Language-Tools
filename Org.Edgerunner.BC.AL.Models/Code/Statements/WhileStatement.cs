@@ -68,7 +68,9 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Statements
             formatter.AppendNewLine(builder);
          else
             builder.Append(" ");
+         formatter.IndentationLevel++;
          Statement.Format(formatter, builder);
+         formatter.IndentationLevel--;
       }
    }
 }

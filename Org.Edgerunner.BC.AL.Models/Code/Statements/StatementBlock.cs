@@ -55,10 +55,15 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Statements
       public void Format(CodeFormatter formatter, StringBuilder builder)
       {
          builder.Append("begin");
+         formatter.IndentationLevel++;
 
-         foreach (var statement in Statements) 
+         foreach (var statement in Statements)
+         {
+            builder.Append(formatter.GetIndentationPadding());
             statement.Format(formatter, builder);
+         }
 
+         formatter.IndentationLevel--;
          builder.Append("end");
       }
    }
