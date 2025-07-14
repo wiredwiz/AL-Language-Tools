@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "ForExpression.cs">
+// <copyright company = "Edgerunner.org" file = "ForStatement.cs">
 // Copyright(c)  2025
 // </copyright>
 // The MIT License (MIT)
@@ -34,7 +34,7 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Statements
    /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Code.Statements.IStatement" />
    /// </summary>
    /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Statements.IStatement" />
-   public class ForExpression : IStatement
+   public class ForStatement : IStatement
    {
       /// <summary>
       /// Gets the type.
@@ -67,7 +67,7 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Statements
       public IStatement Statement { get; set; }
 
       /// <summary>
-      /// Gets or sets a value indicating whether this <see cref="ForExpression"/> is ascending.
+      /// Gets or sets a value indicating whether this <see cref="ForStatement"/> is ascending.
       /// </summary>
       /// <value><c>true</c> if ascending; otherwise, <c>false</c>.</value>
       public bool Ascending { get; set; }
