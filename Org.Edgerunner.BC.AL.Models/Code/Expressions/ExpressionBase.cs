@@ -42,12 +42,6 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       public abstract NodeType Type { get; }
 
       /// <summary>
-      /// Gets or sets the children.
-      /// </summary>
-      /// <value>The child expressions.</value>
-      public List<IExpression> Children { get; set; }
-
-      /// <summary>
       /// Formats this instance as code text.
       /// </summary>
       /// <param name="formatter">The code formatter.</param>

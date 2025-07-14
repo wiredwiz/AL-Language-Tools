@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "IExpression.cs">
+// <copyright company = "Edgerunner.org" file = "IStatement.cs">
 // Copyright(c)  2025
 // </copyright>
 // The MIT License (MIT)
@@ -23,15 +23,14 @@
 // THE SOFTWARE.
 #endregion
 
-using System.Collections.Generic;
-using System.Text;
-
-namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
+namespace Org.Edgerunner.BC.AL.Models.Code.Statements
 {
    /// <summary>
-   /// Interface that represents an AL code expression.
+   /// Interface that defines an AL statement.
+   /// Extends the <see cref="Org.Edgerunner.BC.AL.Models.Code.IFormattable" />
    /// </summary>
-   public interface IExpression : ISyntaxNode, IFormattable
+   /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.IFormattable" />
+   public interface IStatement : ISyntaxNode, IFormattable
    {
    }
 }

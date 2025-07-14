@@ -23,8 +23,7 @@
 // THE SOFTWARE.
 #endregion
 
-using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
@@ -36,13 +35,26 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
    /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.IExpression" />
    public class SetExpression : ExpressionBase
    {
-      
+      /// <summary>
+      /// Initializes a new instance of the <see cref="SetExpression"/> class.
+      /// </summary>
+      /// <param name="contents">The contents.</param>
+      public SetExpression(List<IExpression> contents)
+      {
+         Contents = contents;
+      }
 
       /// <summary>
       /// Gets or the expression type.
       /// </summary>
       /// <value>The expression type.</value>
       public override NodeType Type => NodeType.ScopeExpression;
+
+      /// <summary>
+      /// Gets or sets the contents.
+      /// </summary>
+      /// <value>The content expressions.</value>
+      public List<IExpression> Contents { get; set; }
 
       /// <summary>
       /// Formats this instance as code text.
@@ -52,7 +64,7 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       public override void Format(CodeFormatter formatter, StringBuilder builder)
       {
          formatter.FormatBraces(builder, "[");
-         formatter.FormatSetWithSeparator(Children, builder);
+         formatter.FormatSetWithSeparator(Contents, builder);
          formatter.FormatBraces(builder, "]");
       }
    }

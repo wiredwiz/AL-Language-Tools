@@ -76,6 +76,11 @@ namespace Org.Edgerunner.BC.AL.Models.Code
       BooleanLiteralExpression,
 
       /// <summary>
+      /// A variable expression
+      /// </summary>
+      VariableExpression,
+
+      /// <summary>
       /// An add expression
       /// </summary>
       /// <example>5 + 2</example>
@@ -229,7 +234,62 @@ namespace Org.Edgerunner.BC.AL.Models.Code
       /// An assignment expression
       /// </summary>
       /// <example>a := 4</example>
-      AssignExpression
+      AssignExpression,
+
+      /// <summary>
+      /// A statement
+      /// </summary>
+      Statement,
+
+      /// <summary>
+      /// A statement block
+      /// </summary>
+      StatementBlock,
+      
+      /// <summary>
+      /// A With statement
+      /// </summary>
+      WithStatement,
+
+      /// <summary>
+      /// An If statement
+      /// </summary>
+      IfStatement,
+
+      /// <summary>
+      /// A Case statement
+      /// </summary>
+      CaseStatement,
+
+      /// <summary>
+      /// A For statement
+      /// </summary>
+      ForStatement,
+
+      /// <summary>
+      /// A ForEach statement
+      /// </summary>
+      ForEachStatement,
+
+      /// <summary>
+      /// A While statement
+      /// </summary>
+      WhileStatement,
+      
+      /// <summary>
+      /// A RepeatUntil statement
+      /// </summary>
+      RepeatUntilStatement,
+
+      /// <summary>
+      /// A Break statement
+      /// </summary>
+      BreakStatement,
+
+      /// <summary>
+      /// A Continue statement
+      /// </summary>
+      ContinueStatement
 
       // ReSharper restore StyleCop.SA1630
       // ReSharper restore StyleCop.SA1631

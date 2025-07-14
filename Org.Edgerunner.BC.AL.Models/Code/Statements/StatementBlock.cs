@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "IExpression.cs">
+// <copyright company = "Edgerunner.org" file = "StatementBlock.cs">
 // Copyright(c)  2025
 // </copyright>
 // The MIT License (MIT)
@@ -26,12 +26,40 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
+namespace Org.Edgerunner.BC.AL.Models.Code.Statements
 {
    /// <summary>
-   /// Interface that represents an AL code expression.
+   /// Class that represents an AL statement block.
+   /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Code.Statements.IStatement" />
    /// </summary>
-   public interface IExpression : ISyntaxNode, IFormattable
+   /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Statements.IStatement" />
+   public class StatementBlock : IStatement
    {
+      /// <summary>
+      /// Gets the type.
+      /// </summary>
+      /// <value>The type.</value>
+      public NodeType Type => NodeType.StatementBlock;
+
+      /// <summary>
+      /// Gets or sets the statements.
+      /// </summary>
+      /// <value>The statements.</value>
+      public List<IStatement> Statements { get; set; }
+
+      /// <summary>
+      /// Formats the specified formatter.
+      /// </summary>
+      /// <param name="formatter">The formatter.</param>
+      /// <param name="builder">The builder.</param>
+      public void Format(CodeFormatter formatter, StringBuilder builder)
+      {
+         builder.Append("begin");
+
+         foreach (var statement in Statements) 
+            statement.Format(formatter, builder);
+
+         builder.Append("end");
+      }
    }
 }

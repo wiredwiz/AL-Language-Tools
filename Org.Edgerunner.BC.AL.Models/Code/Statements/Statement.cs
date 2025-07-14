@@ -1,6 +1,6 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "VariableExpression.cs">
-// Copyright(c) Thaddeus Ryker 2025
+// <copyright company = "Edgerunner.org" file = "Statement.cs">
+// Copyright(c)  2025
 // </copyright>
 // The MIT License (MIT)
 // 
@@ -25,42 +25,48 @@
 
 using System.Text;
 
-namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
+using Org.Edgerunner.BC.AL.Models.Code.Expressions;
+
+namespace Org.Edgerunner.BC.AL.Models.Code.Statements
 {
    /// <summary>
-   /// Class that represents a code Variable
+   /// Class that represents a basic AL statement.
+   /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Code.Statements.IStatement" />
    /// </summary>
-   public class VariableExpression : ExpressionBase
+   /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Statements.IStatement" />
+   public class Statement : IStatement
    {
       /// <summary>
-      /// Initializes a new instance of the <see cref="VariableExpression"/> class.
+      /// Initializes a new instance of the <see cref="Statement"/> class.
       /// </summary>
-      /// <param name="name">The name.</param>
-      public VariableExpression(string name)
+      /// <param name="expression">The expression.</param>
+      public Statement(IExpression expression)
       {
-         Name = name;
+         Expression = expression;
       }
 
       /// <summary>
-      /// Gets or the expression type.
+      /// Gets the type.
       /// </summary>
-      /// <value>The expression type.</value>
-      public override NodeType Type => NodeType.VariableExpression;
+      /// <value>The type.</value>
+      public NodeType Type => NodeType.Statement;
 
       /// <summary>
-      /// Gets or sets the name.
+      /// Gets or sets the value.
       /// </summary>
-      /// <value>The name.</value>
-      public string Name { get; set; }
+      /// <value>The value.</value>
+      public IExpression Expression { get; set; }
 
       /// <summary>
-      /// Formats this instance as code text.
+      /// Formats the specified formatter.
       /// </summary>
-      /// <param name="formatter">The code formatter.</param>
-      /// <param name="builder">The string builder to populate.</param>
-      public override void Format(CodeFormatter formatter, StringBuilder builder)
+      /// <param name="formatter">The formatter.</param>
+      /// <param name="builder">The builder.</param>
+      public void Format(CodeFormatter formatter, StringBuilder builder)
       {
-         builder.Append(Name);
+         Expression.Format(formatter, builder);
+         builder.Append(";");
+         builder.Append("\r\n");
       }
    }
 }

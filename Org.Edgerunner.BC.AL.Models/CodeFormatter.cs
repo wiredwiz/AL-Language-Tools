@@ -37,6 +37,12 @@ namespace Org.Edgerunner.BC.AL.Models
    public class CodeFormatter
    {
       /// <summary>
+      /// Gets or sets text that represents a new line character sequence.
+      /// </summary>
+      /// <value>The new line text.</value>
+      public string NewLine { get; set; } = "\r\n";
+
+      /// <summary>
       /// Gets or sets a value indicating whether [use spaces instead of tabs].
       /// </summary>
       /// <value><c>true</c> if [use spaces instead of tabs]; otherwise, <c>false</c>.</value>
@@ -83,6 +89,21 @@ namespace Org.Edgerunner.BC.AL.Models
       /// </summary>
       /// <value>The indentation level.</value>
       public int IndentationLevel { get; set; }
+
+      /// <summary>
+      /// Gets or sets a value indicating whether to start begin keywords on new line.
+      /// </summary>
+      /// <value><c>true</c> if [start begin on new line]; otherwise, <c>false</c>.</value>
+      public bool StartBeginOnNewLine { get; set; }
+
+      /// <summary>
+      /// Appends the new line terminator.
+      /// </summary>
+      /// <param name="builder">The builder.</param>
+      public void AppendNewLine(StringBuilder builder)
+      {
+         builder.Append(NewLine);
+      }
 
       /// <summary>
       /// Formats the math operator for code display.

@@ -1,6 +1,6 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "VariableExpression.cs">
-// Copyright(c) Thaddeus Ryker 2025
+// <copyright company = "Edgerunner.org" file = "WithStatement.cs">
+// Copyright(c)  2025
 // </copyright>
 // The MIT License (MIT)
 // 
@@ -25,42 +25,50 @@
 
 using System.Text;
 
-namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
+using Org.Edgerunner.BC.AL.Models.Code.Expressions;
+
+namespace Org.Edgerunner.BC.AL.Models.Code.Statements
 {
    /// <summary>
-   /// Class that represents a code Variable
+   /// Class that represents an AL With statement.
+   /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Code.Statements.IStatement" />
    /// </summary>
-   public class VariableExpression : ExpressionBase
+   /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Statements.IStatement" />
+   public class WithStatement : IStatement
    {
       /// <summary>
-      /// Initializes a new instance of the <see cref="VariableExpression"/> class.
+      /// Gets the type.
       /// </summary>
-      /// <param name="name">The name.</param>
-      public VariableExpression(string name)
+      /// <value>The type.</value>
+      public NodeType Type => NodeType.WithStatement;
+
+      /// <summary>
+      /// Gets or sets the subject.
+      /// </summary>
+      /// <value>The subject.</value>
+      public VariableExpression Subject { get; set; }
+
+      /// <summary>
+      /// Gets or sets the statement.
+      /// </summary>
+      /// <value>The statement.</value>
+      public IStatement Statement { get; set; }
+
+      /// <summary>
+      /// Formats the specified formatter.
+      /// </summary>
+      /// <param name="formatter">The formatter.</param>
+      /// <param name="builder">The builder.</param>
+      public void Format(CodeFormatter formatter, StringBuilder builder)
       {
-         Name = name;
-      }
-
-      /// <summary>
-      /// Gets or the expression type.
-      /// </summary>
-      /// <value>The expression type.</value>
-      public override NodeType Type => NodeType.VariableExpression;
-
-      /// <summary>
-      /// Gets or sets the name.
-      /// </summary>
-      /// <value>The name.</value>
-      public string Name { get; set; }
-
-      /// <summary>
-      /// Formats this instance as code text.
-      /// </summary>
-      /// <param name="formatter">The code formatter.</param>
-      /// <param name="builder">The string builder to populate.</param>
-      public override void Format(CodeFormatter formatter, StringBuilder builder)
-      {
-         builder.Append(Name);
+         builder.Append("with ");
+         Subject.Format(formatter, builder);
+         builder.Append("do");
+         Statement.Format(formatter, builder);
+         if (formatter.StartBeginOnNewLine)
+            formatter.AppendNewLine(builder);
+         else
+            builder.Append(" ");
       }
    }
 }
