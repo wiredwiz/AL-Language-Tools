@@ -49,7 +49,7 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       /// Gets or the expression type.
       /// </summary>
       /// <value>The expression type.</value>
-      public ExpressionType Type => ExpressionType.StringLiteral;
+      public NodeType Type => NodeType.StringLiteralExpression;
 
       /// <summary>
       /// Gets or sets the children.

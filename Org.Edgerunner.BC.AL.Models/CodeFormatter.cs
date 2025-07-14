@@ -97,6 +97,18 @@ namespace Org.Edgerunner.BC.AL.Models
       }
 
       /// <summary>
+      /// Formats the assignment operator for code display.
+      /// </summary>
+      /// <param name="builder">The builder.</param>
+      /// <param name="operand">The assignment operand to format.</param>
+      public void FormatAssignmentOperator(StringBuilder builder, string operand)
+      {
+         if (PadOperands) builder.Append(" ");
+         builder.Append(operand);
+         if (PadOperands) builder.Append(" ");
+      }
+
+      /// <summary>
       /// Formats the brace for code display.
       /// </summary>
       /// <param name="builder">The builder.</param>

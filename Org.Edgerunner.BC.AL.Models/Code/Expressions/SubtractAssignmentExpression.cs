@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "GreaterThanOrEqualToExpression.cs">
+// <copyright company = "Edgerunner.org" file = "SubtractAssignmentExpression.cs">
 // Copyright(c)  2025
 // </copyright>
 // The MIT License (MIT)
@@ -23,33 +23,25 @@
 // THE SOFTWARE.
 #endregion
 
-using System.Text;
-
 namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
 {
    /// <summary>
-   /// Class that represents an AL greater than or equal to expression.
-   /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.BinaryExpressionBase" />
+   /// Class that represents an AL subtract assignment expression.
+   /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.AssignmentExpressionBase" />
    /// </summary>
-   /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.BinaryExpressionBase" />
-   public class GreaterThanOrEqualToExpression : BinaryExpressionBase
+   /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.AssignmentExpressionBase" />
+   public class SubtractAssignmentExpression : AssignmentExpressionBase
    {
       /// <summary>
       /// Gets or the expression type.
       /// </summary>
       /// <value>The expression type.</value>
-      public override NodeType Type => NodeType.GreaterThanOrEqualExpression;
+      public override NodeType Type => NodeType.SubtractAssignExpression;
 
       /// <summary>
-      /// Formats this instance as code text.
+      /// Gets the assignment operand.
       /// </summary>
-      /// <param name="formatter">The code formatter.</param>
-      /// <param name="builder">The string builder to populate.</param>
-      public override void Format(CodeFormatter formatter, StringBuilder builder)
-      {
-         Left.Format(formatter, builder);
-         builder.Append(" >= ");
-         Right.Format(formatter, builder);
-      }
+      /// <value>The operand.</value>
+      public override string Operand => "-=";
    }
 }

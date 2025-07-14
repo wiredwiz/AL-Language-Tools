@@ -50,7 +50,7 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       /// Gets or the expression type.
       /// </summary>
       /// <value>The expression type.</value>
-      public override ExpressionType Type => ExpressionType.Subtract;
+      public override NodeType Type => NodeType.SubtractExpression;
 
       /// <summary>
       /// Formats this instance as code text.

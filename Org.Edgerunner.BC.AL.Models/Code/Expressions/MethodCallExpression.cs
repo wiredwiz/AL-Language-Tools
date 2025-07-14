@@ -39,7 +39,7 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       /// Gets or the expression type.
       /// </summary>
       /// <value>The expression type.</value>
-      public override ExpressionType Type => ExpressionType.MethodCall;
+      public override NodeType Type => NodeType.MethodCallExpression;
 
       /// <summary>
       /// Gets or sets the source.

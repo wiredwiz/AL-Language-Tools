@@ -50,7 +50,7 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       /// Gets or the expression type.
       /// </summary>
       /// <value>The expression type.</value>
-      public override ExpressionType Type => ExpressionType.Modulus;
+      public override NodeType Type => NodeType.ModulusExpression;
 
       /// <summary>
       /// Formats this instance as code text.

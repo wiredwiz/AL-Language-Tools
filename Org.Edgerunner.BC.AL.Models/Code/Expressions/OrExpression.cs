@@ -38,7 +38,7 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       /// Gets or the expression type.
       /// </summary>
       /// <value>The expression type.</value>
-      public override ExpressionType Type => ExpressionType.Or;
+      public override NodeType Type => NodeType.OrExpression;
 
       /// <summary>
       /// Formats this instance as code text.

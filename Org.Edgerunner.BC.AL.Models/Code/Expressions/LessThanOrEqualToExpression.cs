@@ -38,7 +38,7 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       /// Gets or the expression type.
       /// </summary>
       /// <value>The expression type.</value>
-      public override ExpressionType Type => ExpressionType.LessThanOrEqual;
+      public override NodeType Type => NodeType.LessThanOrEqualExpression;
 
       /// <summary>
       /// Formats this instance as code text.

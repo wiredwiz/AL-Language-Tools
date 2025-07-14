@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "ExpressionType.cs">
+// <copyright company = "Edgerunner.org" file = "NodeType.cs">
 // Copyright(c)  2025
 // </copyright>
 // The MIT License (MIT)
@@ -23,12 +23,12 @@
 // THE SOFTWARE.
 #endregion
 
-namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
+namespace Org.Edgerunner.BC.AL.Models.Code
 {
    /// <summary>
-   /// Enum representing an AL expression type.
+   /// Enum representing an AL syntax node type.
    /// </summary>
-   public enum ExpressionType
+   public enum NodeType
    {
       // ReSharper disable StyleCop.SA1630
       // ReSharper disable StyleCop.SA1631
@@ -37,169 +37,199 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       /// A string literal expression
       /// </summary>
       /// <example>"foo bar"</example>
-      StringLiteral,
+      StringLiteralExpression,
 
       /// <summary>
       /// An integer literal expression
       /// </summary>
       /// <example>5</example>
-      IntegerLiteral,
+      IntegerLiteralExpression,
 
       /// <summary>
       /// A float literal expression
       /// </summary>
       /// <example>2.5</example>
-      FloatLiteral,
+      FloatLiteralExpression,
 
       /// <summary>
       /// A Date literal expression
       /// </summary>
       /// <example>20020526D</example>
-      DateLiteral,
+      DateLiteralExpression,
 
       /// <summary>
       /// A Time literal expression
       /// </summary>
       /// <example>120215.333T</example>
-      TimeLiteral,
+      TimeLiteralExpression,
 
       /// <summary>
       /// A DateTime literal expression
       /// </summary>
       /// <example>0DT</example>
-      DateTimeLiteral,
+      DateTimeLiteralExpression,
 
       /// <summary>
       /// A boolean literal expression
       /// </summary>
       /// <example>true</example>
-      BooleanLiteral,
+      BooleanLiteralExpression,
 
       /// <summary>
       /// An add expression
       /// </summary>
       /// <example>5 + 2</example>
-      Add,
+      AddExpression,
 
       /// <summary>
       /// A subtract expression
       /// </summary>
       /// <example>5 - 2</example>
-      Subtract,
+      SubtractExpression,
 
       /// <summary>
       /// A multiply expression
       /// </summary>
       /// <example>5 * 2</example>
-      Multiply,
+      MultiplyExpression,
 
       /// <summary>
       /// A divide expression
       /// </summary>
       /// <example>5 / 2</example>
-      Divide,
+      DivideExpression,
 
       /// <summary>
       /// A modulus expression
       /// </summary>
       /// <example>5 % 2</example>
-      Modulus,
+      ModulusExpression,
 
       /// <summary>
       /// A not expression
       /// </summary>
       /// <example>not foo</example>
-      Not,
+      NotExpression,
 
       /// <summary>
       /// A negative expression
       /// </summary>
       /// <example>-foo</example>
-      Negative,
+      NegativeExpression,
 
       /// <summary>
       /// An or expression
       /// </summary>
       /// <example>foo or bar</example>
-      Or,
+      OrExpression,
 
       /// <summary>
       /// An and expression.
       /// </summary>
       /// <example>foo and bar</example>
-      And,
+      AndExpression,
 
       /// <summary>
       /// A ternary expression
       /// </summary>
       /// <example>foo ? bar : bah</example>
-      Ternary,
+      TernaryExpression,
 
       /// <summary>
       /// An in expression
       /// </summary>
       /// <example>2 in [1, 5, 10, 2]</example>
-      InRange,
+      InRangeExpression,
 
       /// <summary>
       /// An is equal expression.
       /// </summary>
       /// <example>2 = 5</example>
-      IsEqual,
+      IsEqualExpression,
 
       /// <summary>
       /// A less than expression
       /// </summary>
       /// <example>2 &lt; 3</example>
-      LessThan,
+      LessThanExpression,
 
       /// <summary>
       /// A greater than expression
       /// </summary>
       /// <example>2 &gt; 5</example>
-      GreaterThan,
+      GreaterThanExpression,
 
       /// <summary>
       /// A greater than or equal expression
       /// </summary>
       /// <example>2 &gt;= 5</example>
-      GreaterThanOrEqual,
+      GreaterThanOrEqualExpression,
 
       /// <summary>
       /// A less than or equal expression
       /// </summary>
       /// <example>2 &lt;= 3</example>
-      LessThanOrEqual,
+      LessThanOrEqualExpression,
 
       /// <summary>
       /// A member access expression
       /// </summary>
       /// <example>foo.bar</example>
-      MemberAccess,
+      MemberAccessExpression,
 
       /// <summary>
       /// A scope literal expression
       /// </summary>
       /// <example>foo::bar</example>
-      Scope,
+      ScopeExpression,
 
       /// <summary>
       /// A method call expression.
       /// </summary>
       /// <example>foo.bar() or foo()</example>
-      MethodCall,
+      MethodCallExpression,
 
       /// <summary>
       /// An index expression.
       /// </summary>
       /// <example>Foo[0..3]</example>
-      Index,
+      IndexExpression,
 
       /// <summary>
       /// A set expression.
       /// </summary>
       /// <example>[1, 2, 3]</example>
-      Set
+      SetExpression,
+
+      /// <summary>
+      /// An add assignment expression
+      /// </summary>
+      /// <example>a += 4</example>
+      AddAssignExpression,
+
+      /// <summary>
+      /// A subtract assignment expression
+      /// </summary>
+      /// <example>a -= 4</example>
+      SubtractAssignExpression,
+
+      /// <summary>
+      /// An multiply assignment expression
+      /// </summary>
+      /// <example>a *= 4</example>
+      MultiplyAssignExpression,
+
+      /// <summary>
+      /// A divide assignment expression
+      /// </summary>
+      /// <example>a /= 4</example>
+      DivideAssignExpression,
+
+      /// <summary>
+      /// An assignment expression
+      /// </summary>
+      /// <example>a := 4</example>
+      AssignExpression
 
       // ReSharper restore StyleCop.SA1630
       // ReSharper restore StyleCop.SA1631

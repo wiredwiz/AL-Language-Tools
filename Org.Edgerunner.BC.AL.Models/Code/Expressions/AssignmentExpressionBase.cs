@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "GreaterThanOrEqualToExpression.cs">
+// <copyright company = "Edgerunner.org" file = "AssignmentExpressionBase.cs">
 // Copyright(c)  2025
 // </copyright>
 // The MIT License (MIT)
@@ -28,17 +28,17 @@ using System.Text;
 namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
 {
    /// <summary>
-   /// Class that represents an AL greater than or equal to expression.
+   /// Class that represents a base for AL assignment expressions.
    /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.BinaryExpressionBase" />
    /// </summary>
    /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.BinaryExpressionBase" />
-   public class GreaterThanOrEqualToExpression : BinaryExpressionBase
+   public abstract class AssignmentExpressionBase : BinaryExpressionBase
    {
       /// <summary>
-      /// Gets or the expression type.
+      /// Gets the assignment operand.
       /// </summary>
-      /// <value>The expression type.</value>
-      public override NodeType Type => NodeType.GreaterThanOrEqualExpression;
+      /// <value>The operand.</value>
+      public abstract string Operand { get; }
 
       /// <summary>
       /// Formats this instance as code text.
@@ -48,7 +48,7 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       public override void Format(CodeFormatter formatter, StringBuilder builder)
       {
          Left.Format(formatter, builder);
-         builder.Append(" >= ");
+         formatter.FormatAssignmentOperator(builder, Operand);
          Right.Format(formatter, builder);
       }
    }

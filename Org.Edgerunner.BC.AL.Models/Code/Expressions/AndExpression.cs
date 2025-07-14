@@ -33,7 +33,7 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       /// Gets or the expression type.
       /// </summary>
       /// <value>The expression type.</value>
-      public override ExpressionType Type => ExpressionType.Add;
+      public override NodeType Type => NodeType.AddExpression;
 
       /// <summary>
       /// Formats this instance as code text.

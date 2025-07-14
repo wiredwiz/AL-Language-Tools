@@ -88,7 +88,7 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
       /// Gets or the expression type.
       /// </summary>
       /// <value>The expression type.</value>
-      public ExpressionType Type => ExpressionType.DateLiteral;
+      public NodeType Type => NodeType.DateLiteralExpression;
 
       /// <summary>
       /// Gets or sets the children.

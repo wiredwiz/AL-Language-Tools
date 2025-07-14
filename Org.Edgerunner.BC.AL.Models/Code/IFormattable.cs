@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "GreaterThanOrEqualToExpression.cs">
+// <copyright company = "Edgerunner.org" file = "IFormattable.cs">
 // Copyright(c)  2025
 // </copyright>
 // The MIT License (MIT)
@@ -25,31 +25,18 @@
 
 using System.Text;
 
-namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
+namespace Org.Edgerunner.BC.AL.Models.Code
 {
    /// <summary>
-   /// Class that represents an AL greater than or equal to expression.
-   /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.BinaryExpressionBase" />
+   /// Interface that defines a code entity that can be formatted into text.
    /// </summary>
-   /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.BinaryExpressionBase" />
-   public class GreaterThanOrEqualToExpression : BinaryExpressionBase
+   public interface IFormattable
    {
-      /// <summary>
-      /// Gets or the expression type.
-      /// </summary>
-      /// <value>The expression type.</value>
-      public override NodeType Type => NodeType.GreaterThanOrEqualExpression;
-
       /// <summary>
       /// Formats this instance as code text.
       /// </summary>
       /// <param name="formatter">The code formatter.</param>
       /// <param name="builder">The string builder to populate.</param>
-      public override void Format(CodeFormatter formatter, StringBuilder builder)
-      {
-         Left.Format(formatter, builder);
-         builder.Append(" >= ");
-         Right.Format(formatter, builder);
-      }
+      void Format(CodeFormatter formatter, StringBuilder builder);
    }
 }

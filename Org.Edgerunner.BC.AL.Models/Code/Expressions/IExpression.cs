@@ -31,25 +31,18 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
    /// <summary>
    /// Interface that represents an AL code expression.
    /// </summary>
-   public interface IExpression
+   public interface IExpression : IFormattable
    {
       /// <summary>
       /// Gets or the expression type.
       /// </summary>
       /// <value>The expression type.</value>
-      ExpressionType Type { get; }
+      NodeType Type { get; }
 
       /// <summary>
       /// Gets or sets the children.
       /// </summary>
       /// <value>The child expressions.</value>
       List<IExpression> Children { get; set; }
-
-      /// <summary>
-      /// Formats this instance as code text.
-      /// </summary>
-      /// <param name="formatter">The code formatter.</param>
-      /// <param name="builder">The string builder to populate.</param>
-      void Format(CodeFormatter formatter, StringBuilder builder);
    }
 }
