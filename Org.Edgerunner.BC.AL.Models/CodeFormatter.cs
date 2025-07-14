@@ -97,6 +97,12 @@ namespace Org.Edgerunner.BC.AL.Models
       public bool StartBeginOnNewLine { get; set; }
 
       /// <summary>
+      /// Gets or sets a value indicating whether to indent begin blocks within the parent statement.
+      /// </summary>
+      /// <value><c>true</c> if [indent begin blocks]; otherwise, <c>false</c>.</value>
+      public bool IndentBeginBlocks { get; set; }
+
+      /// <summary>
       /// Appends the new line terminator.
       /// </summary>
       /// <param name="builder">The builder.</param>
