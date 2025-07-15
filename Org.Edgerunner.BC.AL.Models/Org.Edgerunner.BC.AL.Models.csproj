@@ -5,7 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Objects\" />
+    <Folder Include="Objects\Enumerations\" />
+    <Folder Include="Objects\DotNetAssemblies\" />
+    <Folder Include="Objects\Codeunits\" />
+    <Folder Include="Objects\Entitlements\" />
+    <Folder Include="Objects\PermissionSets\" />
+    <Folder Include="Objects\Reports\" />
+    <Folder Include="Objects\Queries\" />
+    <Folder Include="Objects\XmlPorts\" />
+    <Folder Include="Objects\Pages\" />
+    <Folder Include="Objects\Tables\" />
   </ItemGroup>
 
 </Project>

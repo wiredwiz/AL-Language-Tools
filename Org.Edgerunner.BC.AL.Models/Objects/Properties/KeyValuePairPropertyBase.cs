@@ -1,0 +1,76 @@
+﻿#region MIT License
+// <copyright company = "Edgerunner.org" file = "KeyValuePairPropertyBase.cs">
+// Copyright(c)  2025
+// </copyright>
+// The MIT License (MIT)
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+#endregion
+
+using System.Collections.Generic;
+using System.Text;
+
+using Org.Edgerunner.BC.AL.Models.Code;
+
+namespace Org.Edgerunner.BC.AL.Models.Objects.Properties
+{
+   /// <summary>
+   /// Class that represents a base for a property storing key/value data pairs.
+   /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Objects.Properties.IProperty" />
+   /// </summary>
+   /// <typeparam name="T">The type of the value being stored in each data pair.</typeparam>
+   /// <seealso cref="Org.Edgerunner.BC.AL.Models.Objects.Properties.IProperty" />
+   public class KeyValuePairPropertyBase<T> : IProperty where T : IFormattable, new()
+   {
+      /// <summary>
+      /// Gets or sets the name.
+      /// </summary>
+      /// <value>The name.</value>
+      public string Name { get; set; }
+
+      /// <summary>
+      /// Gets or sets the Key/Value pairs.
+      /// </summary>
+      /// <value>The Key/Value pairs.</value>
+      public Dictionary<string, T> Values { get; set; }
+
+      /// <summary>
+      /// Formats this instance as code text.
+      /// </summary>
+      /// <param name="formatter">The code formatter.</param>
+      /// <param name="builder">The string builder to populate.</param>
+      public void Format(CodeFormatter formatter, StringBuilder builder)
+      {
+         StringBuilder tempBuilder = new StringBuilder(60);
+         var set = new List<string>(Values.Count);
+         foreach (var pair in Values)
+         {
+            tempBuilder.Clear();
+            pair.Value.Format(formatter, tempBuilder);
+            set.Add(pair.Key + " = " + tempBuilder);
+         }
+
+         builder.Append(Name);
+         builder.Append(" = ");
+         formatter.FormatSetWithSeparator(set, builder);
+         builder.Append(";");
+         formatter.AppendNewLine(builder);
+      }
+   }
+}

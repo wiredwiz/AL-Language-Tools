@@ -82,7 +82,7 @@ namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
          switch (type)
          {
             case LiteralType.String:
-               if (literalValue.Length > 1 && literalValue[0] == '"')
+               if (literalValue.Length > 1 && literalValue[0] == '\'')
                   return literalValue.Substring(1, literalValue.Length - 2);
                
                return literalValue;

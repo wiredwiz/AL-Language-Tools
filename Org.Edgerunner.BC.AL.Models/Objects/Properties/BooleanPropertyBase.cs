@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "StringLiteralExpression.cs">
+// <copyright company = "Edgerunner.org" file = "BooleanPropertyBase.cs">
 // Copyright(c)  2025
 // </copyright>
 // The MIT License (MIT)
@@ -23,52 +23,41 @@
 // THE SOFTWARE.
 #endregion
 
-using System;
-using System.Collections.Generic;
 using System.Text;
 
-namespace Org.Edgerunner.BC.AL.Models.Code.Expressions
+namespace Org.Edgerunner.BC.AL.Models.Objects.Properties
 {
    /// <summary>
-   /// Class that represents a AL string literal expression.
-   /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.IExpression" />
+   /// Class that represents the base for a Boolean property.
+   /// Implements the <see cref="Org.Edgerunner.BC.AL.Models.Objects.Properties.IProperty" />
    /// </summary>
-   /// <seealso cref="Org.Edgerunner.BC.AL.Models.Code.Expressions.IExpression" />
-   public class StringLiteralExpression : IExpression
+   /// <seealso cref="Org.Edgerunner.BC.AL.Models.Objects.Properties.IProperty" />
+   public abstract class BooleanPropertyBase : IProperty
    {
       /// <summary>
-      /// Initializes a new instance of the <see cref="StringLiteralExpression"/> class.
+      /// Gets or sets the name.
       /// </summary>
-      /// <param name="value">The value.</param>
-      public StringLiteralExpression(string value)
-      {
-         Value = value;
-      }
+      /// <value>The name.</value>
+      public string Name { get; set; }
 
       /// <summary>
-      /// Gets or the expression type.
+      /// Gets or sets a value indicating whether this <see cref="BooleanPropertyBase"/> is value.
       /// </summary>
-      /// <value>The expression type.</value>
-      public NodeType Type => NodeType.StringLiteralExpression;
+      /// <value><c>true</c> if value; otherwise, <c>false</c>.</value>
+      public bool Value { get; set; }
 
       /// <summary>
-      /// Gets or sets the children.
+      /// Formats this instance as code text.
       /// </summary>
-      /// <value>The child expressions.</value>
-      public List<IExpression> Children { get; set; }
-
-      /// <summary>
-      /// Gets or sets the value.
-      /// </summary>
-      /// <value>The value.</value>
-      public string Value { get; set; }
-
-      /// <inheritdoc />
+      /// <param name="formatter">The code formatter.</param>
+      /// <param name="builder">The string builder to populate.</param>
       public void Format(CodeFormatter formatter, StringBuilder builder)
       {
-         builder.Append("'");
-         builder.Append(Value);
-         builder.Append("'");
+         builder.Append(formatter.GetIndentationPadding());
+         builder.Append(Name);
+         builder.Append(" = ");
+         builder.Append(Value ? "true" : "false");
+         formatter.AppendNewLine(builder);
       }
    }
 }

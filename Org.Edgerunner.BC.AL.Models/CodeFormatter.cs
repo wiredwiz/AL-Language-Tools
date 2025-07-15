@@ -29,6 +29,8 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 
+using Org.Edgerunner.BC.AL.Models.Code;
+
 namespace Org.Edgerunner.BC.AL.Models
 {
    /// <summary>
@@ -170,23 +172,44 @@ namespace Org.Edgerunner.BC.AL.Models
       }
 
       /// <summary>
-      /// Formats the set of expressions with a separator.
+      /// Formats the set of entities with a separator.
       /// </summary>
-      /// <param name="expressions">The expressions.</param>
+      /// <param name="entities">The entities.</param>
       /// <param name="builder">The builder.</param>
-      public void FormatSetWithSeparator(List<IExpression> expressions, StringBuilder builder)
+      public void FormatSetWithSeparator(List<IFormattable> entities, StringBuilder builder)
       {
-         if (expressions.Count == 1)
-            expressions[0].Format(this, builder);
-         if (expressions.Count > 0)
+         if (entities.Count == 1)
+            entities[0].Format(this, builder);
+         if (entities.Count > 0)
          {
-            for (int i = 0; i < expressions.Count - 1; i++)
+            for (int i = 0; i < entities.Count - 1; i++)
             {
-               expressions[0].Format(this, builder);
+               entities[i].Format(this, builder);
                FormatSeparator(builder, ",");
             }
 
-            expressions[expressions.Count - 1].Format(this, builder);
+            entities[entities.Count - 1].Format(this, builder);
+         }
+      }
+
+      /// <summary>
+      /// Formats the set of entities with a separator.
+      /// </summary>
+      /// <param name="entities">The entities.</param>
+      /// <param name="builder">The builder.</param>
+      public void FormatSetWithSeparator(List<string> entities, StringBuilder builder)
+      {
+         if (entities.Count == 1)
+            builder.Append(entities[0]);
+         if (entities.Count > 0)
+         {
+            for (int i = 0; i < entities.Count - 1; i++)
+            {
+               builder.Append(entities[i]);
+               FormatSeparator(builder, ",");
+            }
+
+            builder.Append(entities[entities.Count - 1]);
          }
       }
 
