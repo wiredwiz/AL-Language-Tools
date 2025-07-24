@@ -12,24 +12,24 @@ warningList
     ;
 
 directiveExpression
-    : IDENTIFIER
-    | LEFTPAREN directiveExpression RIGHTPAREN
-    | BANG directiveExpression
-    | directiveExpression OP_AND directiveExpression
-    | directiveExpression OP_OR directiveExpression
+    : IDENTIFIER #identifierExpression
+    | LEFTPAREN directiveExpression RIGHTPAREN #parenthesizedExpression
+    | NOT directiveExpression #notExpression
+    | directiveExpression AND directiveExpression #andExpression
+    | directiveExpression OR directiveExpression #orExpression
     ;
 
 preprocessorDirective
-    : DEFINE IDENTIFIER directiveTerminator
-    | UNDEF IDENTIFIER directiveTerminator
-    | PRAGMA IMPLICITWITH (DISABLE | RESTORE) directiveTerminator
-    | PRAGMA WARNING (DISABLE | RESTORE) warningList directiveTerminator
-    | REGION DIRECTIVE_TEXT directiveTerminator
-    | ENDREGION DIRECTIVE_TEXT directiveTerminator
-    | IF directiveExpression directiveTerminator
-    | ELIF directiveExpression directiveTerminator
-    | ELSE directiveTerminator
-    | ENDIF directiveTerminator
+    : DEFINE IDENTIFIER directiveTerminator #defineDirective
+    | UNDEF IDENTIFIER directiveTerminator #undefDirective
+    | PRAGMA IMPLICITWITH (DISABLE | RESTORE) directiveTerminator #pragmaImplicitWithDirective
+    | PRAGMA WARNING (DISABLE | RESTORE) warningList directiveTerminator #pragmaWarningDirective
+    | REGION DIRECTIVE_TEXT directiveTerminator #regionDirective
+    | ENDREGION DIRECTIVE_TEXT directiveTerminator #regionEndDirective
+    | IF directiveExpression directiveTerminator #ifDirective
+    | ELIF directiveExpression directiveTerminator #elseifDirective
+    | ELSE directiveTerminator #elseDirective
+    | ENDIF directiveTerminator #endifDirective
     ;
 
 compileDirectives

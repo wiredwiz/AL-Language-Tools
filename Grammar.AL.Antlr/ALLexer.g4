@@ -3519,9 +3519,9 @@ ENDREGION              : E N D R E G I O N WHITE_SPACE*  -> channel(DIRECTIVE), 
 PRAGMA                 : P R A G M A WHITE_SPACE+        -> channel(DIRECTIVE);
 DIRECTIVE_OPEN_PARENS  : '('                             -> channel(DIRECTIVE), type(LEFTPAREN);
 DIRECTIVE_CLOSE_PARENS : ')'                             -> channel(DIRECTIVE), type(RIGHTPAREN);
-BANG                   : '!'                             -> channel(DIRECTIVE);
-OP_AND                 : '&&'                            -> channel(DIRECTIVE);
-OP_OR                  : '||'                            -> channel(DIRECTIVE);
+OP_NOT                 : 'not'                           -> channel(DIRECTIVE), type(NOT);
+OP_AND                 : 'and'                           -> channel(DIRECTIVE), type(AND);
+OP_OR                  : 'or'                            -> channel(DIRECTIVE), type(OR);
 DIRECTIVE_COMMA        : ','                             -> channel(DIRECTIVE), type(COMMA);
 WARNING                : W A R N I N G                   -> channel(DIRECTIVE);
 IMPLICITWITH           : I M P L I C I T W I T H         -> channel(DIRECTIVE);
