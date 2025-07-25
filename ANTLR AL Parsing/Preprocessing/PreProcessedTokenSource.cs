@@ -23,6 +23,7 @@
 // THE SOFTWARE.
 #endregion
 
+using System;
 using System.Collections.Generic;
 using Antlr4.Runtime;
 
@@ -30,34 +31,103 @@ namespace Org.Edgerunner.Language.AL.Parsing.Preprocessing
 {
    public class PreProcessedTokenSource : ITokenSource
    {
-      public PreProcessedTokenSource(List<IToken> tokens)
+      public PreProcessedTokenSource(ITokenSource source, List<Tuple<int, int>> skipRanges)
       {
-         Tokens = tokens;
-         TokenIndex = -1;
+         InternalSource = source;
+         SkipRanges = skipRanges;
       }
 
-      public List<IToken> Tokens { get; }
+      private ITokenSource InternalSource { get; }
 
-      private IToken CurrentToken => TokenIndex == -1 ? null : Tokens[TokenIndex];
+      public List<Tuple<int, int>> SkipRanges { get; set; }
 
-      private int TokenIndex { get; set; }
-
+      /// <summary>
+      /// Return a
+      /// <see cref="T:Antlr4.Runtime.IToken" />
+      /// object from your input stream (usually a
+      /// <see cref="T:Antlr4.Runtime.ICharStream" />
+      /// ). Do not fail/return upon lexing error; keep chewing
+      /// on the characters until you get a good one; errors are not passed through
+      /// to the parser.
+      /// </summary>
+      /// <returns>Antlr4.Runtime.IToken.</returns>
       public IToken NextToken()
       {
-         if (TokenIndex < Tokens.Count)
-            return Tokens[++TokenIndex];
+         if (SkipRanges.Count == 0)
+            return InternalSource.NextToken();
 
-         return null;
+         var token = InternalSource.NextToken();
+
+         while (SkipRanges.Count > 0)
+         {
+            if (token.Line < SkipRanges[0].Item1)
+               return token;
+
+            while (token.Line >= SkipRanges[0].Item1 && token.Line <= SkipRanges[0].Item2)
+            {
+               token = InternalSource.NextToken();
+               if (token == null)
+                  return null;
+            }
+
+            if (token.Line > SkipRanges[0].Item1)
+               SkipRanges.RemoveAt(0);
+         }
+
+         return token;
       }
 
-      public int Line => CurrentToken?.Line ?? 0;
+      /// <summary>
+      /// Get the line number for the current position in the input stream.
+      /// </summary>
+      /// <value>The line.</value>
+      /// <remarks>Get the line number for the current position in the input stream. The
+      /// first line in the input is line 1.</remarks>
+      public int Line => InternalSource.Line;
 
-      public int Column => CurrentToken?.Column ?? 0;
+      /// <summary>
+      /// Get the index into the current line for the current position in the input
+      /// stream.
+      /// </summary>
+      /// <value>The column.</value>
+      /// <remarks>Get the index into the current line for the current position in the input
+      /// stream. The first character on a line has position 0.</remarks>
+      public int Column => InternalSource.Column;
 
-      public ICharStream InputStream { get; }
+      /// <summary>
+      /// Get the
+      /// <see cref="T:Antlr4.Runtime.ICharStream" />
+      /// from which this token source is currently
+      /// providing tokens.
+      /// </summary>
+      /// <value>The input stream.</value>
+      public ICharStream InputStream => InternalSource.InputStream;
 
-      public string SourceName { get; }
+      /// <summary>
+      /// Gets the name of the underlying input source.
+      /// </summary>
+      /// <value>The name of the source.</value>
+      /// <remarks>Gets the name of the underlying input source. This method returns a
+      /// non-null, non-empty string. If such a name is not known, this method
+      /// returns
+      /// <see cref="F:Antlr4.Runtime.IntStreamConstants.UnknownSourceName" />
+      /// .</remarks>
+      public string SourceName => InternalSource.SourceName;
 
-      public ITokenFactory TokenFactory { get; set; }
+      /// <summary>
+      /// Set the
+      /// <see cref="T:Antlr4.Runtime.ITokenFactory" />
+      /// this token source should use for creating
+      /// <see cref="T:Antlr4.Runtime.IToken" />
+      /// objects from the input.
+      /// </summary>
+      /// <value>The
+      /// <see cref="T:Antlr4.Runtime.ITokenFactory" />
+      /// to use for creating tokens.</value>
+      public ITokenFactory TokenFactory
+      {
+         get => InternalSource.TokenFactory;
+         set => InternalSource.TokenFactory = value;
+      }
    }
 }

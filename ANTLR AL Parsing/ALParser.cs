@@ -28,6 +28,8 @@ using System.IO;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using Grammar.AL.Antlr;
+using Org.Edgerunner.Language.AL.Parsing.Messaging;
+using Org.Edgerunner.Language.AL.Parsing.Preprocessing;
 
 namespace Org.Edgerunner.Language.AL.Parsing
 {
@@ -40,6 +42,13 @@ namespace Org.Edgerunner.Language.AL.Parsing
       public ALParser()
       {
          Symbols = new List<string>();
+         Errors = new List<ErrorMessage>();
+      }
+
+      public ALParser(List<string> symbols)
+      : this()
+      {
+         Symbols = symbols;
       }
 
       /// <summary>
@@ -50,15 +59,24 @@ namespace Org.Edgerunner.Language.AL.Parsing
 
       public ITokenStream TokenStream { get; private set; }
 
-      public static List<string> Symbols { get; private set; }
+      public List<string> Symbols { get; private set; }
+
+      public List<ErrorMessage> Errors { get; private set; }
 
       protected ISyntaxTree ParseSource(TextReader reader)
       {
-         var inputStream = new AntlrInputStream(reader);
-         Grammar.AL.Antlr.ALLexer lexer = new ALLexer(inputStream);
-         
-         Grammar.AL.Antlr.ALParser parser = new Grammar.AL.Antlr.ALParser(null);
-         return parser.alUnit();
+         var preProcessor = new ALPreProcessor(Symbols);
+         var source = preProcessor.ProcessSource(reader);
+         Errors.AddRange(preProcessor.Errors);
+         var tokenStream = new CommonTokenStream(source, 0);
+
+         Grammar.AL.Antlr.ALParser parser = new Grammar.AL.Antlr.ALParser(tokenStream);
+         parser.RemoveErrorListeners();
+         var listener = new ParserErrorListener(MessageSource.Parser);
+         parser.AddErrorListener(listener);
+         var result = parser.alUnit();
+         Errors.AddRange(listener.Messages);
+         return result;
       }
 
       private void ExecutePreProcessing(Grammar.AL.Antlr.ALLexer lexer)

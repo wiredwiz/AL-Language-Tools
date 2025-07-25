@@ -26,6 +26,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using Grammar.AL.Antlr;
@@ -42,44 +43,49 @@ namespace Org.Edgerunner.Language.AL.Parsing.Preprocessing
       public ALPreProcessor(List<string> symbols)
       {
          Symbols = symbols.ToList();
-         Errors = Errors.ToList();
-         SourceLineMappings = new SourceLineMapper();
+         Errors = new List<ErrorMessage>();
       }
 
       public static List<string> Symbols { get; private set; }
 
-      public SourceLineMapper SourceLineMappings { get; private set; }
+      public List<CodeRegion> Regions { get; private set; }
+
+      public Dictionary<string, List<PragmaInstruction>> Pragmas { get; private set; }
 
       public List<ErrorMessage> Errors { get; private set; }
 
-      public Stream ProcessSource(Stream stream)
+      public ITokenSource ProcessSource(TextReader reader)
       {
          Errors.Clear();
-         var reader = new StreamReader(stream);
          var inputStream = new AntlrInputStream(reader);
          ALLexer lexer = new ALLexer(inputStream);
          var lexerErrorListener = new LexerErrorListener(MessageSource.Lexer);
          lexer.RemoveErrorListeners();
          lexer.AddErrorListener(lexerErrorListener);
-         var tokens = new CommonTokenStream(lexer, 3);
-         tokens.Fill();
+         var tokenStream = new CommonTokenStream(lexer, 3);
+         tokenStream.Fill();
+         var allTokens = tokenStream.GetTokens();
          Errors.AddRange(lexerErrorListener.Messages);
 
          var parserErrorListener = new ParserErrorListener(MessageSource.PreProcessor);
-         ALPreprocessorParser parser = new ALPreprocessorParser(tokens);
+         ALPreprocessorParser parser = new ALPreprocessorParser(tokenStream);
          parser.RemoveErrorListeners();
          parser.AddErrorListener(parserErrorListener);
          var parseTree = parser.compileDirectives();
          Errors.AddRange(parserErrorListener.Messages);
 
-         // TODO: do preprocessing work and  populate source code
-         var sourceCode = string.Empty;
-         var processedStream = new MemoryStream();
-         var writer = new StreamWriter(processedStream);
-         writer.Write(sourceCode);
-         writer.Flush();
-         processedStream.Position = 0;
-         return processedStream;
+         // Interpret pre-processor directives
+         var processWorker = new ALPreProcessingWorker();
+         processWorker.Symbols.AddRange(Symbols);
+         ParseTreeWalker.Default.Walk(processWorker, parseTree);
+
+         // Assign parsed regions and pragma instructions
+         Regions = processWorker.Regions;
+         Pragmas = processWorker.Pragmas;
+
+         // Now we get our pre-processed token source
+         lexer.Reset();
+         return new PreProcessedTokenSource(lexer, processWorker.SkipRanges);
       }
    }
 }

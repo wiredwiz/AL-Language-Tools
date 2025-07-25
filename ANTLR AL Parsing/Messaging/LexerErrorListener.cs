@@ -42,6 +42,7 @@ namespace Org.Edgerunner.Language.AL.Parsing.Messaging
       public LexerErrorListener(MessageSource source)
       {
          Source = source;
+         Messages = new List<ErrorMessage>();
       }
 
       /// <summary>

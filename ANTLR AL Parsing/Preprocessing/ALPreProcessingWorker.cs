@@ -23,6 +23,7 @@
 // THE SOFTWARE.
 #endregion
 
+using System;
 using System.Collections.Generic;
 using Grammar.AL.Antlr;
 
@@ -36,40 +37,191 @@ namespace Org.Edgerunner.Language.AL.Parsing.Preprocessing
    /// <seealso cref="ALPreprocessorParserBaseListener" />
    public class ALPreProcessingWorker : ALPreprocessorParserBaseListener
    {
-      public static List<string> Symbols { get; private set; }
+      public List<string> Symbols { get; } = new List<string>();
 
-      public Stack<bool> ValueStack { get; set; }
+      public List<Tuple<int, int>> SkipRanges { get; } = new List<Tuple<int, int>>();
 
-      public Stack<int> State { get; set; }
+      public List<CodeRegion> Regions { get; } = new List<CodeRegion>();
 
-      public override void EnterPragmaWarningDirective(ALPreprocessorParser.PragmaWarningDirectiveContext context)
-      {
-         base.EnterPragmaWarningDirective(context);
-      }
+      public Dictionary<string, List<PragmaInstruction>> Pragmas { get; } =
+         new Dictionary<string, List<PragmaInstruction>>();
+
+      protected Stack<bool> ValueStack { get; set; } = new Stack<bool>();
+
+      protected Stack<int> State { get; set; } = new Stack<int>();
+
+      protected Stack<CodeRegion> WorkingRegions { get; set; } = new Stack<CodeRegion>();
+
+      public List<string> WarningCodes { get; set; } = new List<string>();
+
+      private int SkipIndex { get; set; }
+
+      private const int IF_SKIP = 1;
+      private const int PARENT_SKIP = 2;
+      private const int IF_MATCHING = 3;
+      private const int IF_MATCHED = 4;
 
       public override void EnterIfDirective(ALPreprocessorParser.IfDirectiveContext context)
       {
-         State.Push(Grammar.AL.Antlr.ALParser.IF);
+         if (State.Count != 0)
+         {
+            var state = State.Peek();
+            if (state == IF_SKIP || state == PARENT_SKIP || state == IF_MATCHED)
+               State.Push(PARENT_SKIP);
+         }
+         else
+            State.Push(IF_MATCHING);
       }
 
       public override void ExitIfDirective(ALPreprocessorParser.IfDirectiveContext context)
       {
-         base.ExitIfDirective(context);
+         if (ValueStack.Count == 0)
+            throw new InvalidOperationException("No value found on the preprocessor value stack when expected");
+
+         var value = ValueStack.Pop();
+         var state = State.Pop();
+
+         if (state == IF_SKIP || state == PARENT_SKIP)
+         {
+            State.Push(state);
+            return;
+         }
+
+         // Check our value stack return for true or false
+         if (!value)
+         {
+            State.Push(IF_SKIP);
+            SkipIndex = context.stop.Line + 1;
+            return;
+         }
+
+         State.Push(IF_MATCHING);
       }
 
-      public override void EnterRegionEndDirective(ALPreprocessorParser.RegionEndDirectiveContext context)
+      public override void EnterElseifDirective(ALPreprocessorParser.ElseifDirectiveContext context)
       {
-         base.EnterRegionEndDirective(context);
+         var state = State.Pop();
+         State.Push(state == IF_MATCHING ? IF_MATCHED : state);
+         if (state == IF_MATCHED || state == IF_SKIP)
+            SkipRanges.Add(new Tuple<int, int>(SkipIndex, context.start.Line - 1));
+      }
+
+      public override void ExitElseifDirective(ALPreprocessorParser.ElseifDirectiveContext context)
+      {
+         if (ValueStack.Count == 0)
+            throw new InvalidOperationException("No value found on the preprocessor value stack when expected");
+
+         var value = ValueStack.Pop();
+         var state = State.Pop();
+
+         if (state == PARENT_SKIP)
+         {
+            State.Push(state);
+            return;
+         }
+
+         if (state == IF_MATCHED || state == IF_SKIP)
+         {
+            State.Push(state);
+            SkipIndex = context.stop.Line + 1;
+            return;
+         }
+
+         // Check our value stack return for true or false
+         if (!value)
+         {
+            State.Push(IF_SKIP);
+            SkipIndex = context.stop.Line + 1;
+            return;
+         }
+
+         State.Push(IF_MATCHING);
+      }
+
+      public override void EnterElseDirective(ALPreprocessorParser.ElseDirectiveContext context)
+      {
+         var state = State.Pop();
+         State.Push(state == IF_MATCHING ? IF_MATCHED : state);
+         if (state == IF_MATCHED || state == IF_SKIP)
+            SkipRanges.Add(new Tuple<int, int>(SkipIndex, context.start.Line - 1));
+      }
+
+      public override void ExitElseDirective(ALPreprocessorParser.ElseDirectiveContext context)
+      {
+         var state = State.Peek();
+         if (state == IF_MATCHED || state == IF_SKIP)
+            SkipIndex = context.stop.Line + 1;
       }
 
       public override void EnterEndifDirective(ALPreprocessorParser.EndifDirectiveContext context)
       {
-         base.EnterEndifDirective(context);
+         var state = State.Pop();
+
+         if (state == IF_SKIP || state == IF_MATCHED)
+            SkipRanges.Add(new Tuple<int, int>(SkipIndex, context.start.Line - 1));
       }
 
-      public override void EnterPragmaImplicitWithDirective(ALPreprocessorParser.PragmaImplicitWithDirectiveContext context)
+      public override void EnterRegionDirective(ALPreprocessorParser.RegionDirectiveContext context)
       {
-         base.EnterPragmaImplicitWithDirective(context);
+         string comment = String.Empty;
+         if (context.ChildCount > 1)
+            comment = context.GetChild(1).GetText().Trim();
+
+         WorkingRegions.Push(new CodeRegion(context.start.Line, comment));
+      }
+
+      public override void EnterRegionEndDirective(ALPreprocessorParser.RegionEndDirectiveContext context)
+      {
+         var inProgress = WorkingRegions.Pop();
+         inProgress.EndLine = context.start.Line;
+         Regions.Add(inProgress);
+      }
+
+      public override void EnterPragmaWarningDirective(ALPreprocessorParser.PragmaWarningDirectiveContext context)
+      {
+         WarningCodes.Clear();
+      }
+
+      public override void ExitPragmaWarningDirective(ALPreprocessorParser.PragmaWarningDirectiveContext context)
+      {
+         var actionText = context.GetChild(2).GetText().Trim().ToLowerInvariant();
+         PragmaAction action;
+         if (actionText == "disable")
+            action = PragmaAction.disable;
+         else if (actionText == "restore")
+            action = PragmaAction.restore;
+         else
+            throw new ArgumentException($"Invalid pragma warning action '{actionText}' specified");
+
+         foreach (var code in WarningCodes)
+         {
+            if (!Pragmas.TryGetValue(code, out var pragmaInstructions))
+            {
+               pragmaInstructions = new List<PragmaInstruction>();
+               Pragmas[code] = pragmaInstructions;
+            }
+            pragmaInstructions.Add(new PragmaInstruction(action, code, context.start.Line));
+         }
+      }
+
+      public override void ExitPragmaImplicitWithDirective(ALPreprocessorParser.PragmaImplicitWithDirectiveContext context)
+      {
+         var actionText = context.GetChild(2).GetText().Trim().ToLowerInvariant();
+         PragmaAction action;
+         if (actionText == "disable")
+            action = PragmaAction.disable;
+         else if (actionText == "restore")
+            action = PragmaAction.restore;
+         else
+            throw new ArgumentException($"Invalid pragma implicitwith action '{actionText}' specified");
+
+         const string code = "IMPLICITWITH";
+         if (!Pragmas.TryGetValue(code, out var pragmaInstructions))
+         {
+            pragmaInstructions = new List<PragmaInstruction>();
+            Pragmas[code] = pragmaInstructions;
+         }
+         pragmaInstructions.Add(new PragmaInstruction(action, code, context.start.Line));
       }
 
       public override void EnterDefineDirective(ALPreprocessorParser.DefineDirectiveContext context)
@@ -83,25 +235,6 @@ namespace Org.Edgerunner.Language.AL.Parsing.Preprocessing
       {
          var symbol = context.GetChild(1);
          Symbols.Remove(symbol.GetText());
-      }
-      public override void EnterElseDirective(ALPreprocessorParser.ElseDirectiveContext context)
-      {
-         base.EnterElseDirective(context);
-      }
-
-      public override void EnterRegionDirective(ALPreprocessorParser.RegionDirectiveContext context)
-      {
-         base.EnterRegionDirective(context);
-      }
-
-      public override void EnterElseifDirective(ALPreprocessorParser.ElseifDirectiveContext context)
-      {
-         base.EnterElseifDirective(context);
-      }
-
-      public override void ExitElseifDirective(ALPreprocessorParser.ElseifDirectiveContext context)
-      {
-         base.ExitElseifDirective(context);
       }
 
       public override void ExitOrExpression(ALPreprocessorParser.OrExpressionContext context)
@@ -130,16 +263,23 @@ namespace Org.Edgerunner.Language.AL.Parsing.Preprocessing
 
       public override void EnterIdentifierExpression(ALPreprocessorParser.IdentifierExpressionContext context)
       {
-         ValueStack.Push(Symbols.Contains(context.IDENTIFIER().GetText()));
+         ValueStack.Push(Symbols.Contains(context.GetText()));
       }
-      
+
       public override void ExitNotExpression(ALPreprocessorParser.NotExpressionContext context)
       {
          ValueStack.Push(!ValueStack.Pop());
       }
       public override void EnterWarningList(ALPreprocessorParser.WarningListContext context)
       {
-         base.EnterWarningList(context);
+         for (int i = 0; i < context.ChildCount; i++)
+         {
+            if (i % 2 == 0)
+            {
+               var child = context.GetChild(i);
+               WarningCodes.Add(child.GetText().ToUpperInvariant().Trim());
+            }
+         }
       }
    }
 }
