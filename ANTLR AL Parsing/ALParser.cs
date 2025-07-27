@@ -30,6 +30,7 @@ using Antlr4.Runtime.Tree;
 using Grammar.AL.Antlr;
 using Org.Edgerunner.Language.AL.Parsing.Messaging;
 using Org.Edgerunner.Language.AL.Parsing.Preprocessing;
+using System;
 
 namespace Org.Edgerunner.Language.AL.Parsing
 {
@@ -51,6 +52,10 @@ namespace Org.Edgerunner.Language.AL.Parsing
          Symbols = symbols;
       }
 
+      public event EventHandler<ParseEventArgs> PreProcessingFinished;
+
+      public event EventHandler<ParseEventArgs> ParsingFinished;
+
       /// <summary>
       /// Gets the lexer tokens.
       /// </summary>
@@ -67,6 +72,7 @@ namespace Org.Edgerunner.Language.AL.Parsing
       {
          var preProcessor = new ALPreProcessor(Symbols);
          var source = preProcessor.ProcessSource(reader);
+         PreProcessingFinished?.Invoke(this, new ParseEventArgs(null, null, preProcessor.Errors));
          Errors.AddRange(preProcessor.Errors);
          var tokenStream = new CommonTokenStream(source, 0);
 
@@ -76,6 +82,7 @@ namespace Org.Edgerunner.Language.AL.Parsing
          parser.AddErrorListener(listener);
          var result = parser.alUnit();
          Errors.AddRange(listener.Messages);
+         ParsingFinished?.Invoke(this, new ParseEventArgs(tokenStream.GetTokens(), result, Errors));
          return result;
       }
 
