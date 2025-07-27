@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANTLR AL Parsing", "ANTLR A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANTLR AL Parser Driver", "ANTLR AL Parser Driver\ANTLR AL Parser Driver.csproj", "{CA0A8C18-8DE3-41B3-AD37-D3E934C2C461}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parser Benchmark", "Parser Benchmark\Parser Benchmark.csproj", "{06ED981C-F25D-4965-A01D-2698F89E462F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,10 @@ Global
 		{CA0A8C18-8DE3-41B3-AD37-D3E934C2C461}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA0A8C18-8DE3-41B3-AD37-D3E934C2C461}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA0A8C18-8DE3-41B3-AD37-D3E934C2C461}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06ED981C-F25D-4965-A01D-2698F89E462F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06ED981C-F25D-4965-A01D-2698F89E462F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06ED981C-F25D-4965-A01D-2698F89E462F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06ED981C-F25D-4965-A01D-2698F89E462F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
