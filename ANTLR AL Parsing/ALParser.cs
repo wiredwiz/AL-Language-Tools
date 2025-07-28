@@ -31,6 +31,8 @@ using Grammar.AL.Antlr;
 using Org.Edgerunner.Language.AL.Parsing.Messaging;
 using Org.Edgerunner.Language.AL.Parsing.Preprocessing;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Org.Edgerunner.Language.AL.Parsing
 {
@@ -70,7 +72,7 @@ namespace Org.Edgerunner.Language.AL.Parsing
 
       public string FileName { get; set; }
 
-      protected ISyntaxTree ParseSource(TextReader reader)
+      protected ISyntaxTree ParseSource(TextReader reader, CancellationToken token)
       {
          var preProcessor = new ALPreProcessor(Symbols);
          preProcessor.FileName = FileName;
@@ -78,6 +80,8 @@ namespace Org.Edgerunner.Language.AL.Parsing
          PreProcessingFinished?.Invoke(this, new ParseEventArgs(null, null, preProcessor.Errors));
          Errors.AddRange(preProcessor.Errors);
          var tokenStream = new CommonTokenStream(source, 0);
+
+         token.ThrowIfCancellationRequested();
 
          Grammar.AL.Antlr.ALParser parser = new Grammar.AL.Antlr.ALParser(tokenStream);
          parser.RemoveErrorListeners();
@@ -96,12 +100,12 @@ namespace Org.Edgerunner.Language.AL.Parsing
 
       public ISyntaxTree Parse(TextReader reader)
       {
-         return ParseSource(reader);
+         return ParseSource(reader, CancellationToken.None);
       }
 
       public ISyntaxTree Parse(Stream stream)
       {
-         return ParseSource(new StreamReader(stream));
+         return ParseSource(new StreamReader(stream), CancellationToken.None);
       }
 
       public ISyntaxTree Parse(string sourceCode)
@@ -111,7 +115,33 @@ namespace Org.Edgerunner.Language.AL.Parsing
          writer.Write(sourceCode);
          writer.Flush();
          stream.Position = 0;
-         return ParseSource(new StreamReader(stream));
+         return ParseSource(new StreamReader(stream), CancellationToken.None);
+      }
+
+      public async Task<ISyntaxTree> ParseAsync(TextReader reader, CancellationTokenSource tokenSource = null)
+      {
+         var token = tokenSource?.Token ?? CancellationToken.None;
+         var processingTask = Task.Run(() => ParseSource(reader, token), token);
+         return await processingTask.ConfigureAwait(false);
+      }
+
+      public async Task<ISyntaxTree> ParseAsync(Stream stream, CancellationTokenSource tokenSource = null)
+      {
+         var token = tokenSource?.Token ?? CancellationToken.None;
+         var processingTask = Task.Run(() => ParseSource(new StreamReader(stream), token), token);
+         return await processingTask.ConfigureAwait(false);
+      }
+
+      public async Task<ISyntaxTree> ParseAsync(string sourceCode, CancellationTokenSource tokenSource = null)
+      {
+         var token = tokenSource?.Token ?? CancellationToken.None;
+         var stream = new MemoryStream();
+         var writer = new StreamWriter(stream);
+         await writer.WriteAsync(sourceCode).ConfigureAwait(false);
+         await writer.FlushAsync().ConfigureAwait(false);
+         stream.Position = 0;
+         var processingTask = Task.Run(() => ParseSource(new StreamReader(stream), token), token);
+         return await processingTask.ConfigureAwait(false);
       }
    }
 }
