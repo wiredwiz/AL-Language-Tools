@@ -13,6 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="ItemList.Page.al">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SalesHeader.Table.al">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

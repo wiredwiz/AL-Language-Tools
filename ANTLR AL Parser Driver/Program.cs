@@ -10,8 +10,9 @@ namespace ANTLR_AL_Parser_Driver
 
       static void Main(string[] args)
       {
-         var parser = new ALParser(["CLEAN24"]);
-         var source = new StreamReader("SalesHeader.Table.al");
+         var parser = new ALParser();
+         //var source = new StreamReader("SalesHeader.Table.al");
+         var source = new StreamReader("ItemList.Page.al");
 
          parser.PreProcessingFinished += Parser_PreProcessingFinished;
          parser.ParsingFinished += Parser_ParsingFinished;
