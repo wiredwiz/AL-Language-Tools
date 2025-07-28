@@ -44,10 +44,12 @@ namespace Parser_Benchmark
       /// Initializes a new instance of the <see cref="AntlrParseWorker" /> class.
       /// </summary>
       /// <param name="fileQueue">The file queue.</param>
-      public AntlrParseWorker(FileQueue fileQueue)
+      /// <param name="cts">The cancellation token source.</param>
+      public AntlrParseWorker(FileQueue fileQueue, CancellationTokenSource cts)
       {
          _FileQueue = fileQueue;
          Parser = new ALParser();
+         _Cts2 = cts;
       }
 
       private readonly FileQueue _FileQueue;
@@ -55,6 +57,9 @@ namespace Parser_Benchmark
 
       private Task _ProcessingTask;
       private CancellationTokenSource _Cts;
+      private CancellationTokenSource _Cts2;
+
+      private CancellationTokenSource _CombinedCts;
       private bool _IsRunning;
       private int _Busy;
 
@@ -71,6 +76,8 @@ namespace Parser_Benchmark
                throw new InvalidOperationException("Processing is already running.");
 
             _Cts = new CancellationTokenSource();
+            _CombinedCts = CancellationTokenSource.CreateLinkedTokenSource(_Cts.Token, _Cts2.Token);
+
             var token = _Cts.Token;
             _IsRunning = true;
 
@@ -110,9 +117,9 @@ namespace Parser_Benchmark
             lock (_Lock)
             {
                _IsRunning = false;
+               _ProcessingTask = null;
                _Cts.Dispose();
                _Cts = null;
-               _ProcessingTask = null;
             }
          }
       }
@@ -122,21 +129,12 @@ namespace Parser_Benchmark
          var watch = new Stopwatch();
          while (!token.IsCancellationRequested)
          {
-            if (_FileQueue.Count == 0)
-               lock (_Lock)
-               {
-                  _IsRunning = false;
-                  _Cts.Dispose();
-                  _Cts = null;
-                  _ProcessingTask = null;
-                  break;
-               }
-
-            Interlocked.Exchange(ref _Busy, 1);
-
             if (_FileQueue.TryDequeue(out var fileEntry))
             {
+               Interlocked.Exchange(ref _Busy, 1);
+
                watch.Restart();
+               Parser.FileName = fileEntry.FileName;
                Parser.Parse(fileEntry.Stream);
                watch.Stop();
                var elapsed = watch.Elapsed;
@@ -144,9 +142,19 @@ namespace Parser_Benchmark
                ReportData?.Invoke(this, datum);
                if (Parser.Errors.Count > 0)
                   ReportErrors?.Invoke(this, Parser.Errors);
-            }
 
-            Interlocked.Exchange(ref _Busy, 0);
+               Interlocked.Exchange(ref _Busy, 0);
+            }
+            else
+               Task.Delay(100, _Cts.Token);
+
+            if (_FileQueue.LoadingComplete && _FileQueue.Count == 0)
+               lock (_Lock)
+               {
+                  _IsRunning = false;
+                  _ProcessingTask = null;
+                  break;
+               }
          }
       }
 
@@ -166,6 +174,6 @@ namespace Parser_Benchmark
       /// </summary>
       public event EventHandler<Datum> ReportData;
 
-      private ALParser Parser { get; set; }
+      private ALParser Parser { get; }
    }
 }

@@ -23,9 +23,14 @@
 // THE SOFTWARE.
 #endregion
 
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+
+using Antlr4.Runtime.Misc;
 
 namespace Parser_Benchmark
 {
@@ -36,6 +41,8 @@ namespace Parser_Benchmark
    /// <seealso cref="System.Collections.Concurrent.ConcurrentQueue{SourceFileEntry}" />
    public class FileQueue : ConcurrentQueue<SourceFileEntry>
    {
+      private int _LoadingComplete;
+
       /// <summary>
       /// Initializes a new instance of the <see cref="FileQueue"/> class.
       /// </summary>
@@ -48,12 +55,31 @@ namespace Parser_Benchmark
       public FileQueue(IEnumerable<SourceFileEntry> collection) : base(collection) {}
 
       /// <summary>
-      /// Enqueues a file at the specified path.
+      /// Gets or sets a value indicating whether loading of files is complete.
+      /// </summary>
+      /// <value><c>true</c> if [loading complete]; otherwise, <c>false</c>.</value>
+      public bool LoadingComplete
+      {
+         get => _LoadingComplete == 1;
+         set => Interlocked.Exchange(ref _LoadingComplete, value ? 1 : 0);
+      }
+
+      /// <summary>
+      /// Enqueues a file at the specified path asynchronously.
       /// </summary>
       /// <param name="filePath">The file path.</param>
-      public void Enqueue(string filePath)
+      /// <param name="cts">The cancellation token source.</param>
+      public async void EnqueueAsync(string filePath, [NotNull] CancellationTokenSource cts)
       {
-         this.Enqueue(new SourceFileEntry(filePath, ReadFileIntoMemoryStream(filePath)));
+         try
+         {
+            var stream = await ReadFileIntoMemoryStream(filePath, cts).ConfigureAwait(false);
+            this.Enqueue(new SourceFileEntry(filePath, stream));
+         }
+         catch (OperationCanceledException)
+         {
+            return;
+         }
       }
 
       /// <summary>
@@ -62,13 +88,11 @@ namespace Parser_Benchmark
       /// <param name="filePath">The file path.</param>
       /// <returns>MemoryStream.</returns>
       /// <exception cref="System.IO.FileNotFoundException">The file was not found: {filePath}</exception>
-      public static MemoryStream ReadFileIntoMemoryStream(string filePath)
+      public static async Task<MemoryStream> ReadFileIntoMemoryStream(string filePath, [NotNull] CancellationTokenSource cts)
       {
          // Check if the file exists
-         if (!File.Exists(filePath))
-         {
+         if (!File.Exists(filePath)) 
             throw new FileNotFoundException($"The file was not found: {filePath}");
-         }
 
          // Create a new MemoryStream
          MemoryStream memoryStream = new MemoryStream();
@@ -76,8 +100,8 @@ namespace Parser_Benchmark
          // Open the file as a FileStream
          using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
          {
-            // Copy the contents of the FileStream to the MemoryStream
-            fileStream.CopyTo(memoryStream);
+            var info = new FileInfo(filePath);
+            await fileStream.CopyToAsync(memoryStream, (int)info.Length, cts.Token).ConfigureAwait(false);
          }
 
          // Reset the position of the MemoryStream to the beginning
