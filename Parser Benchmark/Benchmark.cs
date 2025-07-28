@@ -12,6 +12,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using Org.Edgerunner.Language.AL.Parsing.Messaging;
+
 namespace Parser_Benchmark
 {
    public partial class Benchmark : Form
@@ -21,10 +23,19 @@ namespace Parser_Benchmark
       private FileQueue _FileQueue;
       private bool _IsRunning = false;
       private CancellationTokenSource _Cts;
+      private List<ErrorMessage> _Errors;
+      private List<BenchEvent> _BenchEvents;
+      private int _TotalFiles;
+      private int _ParseCount;
+      private int _LoadCount;
 
       public Benchmark()
       {
          InitializeComponent();
+         _Errors = new List<ErrorMessage>();
+         _BenchEvents = new List<BenchEvent>();
+         viewErrors.SetObjects(_Errors);
+         viewStatus.SetObjects(_BenchEvents);
       }
 
       private void numParserThreads_ValueChanged(object sender, EventArgs e)
@@ -64,7 +75,13 @@ namespace Parser_Benchmark
             if (_IsRunning)
                return;
 
-            txtOutput.Clear();
+            _BenchEvents.Clear();
+            _Errors.Clear();
+            viewStatus.SetObjects(_BenchEvents);
+            viewErrors.SetObjects(_Errors);
+            progLoading.Value = 0;
+            progParsing.Value = 0;
+            this.Refresh();
             _IsRunning = true;
             _FileQueue = new FileQueue();
             if (_Cts != null)
@@ -87,12 +104,13 @@ namespace Parser_Benchmark
             var watch = Stopwatch.StartNew();
             await Task.WhenAll(_ParserTasks).ConfigureAwait(true);
             watch.Stop();
-            WriteOutput($"All parsing finished in {watch.Elapsed}");
+            _BenchEvents.Add(new BenchEvent(BenchAction.Parsed, "ALL FILES", watch.Elapsed.ToString()));
+            viewStatus.SetObjects(_BenchEvents);
          }
          catch (OperationCanceledException)
          {
             // do nothing
-            WriteOutput($"Parsing benchmark halted at {DateTime.Now.ToString()}");
+            _BenchEvents.Add(new BenchEvent(BenchAction.Halted, "Parsing", DateTime.Now.ToString()));
             _IsRunning = false;
          }
          catch (Exception ex)
@@ -107,7 +125,8 @@ namespace Parser_Benchmark
 
       private void Benchmark_ReportData(object sender, Datum e)
       {
-         WriteOutput($"Finished parsing \"{Path.GetFileName(e.FileName)}\" in {e.ParseTime.ToString()}");
+         _BenchEvents.Add(new BenchEvent(BenchAction.Parsed, e.FileName, e.ParseTime.ToString()));
+         progParsing.Invoke((Action)(() => progParsing.Value += 1)); 
       }
 
       private void BtnStopParsing_Click(object sender, EventArgs e)
@@ -126,10 +145,12 @@ namespace Parser_Benchmark
          var token = cts.Token;
 
          // Producer: enumerate files
-         var files = Directory.EnumerateFiles(directoryPath, "*.al", SearchOption.AllDirectories);
+         var files = await Task.Run(() => Directory.EnumerateFiles(directoryPath, "*.al", SearchOption.AllDirectories).ToArray()).ConfigureAwait(true);
+         _TotalFiles = files.Length;
+         progLoading.Maximum = _TotalFiles;
+         progParsing.Maximum = _TotalFiles;
          var queue = new ConcurrentQueue<string>(files);
 
-         var results = new ConcurrentDictionary<string, byte[]>();
          var workers = new Task[workerCount];
 
          for (int i = 0; i < workerCount; i++)
@@ -141,7 +162,8 @@ namespace Parser_Benchmark
                   try
                   {
                      fileQueue.EnqueueAsync(file, cts);
-                     WriteOutput($"Loaded file \"{Path.GetFileName(file)}\"");
+                     _BenchEvents.Add(new BenchEvent(BenchAction.Loaded, Path.GetFileName(file), string.Empty));
+                     progLoading.Invoke((Action)(() => progLoading.Value += 1)); 
                   }
                   catch (OperationCanceledException)
                   {
@@ -165,30 +187,18 @@ namespace Parser_Benchmark
             await Task.WhenAll(workers).ConfigureAwait(false);
             watch.Stop();
             if (token.IsCancellationRequested)
-               WriteOutput($"Parsing benchmark halted at {DateTime.Now.ToString()}");
-            WriteOutput($"All files loaded in {watch.Elapsed.ToString()}");
+               _BenchEvents.Add(new BenchEvent(BenchAction.Halted, "Parsing", DateTime.Now.ToString()));
+            _BenchEvents.Add(new BenchEvent(BenchAction.Loaded, "ALL FILES", watch.Elapsed.ToString()));
          }
          catch (OperationCanceledException)
          {
             // Swallow if you want graceful cancellation
-            WriteOutput($"Parsing benchmark halted at {DateTime.Now.ToString()}");
+            _BenchEvents.Add(new BenchEvent(BenchAction.Halted, "Parsing", DateTime.Now.ToString()));
+            viewStatus.SetObjects(_BenchEvents);
          }
 
          _IsRunning = false;
          _FileQueue.LoadingComplete = true;
-      }
-
-      private void WriteOutput(string outputText)
-      {
-         if (txtOutput.InvokeRequired)
-         {
-            txtOutput.Invoke((MethodInvoker)delegate
-                                               {
-                                                  txtOutput.AppendText(string.Concat(outputText, "\r\n"));
-                                               });
-         }
-         else
-            txtOutput.AppendText(string.Concat(outputText, "\r\n"));
       }
    }
 }

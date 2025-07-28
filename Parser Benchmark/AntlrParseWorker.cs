@@ -78,7 +78,7 @@ namespace Parser_Benchmark
             _Cts = new CancellationTokenSource();
             _CombinedCts = CancellationTokenSource.CreateLinkedTokenSource(_Cts.Token, _Cts2.Token);
 
-            var token = _Cts.Token;
+            var token = _CombinedCts.Token;
             _IsRunning = true;
 
             _ProcessingTask = Task.Run(() => ParseLoop(token), token);
@@ -146,7 +146,7 @@ namespace Parser_Benchmark
                Interlocked.Exchange(ref _Busy, 0);
             }
             else
-               Task.Delay(100, _Cts.Token);
+               Task.Delay(100, _CombinedCts.Token);
 
             if (_FileQueue.LoadingComplete && _FileQueue.Count == 0)
                lock (_Lock)

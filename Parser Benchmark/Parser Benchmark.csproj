@@ -53,6 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AntlrParseWorker.cs" />
+    <Compile Include="BenchAction.cs" />
+    <Compile Include="BenchEvent.cs" />
     <Compile Include="Datum.cs" />
     <Compile Include="FileLoader.cs" />
     <Compile Include="FileQueue.cs" />
