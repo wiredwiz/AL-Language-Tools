@@ -26,6 +26,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Org.Edgerunner.Language.AL.Parsing;
@@ -138,7 +139,7 @@ namespace Parser_Benchmark
                Parser.Parse(fileEntry.Stream);
                watch.Stop();
                var elapsed = watch.Elapsed;
-               var datum = new Datum(fileEntry.FileName, elapsed);
+               var datum = new Datum(Path.GetFileName(fileEntry.FileName), elapsed);
                ReportData?.Invoke(this, datum);
                if (Parser.Errors.Count > 0)
                   ReportErrors?.Invoke(this, Parser.Errors);
