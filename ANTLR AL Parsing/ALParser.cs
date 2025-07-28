@@ -68,9 +68,12 @@ namespace Org.Edgerunner.Language.AL.Parsing
 
       public List<ErrorMessage> Errors { get; private set; }
 
+      public string FileName { get; set; }
+
       protected ISyntaxTree ParseSource(TextReader reader)
       {
          var preProcessor = new ALPreProcessor(Symbols);
+         preProcessor.FileName = FileName;
          var source = preProcessor.ProcessSource(reader);
          PreProcessingFinished?.Invoke(this, new ParseEventArgs(null, null, preProcessor.Errors));
          Errors.AddRange(preProcessor.Errors);

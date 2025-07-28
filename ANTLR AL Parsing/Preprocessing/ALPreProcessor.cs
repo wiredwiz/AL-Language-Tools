@@ -32,6 +32,7 @@ using Antlr4.Runtime.Tree;
 using Grammar.AL.Antlr;
 using Org.Edgerunner.Language.AL.Parsing.Exceptions;
 using Org.Edgerunner.Language.AL.Parsing.Messaging;
+// ReSharper disable HollowTypeName
 
 namespace Org.Edgerunner.Language.AL.Parsing.Preprocessing
 {
@@ -53,6 +54,8 @@ namespace Org.Edgerunner.Language.AL.Parsing.Preprocessing
       public Dictionary<string, List<PragmaInstruction>> Pragmas { get; private set; }
 
       public List<ErrorMessage> Errors { get; private set; }
+
+      public string FileName { get; set; }
 
       public ITokenSource ProcessSource(TextReader reader)
       {
@@ -76,6 +79,7 @@ namespace Org.Edgerunner.Language.AL.Parsing.Preprocessing
 
          // Interpret pre-processor directives
          var processWorker = new ALPreProcessingWorker();
+         processWorker.FileName = FileName;
          processWorker.Symbols.AddRange(Symbols);
          ParseTreeWalker.Default.Walk(processWorker, parseTree);
 

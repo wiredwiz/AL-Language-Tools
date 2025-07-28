@@ -30,6 +30,7 @@ using Grammar.AL.Antlr;
 namespace Org.Edgerunner.Language.AL.Parsing.Preprocessing
 {
    // ReSharper disable once InconsistentNaming
+
    /// <summary>
    /// Class that represents an AL language pre-processing directive worker.
    /// Implements the <see cref="ALPreprocessorParserBaseListener" />
@@ -45,6 +46,8 @@ namespace Org.Edgerunner.Language.AL.Parsing.Preprocessing
 
       public Dictionary<string, List<PragmaInstruction>> Pragmas { get; } =
          new Dictionary<string, List<PragmaInstruction>>();
+
+      public string FileName { get; set; }
 
       protected Stack<bool> ValueStack { get; set; } = new Stack<bool>();
 
@@ -68,6 +71,8 @@ namespace Org.Edgerunner.Language.AL.Parsing.Preprocessing
             var state = State.Peek();
             if (state == IF_SKIP || state == PARENT_SKIP || state == IF_MATCHED)
                State.Push(PARENT_SKIP);
+            else
+               State.Push(IF_MATCHING);
          }
          else
             State.Push(IF_MATCHING);
