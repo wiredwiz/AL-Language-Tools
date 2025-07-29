@@ -24,8 +24,8 @@ preprocessorDirective
     | UNDEF IDENTIFIER directiveTerminator #undefDirective
     | PRAGMA IMPLICITWITH (DISABLE | RESTORE) directiveTerminator #pragmaImplicitWithDirective
     | PRAGMA WARNING (DISABLE | RESTORE) warningList directiveTerminator #pragmaWarningDirective
-    | REGION DIRECTIVE_TEXT directiveTerminator #regionDirective
-    | ENDREGION DIRECTIVE_TEXT directiveTerminator #regionEndDirective
+    | REGION DIRECTIVE_TEXT? directiveTerminator #regionDirective
+    | ENDREGION DIRECTIVE_TEXT? directiveTerminator #regionEndDirective
     | IF directiveExpression directiveTerminator #ifDirective
     | ELIF directiveExpression directiveTerminator #elseifDirective
     | ELSE directiveTerminator #elseDirective

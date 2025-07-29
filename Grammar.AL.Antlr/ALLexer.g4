@@ -3523,7 +3523,7 @@ ELIF                     : E L I F                                              
 DIRECTIVE_ELSE           : E L S E                                                         -> channel(DIRECTIVE), type(ELSE);
 ENDIF                    : E N D I F                                                       -> channel(DIRECTIVE);
 REGION                   : R E G I O N WHITE_SPACE*                                        -> channel(DIRECTIVE), mode(DIRECTIVE_TEXT_MODE);
-ENDREGION                : E N D R E G I O N WHITE_SPACE*                                  -> channel(DIRECTIVE);
+ENDREGION                : E N D R E G I O N WHITE_SPACE*                                  -> channel(DIRECTIVE), mode(DIRECTIVE_TEXT_MODE);
 PRAGMA                   : P R A G M A WHITE_SPACE+                                        -> channel(DIRECTIVE);
 DIRECTIVE_OPEN_PARENS    : '('                                                             -> channel(DIRECTIVE), type(LEFTPAREN);
 DIRECTIVE_CLOSE_PARENS   : ')'                                                             -> channel(DIRECTIVE), type(RIGHTPAREN);

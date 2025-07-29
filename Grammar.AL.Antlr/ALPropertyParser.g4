@@ -116,11 +116,19 @@ subPageLinkProperty
  * Table relations
  */
 
+tableRelationFilterSegment
+   : (EQUAL|NOTEQUAL|LESSTHAN|GREATERTHAN|LESSTHANEQUAL|GREATERTHANEQUAL)? fieldValue
+   ;
+
+tableRelationFilterCompound
+   : tableRelationFilterSegment ( AMPERSAND tableRelationFilterSegment | PIPE tableRelationFilterSegment )*
+   ;
+
 tableRelationFilter
    : identifier EQUAL
         (FIELD LEFTPAREN identifier RIGHTPAREN
         | CONST LEFTPAREN fieldValue RIGHTPAREN
-        | FILTER LEFTPAREN (EQUAL|NOTEQUAL|LESSTHAN|GREATERTHAN|LESSTHANEQUAL|GREATERTHANEQUAL)? fieldValue RIGHTPAREN)
+        | FILTER LEFTPAREN tableRelationFilterCompound RIGHTPAREN)
    ;
 
 tableRelationFilters
