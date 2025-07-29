@@ -1,5 +1,5 @@
 ﻿#region MIT License
-// <copyright company = "Edgerunner.org" file = "IParserWorker.cs">
+// <copyright company = "Edgerunner.org" file = "ParseErrorsEvent.cs">
 // Copyright(c)  2025
 // </copyright>
 // The MIT License (MIT)
@@ -23,45 +23,21 @@
 // THE SOFTWARE.
 #endregion
 
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Org.Edgerunner.Language.AL.Parsing;
+
 using Org.Edgerunner.Language.AL.Parsing.Messaging;
 
 namespace Parser_Benchmark
 {
-   /// <summary>
-   /// Interface that defines a language parsing worker.
-   /// </summary>
-   public interface IParserWorker
+   public struct ParseErrorsEvent
    {
-      /// <summary>
-      /// Starts this instance.
-      /// </summary>
-      /// <returns>A new <see cref="Task"/>.</returns>
-      Task StartAsync();
+      public ParseErrorsEvent(IList<ErrorMessage> errors, string sourceFile)
+      {
+         Errors = errors;
+         SourceFile = sourceFile;
+      }
 
-      /// <summary>
-      /// Stops this instance.
-      /// </summary>
-      /// <returns>The <see cref="Task"/> being stopped.</returns>
-      Task StopAsync();
-
-      /// <summary>
-      /// Gets a value indicating whether this <see cref="IParserWorker"/> is busy.
-      /// </summary>
-      /// <value><c>true</c> if busy; otherwise, <c>false</c>.</value>
-      bool Busy { get; }
-
-      /// <summary>
-      /// Occurs when parsing errors are reported.
-      /// </summary>
-      event EventHandler<ParseErrorsEvent> ReportErrors;
-
-      /// <summary>
-      /// Occurs when parsing data is reported.
-      /// </summary>
-      event EventHandler<Datum> ReportData;
+      public IList<ErrorMessage> Errors { get; set; }
+      public string SourceFile { get; set; }
    }
 }

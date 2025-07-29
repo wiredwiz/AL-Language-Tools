@@ -31,17 +31,19 @@ namespace Org.Edgerunner.Language.AL.Parsing.Messaging
    public struct ErrorMessage
    {
       /// <summary>
-      /// Initializes a new instance of the <see cref="ErrorMessage"/> struct.
+      /// Initializes a new instance of the <see cref="ErrorMessage" /> struct.
       /// </summary>
       /// <param name="source">The message source.</param>
+      /// <param name="fileName">Path of the source file.</param>
       /// <param name="severity">The message severity.</param>
       /// <param name="line">The source line number.</param>
       /// <param name="position">The source position within the line.</param>
       /// <param name="text">The message text.</param>
       // ReSharper disable once TooManyDependencies
-      public ErrorMessage(MessageSource source, MessageSeverity severity, int line, int position, string text)
+      public ErrorMessage(MessageSource source, string fileName, MessageSeverity severity, int line, int position, string text)
       {
          Source = source;
+         SourceFile = fileName;
          Severity = severity;
          Line = line;
          Position = position;
@@ -53,6 +55,12 @@ namespace Org.Edgerunner.Language.AL.Parsing.Messaging
       /// </summary>
       /// <value>The source.</value>
       public MessageSource Source { get; set; }
+
+      /// <summary>
+      /// Gets or sets the source file path.
+      /// </summary>
+      /// <value>The source file path.</value>
+      public string SourceFile { get; set; }
 
       /// <summary>
       /// Gets or sets the severity of the message.

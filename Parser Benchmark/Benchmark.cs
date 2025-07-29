@@ -12,6 +12,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
+using BrightIdeasSoftware;
+
 using Org.Edgerunner.Language.AL.Parsing;
 using Org.Edgerunner.Language.AL.Parsing.Messaging;
 using Timer = System.Timers.Timer;
@@ -40,8 +43,6 @@ namespace Parser_Benchmark
          _Errors = new List<ErrorMessage>();
          _BenchEvents = new List<BenchEvent>();
          _Observable = new BindingList<BenchEvent>();
-         viewErrors.SetObjects(_Errors);
-         viewStatus.SetObjects(_Observable);
          viewStatus.DataSource = _Observable;
          _Timer = new Timer();
          _Timer.Interval = 1000;
@@ -116,6 +117,7 @@ namespace Parser_Benchmark
                      _ParserWorker[i] = new AntlrParseWorker(_FileQueue, _Cts);
 
                   _ParserWorker[i].ReportData += Benchmark_ReportData;
+                  _ParserWorker[i].ReportErrors += Benchmark_ReportErrors;
                   _ParserTasks[i] = _ParserWorker[i].StartAsync();
                }
 
@@ -139,8 +141,14 @@ namespace Parser_Benchmark
          }
          finally
          {
-
+            viewErrors.SetObjects(_Errors);
          }
+      }
+
+      private void Benchmark_ReportErrors(object sender, ParseErrorsEvent e)
+      {
+         if (e.SourceFile.Contains("Table") || e.SourceFile.Contains("Codeunit") || e.SourceFile.Contains("Page"))
+            _Errors.AddRange(e.Errors);
       }
 
       private void Benchmark_ReportData(object sender, Datum e)
@@ -273,6 +281,8 @@ namespace Parser_Benchmark
                var elapsed = watch.Elapsed;
                if (chkUpdates.CheckState == CheckState.Checked)
                   AddBenchEvent(BenchAction.Parsed, Path.GetFileName(file), elapsed.ToString());
+               if (parser.Errors.Count > 0)
+                  _Errors.AddRange(parser.Errors);
                progParsing.Value += 1;
             }
 
@@ -288,6 +298,7 @@ namespace Parser_Benchmark
          {
             _Timer.Stop();
             _IsRunning = false;
+            viewErrors.SetObjects(_Errors);
          }
       }
 
@@ -297,6 +308,23 @@ namespace Parser_Benchmark
             txtRunTime.Invoke((Action)(() => txtRunTime.Text = (DateTime.UtcNow - _Start).ToString(@"hh\:mm\:ss")));
          else
             txtRunTime.Text = (DateTime.UtcNow - _Start).ToString(@"hh\:mm\:ss");
+      }
+
+      private void viewErrors_DoubleClick(object sender, EventArgs e)
+      {
+         OLVListItem selected;
+         object rowObject = null;
+         if ((selected = viewErrors.SelectedItem) != null && selected.RowObject != null)
+            rowObject = selected.RowObject;
+
+         if (rowObject != null)
+         {
+            var message = (ErrorMessage)rowObject;
+            var appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            var vsCode = $"{appData}\\Programs\\Microsoft VS Code\\Code.exe";
+            var startInfo = new ProcessStartInfo(vsCode);
+            Process.Start(vsCode, $"--goto \"{message.SourceFile}:{message.Line}:{message.Position}\"");
+         }
       }
    }
 }

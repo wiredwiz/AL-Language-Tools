@@ -142,7 +142,7 @@ namespace Parser_Benchmark
                var datum = new Datum(Path.GetFileName(fileEntry.FileName), elapsed);
                ReportData?.Invoke(this, datum);
                if (Parser.Errors.Count > 0)
-                  ReportErrors?.Invoke(this, Parser.Errors);
+                  ReportErrors?.Invoke(this, new ParseErrorsEvent(Parser.Errors, fileEntry.FileName));
 
                Interlocked.Exchange(ref _Busy, 0);
             }
@@ -168,7 +168,7 @@ namespace Parser_Benchmark
       /// <summary>
       /// Occurs when parsing errors are reported.
       /// </summary>
-      public event EventHandler<List<ErrorMessage>> ReportErrors;
+      public event EventHandler<ParseErrorsEvent> ReportErrors;
 
       /// <summary>
       /// Occurs when parsing data is reported.

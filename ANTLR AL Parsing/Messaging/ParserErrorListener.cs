@@ -36,9 +36,15 @@ namespace Org.Edgerunner.Language.AL.Parsing.Messaging
    /// <seealso cref="IToken" />
    internal class ParserErrorListener : IAntlrErrorListener<IToken>
    {
-      public ParserErrorListener(MessageSource source)
+      /// <summary>
+      /// Initializes a new instance of the <see cref="ParserErrorListener"/> class.
+      /// </summary>
+      /// <param name="source">The source.</param>
+      /// <param name="fileName">Path of the source file.</param>
+      public ParserErrorListener(MessageSource source, string fileName)
       {
          Source = source;
+         SourceFile = fileName;
          Messages = new List<ErrorMessage>();
       }
 
@@ -47,6 +53,12 @@ namespace Org.Edgerunner.Language.AL.Parsing.Messaging
       /// </summary>
       /// <value>The source.</value>
       public MessageSource Source { get; }
+
+      /// <summary>
+      /// Gets or sets the source file path.
+      /// </summary>
+      /// <value>The source file path.</value>
+      public string SourceFile { get; set; }
 
       /// <summary>
       /// Gets or sets the messages.
@@ -93,7 +105,7 @@ namespace Org.Edgerunner.Language.AL.Parsing.Messaging
                               string msg,
                               RecognitionException e)
       {
-         Messages.Add(new ErrorMessage(Source, MessageSeverity.Error, line, charPositionInLine, msg));
+         Messages.Add(new ErrorMessage(Source, SourceFile, MessageSeverity.Error, line, charPositionInLine, msg));
       }
    }
 }

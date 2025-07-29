@@ -62,7 +62,7 @@ namespace Org.Edgerunner.Language.AL.Parsing.Preprocessing
          Errors.Clear();
          var inputStream = new AntlrInputStream(reader);
          ALLexer lexer = new ALLexer(inputStream);
-         var lexerErrorListener = new LexerErrorListener(MessageSource.Lexer);
+         var lexerErrorListener = new LexerErrorListener(MessageSource.Lexer, FileName);
          lexer.RemoveErrorListeners();
          lexer.AddErrorListener(lexerErrorListener);
          var tokenStream = new CommonTokenStream(lexer, 3);
@@ -70,7 +70,7 @@ namespace Org.Edgerunner.Language.AL.Parsing.Preprocessing
          var allTokens = tokenStream.GetTokens();
          Errors.AddRange(lexerErrorListener.Messages);
 
-         var parserErrorListener = new ParserErrorListener(MessageSource.PreProcessor);
+         var parserErrorListener = new ParserErrorListener(MessageSource.PreProcessor, FileName);
          ALPreprocessorParser parser = new ALPreprocessorParser(tokenStream);
          parser.RemoveErrorListeners();
          parser.AddErrorListener(parserErrorListener);

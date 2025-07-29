@@ -58,6 +58,7 @@
     <Compile Include="Datum.cs" />
     <Compile Include="FileLoader.cs" />
     <Compile Include="FileQueue.cs" />
+    <Compile Include="ParseErrorsEvent.cs" />
     <Compile Include="SourceFileEntry.cs" />
     <Compile Include="Benchmark.cs">
       <SubType>Form</SubType>

@@ -85,7 +85,7 @@ namespace Org.Edgerunner.Language.AL.Parsing
 
          Grammar.AL.Antlr.ALParser parser = new Grammar.AL.Antlr.ALParser(tokenStream);
          parser.RemoveErrorListeners();
-         var listener = new ParserErrorListener(MessageSource.Parser);
+         var listener = new ParserErrorListener(MessageSource.Parser, FileName);
          parser.AddErrorListener(listener);
          var result = parser.alUnit();
          Errors.AddRange(listener.Messages);
