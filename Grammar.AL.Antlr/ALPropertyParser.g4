@@ -31,6 +31,17 @@ permissionsProperty
    : PERMISSIONS EQUAL permissionSpecifiers SEMICOLON
    ;
 
+propExpression
+   : booleanLiteral #BooleanPropExpression
+   | STRING_LITERAL #StringPropExpression
+   | FLOAT_LITERAL #FloatPropExpression
+   | INTEGER_LITERAL #IntegerPropExpression
+   | identifier #IdentifierPropExpression
+   // | systemEnumerationLiteral #SystemEnumerationPropExpression
+   // | expression SCOPE identifier #ScopePropExpression
+   // | expression PERIOD identifier #MemberAccessPropExpression
+   ;
+
 /*
  * Field related rules
  */
@@ -74,6 +85,31 @@ fieldReference
 
 qualifiedFieldReference
    : tableReference PERIOD fieldReference
+   ;
+
+/*
+ * Sub Page Links
+ */
+
+subPageLinkTableFilter
+   : CONST LEFTPAREN fieldValue RIGHTPAREN
+   | FILTER LEFTPAREN compoundFilterRule RIGHTPAREN
+   | FIELD LEFTPAREN identifier RIGHTPAREN
+   | FIELD LEFTPAREN UPPERLIMIT LEFTPAREN FILTER LEFTPAREN identifier RIGHTPAREN RIGHTPAREN RIGHTPAREN
+   | FIELD LEFTPAREN UPPERLIMIT LEFTPAREN identifier RIGHTPAREN RIGHTPAREN
+   | FIELD LEFTPAREN FILTER LEFTPAREN identifier RIGHTPAREN RIGHTPAREN
+   ;
+
+subPageLink
+   : identifier EQUAL subPageLinkTableFilter
+   ;
+
+subPageLinks
+   : subPageLink ( COMMA subPageLink)*
+   ;
+
+subPageLinkProperty
+   : SUBPAGELINK EQUAL subPageLinks SEMICOLON
    ;
 
 /*

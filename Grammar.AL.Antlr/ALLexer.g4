@@ -2452,6 +2452,10 @@ PARENTCONTROL
    : P A R E N T C O N T R O L
    ;
 
+PART
+   : P A R T
+   ;
+
 PARTTYPE
    : P A R T T Y P E
    ;
@@ -3014,6 +3018,10 @@ SYSTEM
 
 SYSTEMACTION
    : S Y S T E M A C T I O N
+   ;
+
+SYSTEMPART
+   : S Y S T E M P A R T
    ;
 
 SYSTEMPARTID

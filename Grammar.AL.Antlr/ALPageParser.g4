@@ -30,9 +30,8 @@ pageFieldProperty
    | expressionProperty
    ;
 
-pageActionProperty
-   : TABLERELATION EQUAL tableRelation SEMICOLON
-   | multiLanguageCaptionProperty
+pageGenericProperty
+   : multiLanguageCaptionProperty
    | keyIdentifierListProperty
    | keyValueProperty
    | accessByPermProperty
@@ -50,6 +49,41 @@ pageFieldEntity
    | pageFieldProperty
    ;
 
+pageFieldEntities
+   : pageFieldEntity*
+   ;
+
+pageRepeaterEntity
+   : pageGenericProperty
+   | pageField
+   ;
+
+pageRepeaterEntities
+   : pageRepeaterEntity*
+   ;
+
+pageCueEntity
+   : pageGenericProperty
+   | pageField
+   ;
+
+pageCueEntities
+   : pageCueEntity*
+   ;
+
+pagePartProperty
+   : subPageLinkProperty
+   | pageGenericProperty
+   ;
+
+pagePartEntity
+   : pagePartProperty
+   ;
+
+pagePartEntities
+   : pagePartEntity*
+   ;
+
 pageFieldId 
     : INTEGER_LITERAL
     ;
@@ -63,34 +97,64 @@ pagefieldSource
     | identifier PERIOD identifier
     ;
 
+pageEntityName
+    : identifier
+    ;
+
+pagePartType
+    : identifier
+    ;
+
 pageField
    : FIELD LEFTPAREN pageFieldName SEMICOLON pagefieldSource RIGHTPAREN LEFTCBRACE pageFieldEntity*? RIGHTCBRACE
    ;
 
+pageFields
+    : pageField*
+    ;
+
 pageLayoutGroup
-    : GROUP LEFTPAREN identifier RIGHTPAREN LEFTCBRACE pageField* RIGHTCBRACE
+    : GROUP LEFTPAREN pageEntityName RIGHTPAREN LEFTCBRACE pageFields RIGHTCBRACE
     ;
 
 pageLayoutRepeater
-    : REPEATER LEFTPAREN identifier RIGHTPAREN LEFTCBRACE pageField* RIGHTCBRACE
+    : REPEATER LEFTPAREN pageEntityName RIGHTPAREN LEFTCBRACE pageRepeaterEntities RIGHTCBRACE
     ;
 
 pageCuePart
-    : CUEGROUP LEFTPAREN identifier RIGHTPAREN LEFTCBRACE pageField* RIGHTCBRACE
+    : CUEGROUP LEFTPAREN pageEntityName RIGHTPAREN LEFTCBRACE pageCueEntities RIGHTCBRACE
+    ;
+
+pagePart
+    : PART LEFTPAREN pageEntityName SEMICOLON pagePartType RIGHTPAREN LEFTCBRACE pagePartEntities RIGHTCBRACE
+    ;
+
+pageSystemPart
+    : SYSTEMPART LEFTPAREN pageEntityName SEMICOLON pagePartType RIGHTPAREN LEFTCBRACE pagePartEntities RIGHTCBRACE
     ;
 
 pageLayoutEntity
     : pageLayoutGroup
     | pageLayoutRepeater
     | pageCuePart
+    | pagePart
+    | pageSystemPart
+    ;
+
+pageLayoutEntities
+    : pageLayoutEntity*
     ;
 
 pageLayoutArea
-    : AREA LEFTPAREN identifier RIGHTPAREN LEFTCBRACE pageLayoutEntity* RIGHTCBRACE
+    : AREA LEFTPAREN pageEntityName RIGHTPAREN LEFTCBRACE pageLayoutEntities RIGHTCBRACE
     ;
 
-pageLayout
-    : LAYOUT LEFTCBRACE pageLayoutArea* RIGHTCBRACE
+pageLayoutAreas
+    : pageLayoutArea*
+    ;
+
+pageLayoutSection
+    : LAYOUT LEFTCBRACE pageLayoutAreas RIGHTCBRACE
     ;
 
 /*
@@ -99,29 +163,55 @@ pageLayout
 
 pageActionEntity
     : triggerDeclaration
-    | pageActionProperty
+    | pageGenericProperty
     ;
 
 pageAction
     : ACTION LEFTPAREN identifier RIGHTPAREN LEFTCBRACE pageActionEntity* RIGHTCBRACE
     ;
 
-pageActionArea
-    : AREA LEFTPAREN identifier RIGHTPAREN LEFTCBRACE pageAction* RIGHTCBRACE
+pageActions
+    : pageAction*
     ;
 
-pageActions
-    : ACTIONS LEFTCBRACE pageActionArea* RIGHTCBRACE
+pageActionArea
+    : AREA LEFTPAREN identifier RIGHTPAREN LEFTCBRACE pageActions RIGHTCBRACE
+    ;
+
+pageActionAreas
+    : pageActionArea*
+    ;
+
+actionGroup
+    : GROUP LEFTPAREN pageEntityName RIGHTPAREN LEFTCBRACE actionGroupEntities RIGHTCBRACE
+    ;
+
+actionGroupEntity
+    : actionGroup
+    | pageGenericProperty
+    ;
+
+actionGroupEntities
+    : actionGroupEntity*
+    ;
+
+pageActionSection
+    : ACTIONS LEFTCBRACE pageActionAreas RIGHTCBRACE
     ;
 
 /*
  * Page
  */
 
+pageEntity
+    : pageLayoutSection
+    | pageActionSection
+    ;
+
 pageEntities
-    : pageLayout
+    : pageEntity*
     ;
 
 page
-   : namespaceDeclaration? usingDeclarations? PAGE INTEGER_LITERAL identifier LEFTCBRACE pageProperties pageEntities? codeDeclarations? RIGHTCBRACE
+   : namespaceDeclaration? usingDeclarations? PAGE INTEGER_LITERAL identifier LEFTCBRACE pageProperties pageEntities codeDeclarations? RIGHTCBRACE
    ;
