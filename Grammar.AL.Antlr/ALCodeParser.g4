@@ -24,7 +24,7 @@ methodName
    : identifier;
 
 methodDeclaration
-   : methodAttribute*? methodAccessModifier* PROCEDURE identifier LEFTPAREN parameterList? RIGHTPAREN returnValue? SEMICOLON? varBlock? statementBlock SEMICOLON;
+   : attributes=methodAttribute*? accessModifier=methodAccessModifier* PROCEDURE name=identifier LEFTPAREN parameters=parameterList? RIGHTPAREN returnVal=returnValue? SEMICOLON? variables=varBlock? codeBlock=statementBlock SEMICOLON;
 
 /*
  * Method attributes
@@ -89,23 +89,23 @@ optionValueList
    ;
 
 variableTypeDeclaration
-   : ARRAY LEFTBRACKET dimensions RIGHTBRACKET OF variableTypeDeclaration #ArrayVariable
+   : ARRAY LEFTBRACKET dimensions=arrayDimensions RIGHTBRACKET OF typeDecl=variableTypeDeclaration #ArrayVariable
    | BIGINTEGER #BigIntegerVariable
    | BLOB #BlobVariable
    | BOOLEAN #BooleanVariable
    | BYTE #ByteVariable
    | CHAR #CharVariable
-   | CODE sizeDeclaration #CodeVariable
-   | CODEUNIT objectId #CodeunitVariable
+   | CODE sizeDecl=sizeDeclaration #CodeVariable
+   | CODEUNIT objId=objectId #CodeunitVariable
    | DATE #DateVariable
    | DATEFORMULA #DateFormulaVariable
    | DATETIME #DatetimeVariable
    | DECIMAL #DecimalVariable
    | DIALOG #DialogVariable
-   | DICTIONARY OF LEFTBRACKET dictionaryKey COMMA dictionaryDataType RIGHTBRACKET #DictionaryVariable
-   | DOTNET objectId #DotNetVariable
+   | DICTIONARY OF LEFTBRACKET keyDecl=dictionaryKey COMMA typeDecl=dictionaryDataType RIGHTBRACKET #DictionaryVariable
+   | DOTNET objId=objectId #DotNetVariable
    | DURATION #DurationVariable
-   | ENUM objectId #EnumVariable
+   | ENUM objId=objectId #EnumVariable
    | FIELDREF #FieldRefVariable
    | FILE #FileVariable
    | FILTERPAGEBUILDER #FilterPageBuilderVariable
@@ -117,29 +117,29 @@ variableTypeDeclaration
    | HTTPRESPONSEMESSAGE #HttpResponseMessageVariable
    | INSTREAM #InStreamVariable
    | INTEGER #IntegerVariable
-   | INTERFACE objectId #InterfaceVariable
+   | INTERFACE objId=objectId #InterfaceVariable
    | JSONARRAY #JsonArrayVariable
    | JSONOBJECT #JsonObjectVariable
    | JSONTOKEN #JsonTokenVariable
    | JSONVALUE #JsonValueVariable
    | KEYREF #KeyRefVariable
-   | LABEL labelText (COMMA labelArgs)? #LabelVariable
-   | LIST OF LEFTBRACKET variableTypeDeclaration RIGHTBRACKET #ListVariable
+   | LABEL text=labelText (COMMA arguments=labelArgs)? #LabelVariable
+   | LIST OF LEFTBRACKET typeDecl=variableTypeDeclaration RIGHTBRACKET #ListVariable
    | MODULEDEPENDENCYINFO #ModuleDependencyInfoVariable
    | MODULEINFO #ModuleInfoVariable
    | NOTIFICATION #NotificationVariable
-   | OPTION optionValueList? #OptionVariable
+   | OPTION options=optionValueList? #OptionVariable
    | OUTSTREAM #OutStreamVariable
-   | PAGE objectId #PageVariable
-   | QUERY objectId #QueryVariable
-   | RECORD objectId TEMPORARY? #RecordVariable
+   | PAGE objId=objectId #PageVariable
+   | QUERY objId=objectId #QueryVariable
+   | RECORD objId=objectId TEMPORARY? #RecordVariable
    | RECORDID #RecordIdVariable
    | RECORDREF #RecordRefVariable
-   | REPORT objectId #ReportVariable
+   | REPORT objId=objectId #ReportVariable
    | SESSIONSETTINGS #SessionSettingsVariable
-   | TEXT sizeDeclaration? #TextVariable
+   | TEXT sizeDecl=sizeDeclaration? #TextVariable
    | TEXTBUILDER #TextBuilderVariable
-   | TEXTCONST identifier EQUAL STRING_LITERAL #TextConstantVariable
+   | TEXTCONST name=identifier EQUAL literalValue=STRING_LITERAL #TextConstantVariable
    | TIME #TimeVariable
    | VARIANT #VariantVariable
    | VERSION #VersionVariable
@@ -147,7 +147,7 @@ variableTypeDeclaration
    | XMLDOCUMENT #XmlDocumentVariable
    | XMLELEMENT #XmlElementVariable
    | XMLNODE #XmlNodeVariable
-   | XMLPORT objectId #XmlPortVariable
+   | XMLPORT objId=objectId #XmlPortVariable
    ;
 
 parameterName
@@ -387,7 +387,7 @@ methodCallArguments
    ;
 
 expression
-   : LEFTPAREN expression RIGHTPAREN #ParenthesisExpression
+   : LEFTPAREN expr=expression RIGHTPAREN #ParenthesisExpression
    | booleanLiteral #BooleanLiteralExpression
    | DATE_LITERAL #DateLiteralExpression
    | TIME_LITERAL #TimeLiteralExpression
@@ -397,24 +397,24 @@ expression
    | INTEGER_LITERAL	#IntegerLiteralExpression
    | systemEnumerationLiteral #SystemEnumerationLiteralExpression
    | identifier #IdentifierExpression
-   | expression PERIOD methodName LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
-   | methodName LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
-   | expression SCOPE identifier #ScopeExpression
-   | expression PERIOD identifier #MemberAccessExpression
-   | expression LEFTBRACKET indexAccessorSet RIGHTBRACKET #IndexExpression
-   | LEFTBRACKET valueSet? RIGHTBRACKET #SetExpression
-   | NOT expression #NotExpression
-   | MINUS expression #NegativeExpression
-   | expression ASTERISK expression	#MultiplyExpression
-   | expression BACKSLASH expression #DivideExpression
-   | expression DIV expression #IntegerDivideExpression
-   | expression MOD expression #ModulusExpression
-   | expression PLUS expression #AddExpression
-   | expression MINUS expression #SubtractExpression
-   | expression (LESSTHAN | GREATERTHAN | LESSTHANEQUAL | GREATERTHANEQUAL | NOTEQUAL | EQUAL) expression #ComparisonExpression
-   | expression (AND | OR | XOR) expression #LogicalComparisonExpression
-   | expression CONDITION expression COLON expression #TernaryExpression
-   | expression (ASSGN | DIV_ASSGN | MULTIPLY_ASSGN | ADD_ASSGN | MINUS_ASSGN) expression #AssignmentExpression
-   | expression IN LEFTBRACKET valueSet? RIGHTBRACKET #InRangeExpression
+   | expression PERIOD name=methodName LEFTPAREN arguments=methodCallArguments? RIGHTPAREN #MethodCallExpression
+   | name=methodName LEFTPAREN arguments=methodCallArguments? RIGHTPAREN #MethodCallExpression
+   | expr=expression SCOPE scope=identifier #ScopeExpression
+   | expr=expression PERIOD member=identifier #MemberAccessExpression
+   | expr=expression LEFTBRACKET indexValue=expression RIGHTBRACKET #IndexExpression
+   | LEFTBRACKET setExpr=valueSet? RIGHTBRACKET #SetExpression
+   | NOT expr=expression #NotExpression
+   | MINUS expr=expression #NegativeExpression
+   | lhs=expression ASTERISK rhs=expression	#MultiplyExpression
+   | lhs=expression BACKSLASH rhs=expression #DivideExpression
+   | lhs=expression DIV rhs=expression #IntegerDivideExpression
+   | lhs=expression MOD rhs=expression #ModulusExpression
+   | lhs=expression PLUS rhs=expression #AddExpression
+   | lhs=expression MINUS rhs=expression #SubtractExpression
+   | lhs=expression (LESSTHAN | GREATERTHAN | LESSTHANEQUAL | GREATERTHANEQUAL | NOTEQUAL | EQUAL) rhs=expression #ComparisonExpression
+   | lhs=expression (AND | OR | XOR) rhs=expression #LogicalComparisonExpression
+   | condition=expression CONDITION trueExpr=expression COLON falseExpr=expression #TernaryExpression
+   | lhs=expression (ASSGN | DIV_ASSGN | MULTIPLY_ASSGN | ADD_ASSGN | MINUS_ASSGN) rhs=expression #AssignmentExpression
+   | expr=expression IN LEFTBRACKET setExpr=valueSet? RIGHTBRACKET #InRangeExpression
    | GUIALLOWED #GuiAllowedFunctionExpression
    ;

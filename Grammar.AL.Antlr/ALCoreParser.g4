@@ -872,7 +872,7 @@ sizeDeclaration
    : LEFTBRACKET INTEGER_LITERAL RIGHTBRACKET
    ;
 
-dimensions
+arrayDimensions
    : INTEGER_LITERAL (COMMA INTEGER_LITERAL)*?
    ;
 
