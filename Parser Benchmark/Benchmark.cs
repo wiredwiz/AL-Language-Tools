@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -319,9 +319,19 @@ namespace Parser_Benchmark
 
          if (rowObject != null)
          {
+            var progFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
+            var vsCode = $"{progFiles}\\Microsoft VS Code\\Code.exe";
+            if (!File.Exists(vsCode))
+            {
+               var appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+               vsCode = $"{appData}\\Programs\\Microsoft VS Code\\Code.exe";
+            }
+            if (!File.Exists(vsCode))
+            {
+               MessageBox.Show("Unable to locate Visual Studio Code executable");
+               return;
+            }
             var message = (ErrorMessage)rowObject;
-            var appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            var vsCode = $"{appData}\\Programs\\Microsoft VS Code\\Code.exe";
             var startInfo = new ProcessStartInfo(vsCode);
             Process.Start(vsCode, $"--goto \"{message.SourceFile}:{message.Line}:{message.Position}\"");
          }
