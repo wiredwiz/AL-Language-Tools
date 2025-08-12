@@ -23,12 +23,14 @@
 // THE SOFTWARE.
 #endregion
 
+using System;
+
 namespace Org.Edgerunner.Language.AL.Parsing.Messaging
 {
    /// <summary>
    /// Struct that represents a source code parsing error message.
    /// </summary>
-   public struct ErrorMessage
+   public struct ErrorMessage : IEquatable<ErrorMessage>
    {
       /// <summary>
       /// Initializes a new instance of the <see cref="ErrorMessage" /> struct.
@@ -85,5 +87,29 @@ namespace Org.Edgerunner.Language.AL.Parsing.Messaging
       /// </summary>
       /// <value>The message text.</value>
       public string Text { get; set; }
+
+      public bool Equals(ErrorMessage other)
+      {
+         return Source == other.Source && SourceFile == other.SourceFile && Severity == other.Severity && Line == other.Line && Position == other.Position && Text == other.Text;
+      }
+
+      public override bool Equals(object obj)
+      {
+         return obj is ErrorMessage other && Equals(other);
+      }
+
+      public override int GetHashCode()
+      {
+         unchecked
+         {
+            var hashCode = (int)Source;
+            hashCode = (hashCode * 397) ^ (SourceFile != null ? SourceFile.GetHashCode() : 0);
+            hashCode = (hashCode * 397) ^ (int)Severity;
+            hashCode = (hashCode * 397) ^ Line;
+            hashCode = (hashCode * 397) ^ Position;
+            hashCode = (hashCode * 397) ^ (Text != null ? Text.GetHashCode() : 0);
+            return hashCode;
+         }
+      }
    }
 }
