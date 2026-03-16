@@ -44,15 +44,6 @@ pageGenericProperty
  * Layout
  */
 
-pageFieldEntity
-   : triggerDeclaration
-   | pageFieldProperty
-   ;
-
-pageFieldEntities
-   : pageFieldEntity*
-   ;
-
 pageRepeaterEntity
    : pageGenericProperty
    | pageField
@@ -106,7 +97,7 @@ pagePartType
     ;
 
 pageField
-   : FIELD LEFTPAREN pageFieldName SEMICOLON pagefieldSource RIGHTPAREN LEFTCBRACE pageFieldEntity*? RIGHTCBRACE
+   : FIELD LEFTPAREN pageFieldName SEMICOLON pagefieldSource RIGHTPAREN LEFTCBRACE pageFieldProperty*? triggerDeclaration*? RIGHTCBRACE
    ;
 
 pageFields

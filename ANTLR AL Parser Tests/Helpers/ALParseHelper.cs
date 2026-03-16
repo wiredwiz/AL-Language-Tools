@@ -47,4 +47,14 @@ public static class ALParseHelper
         var tree = parser.Parse(source);
         return (tree, parser.Errors);
     }
+
+    /// <summary>
+    /// Parses a complete AL unit from source (query, report, xmlport, table, page, codeunit, etc.).
+    /// </summary>
+    public static (ISyntaxTree Tree, IReadOnlyList<ErrorMessage> Errors) ParseAlUnit(string source)
+    {
+        var parser = new ALParser();
+        var tree = parser.Parse(source);
+        return (tree, parser.Errors);
+    }
 }

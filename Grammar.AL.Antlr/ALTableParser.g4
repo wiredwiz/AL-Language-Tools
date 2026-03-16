@@ -76,11 +76,6 @@ tableFieldProperty
    | expressionProperty
    ;
 
-tableFieldEntity
-   : triggerDeclaration
-   | tableFieldProperty
-   ;
-
 tableFieldGroupName
    : DROPDOWN
    | {TokenMatches("brick")}? IDENTIFIER
@@ -99,7 +94,7 @@ tableFieldGroups
    ;
 
 tableField
-   : FIELD LEFTPAREN tableFieldId SEMICOLON tableFieldName SEMICOLON tableFieldType RIGHTPAREN LEFTCBRACE tableFieldEntity*? RIGHTCBRACE
+   : FIELD LEFTPAREN tableFieldId SEMICOLON tableFieldName SEMICOLON tableFieldType RIGHTPAREN LEFTCBRACE tableFieldProperty*? triggerDeclaration*? RIGHTCBRACE
    ;
 
 tableFields
