@@ -1,7 +1,7 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:Int64 x:Key="/Default/CodeInspection/CleanCode/MaximumChainedReferences/@EntryValue">5</s:Int64>
 	<s:Int64 x:Key="/Default/CodeInspection/CleanCode/MaximumConstructorDependencies/@EntryValue">4</s:Int64>
-	<s:Int64 x:Key="/Default/CodeInspection/CleanCode/MaximumExpressionsInCondition/@EntryValue">3</s:Int64>
+	<s:Int64 x:Key="/Default/CodeInspection/CleanCode/MaximumExpressionsInCondition/@EntryValue">5</s:Int64>
 	<s:Int64 x:Key="/Default/CodeInspection/CleanCode/MaximumIndentationDepth/@EntryValue">4</s:Int64>
 	<s:Int64 x:Key="/Default/CodeInspection/CleanCode/MaximumMethodParameters/@EntryValue">5</s:Int64>
 	<s:Int64 x:Key="/Default/CodeInspection/CleanCode/MaximumMethodStatements/@EntryValue">28</s:Int64>
@@ -52,8 +52,8 @@
 	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/WRAP_PARAMETERS_STYLE/@EntryValue">CHOP_IF_LONG</s:String>
 	
 	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderRegionName/@EntryValue">MIT License</s:String>
-	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">&lt;copyright company = "Edgerunner.org" file = "${File.FileName}"&gt;&#xD;
-Copyright(c) ${User.Name} ${CurrentDate.Year}&#xD;
+	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">&lt;copyright company = "Edgerunner.org" file = "$FILENAME$"&gt;&#xD;
+Copyright(c) $USER_NAME$ $CURRENT_YEAR$&#xD;
 &lt;/copyright&gt;&#xD;
 The MIT License (MIT)&#xD;
 &#xD;
@@ -81,7 +81,9 @@ THE SOFTWARE.</s:String>
 	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ESettingsUpgrade_002EMigrateBlankLinesAroundFieldToBlankLinesAroundProperty/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Assemblable/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Capturable/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Codeunit/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Edgerunner/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Formattable/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=NONINFRINGEMENT/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Parameterless/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Parsable/@EntryIndexedValue">True</s:Boolean>

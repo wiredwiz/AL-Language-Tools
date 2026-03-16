@@ -58,13 +58,18 @@ identifier
    | ABS
    | ACTION
    | ACTIONREF
+   | ACTIONS
    | ACTIVATE
    | ACTIVE
    | ACTIVECONTROLONOPEN
+   | ADDBEFORE
+   | ADDFIRST
+   | ADDLAST
    | ADDLINK
    | ADDTEXT
    | ALTSEARCHFIELD
    | APPLICATIONPATH
+   | AREA
    | ARRAY
    | ARRAYLEN
    | ASCENDING
@@ -88,7 +93,6 @@ identifier
    | BACKTRANSPARENT
    | BACKUPKEY
    | BEEP
-   | BEGIN
    | BIGINTEGER
    | BIGTEXT
    | BINARY
@@ -104,7 +108,6 @@ identifier
    | BORDERSTYLE
    | BORDERWIDTH
    | BOTTOMMARGIN
-   | BREAK
    | BYTE
    | CALCDATE
    | CALCFIELD
@@ -119,7 +122,6 @@ identifier
    | CAPTIONCLASS
    | CAPTIONML
    | CARDPAGEID
-   | CASE
    | CHANGECOMPANY
    | CHAR
    | CHARALLOWED
@@ -152,7 +154,6 @@ identifier
    | CONST
    | CONTAINERTYPE
    | CONTEXTURL
-   | CONTINUE
    | CONTROLADDIN
    | CONTROLTYPE
    | CONVERTSTR
@@ -171,6 +172,7 @@ identifier
    | CREATEINSTREAM
    | CREATEOUTSTREAM
    | CREATETEMPFILE
+   | CUEGROUP
    | CURRENTDATETIME
    | CURRENTEXECUTIONMODE
    | CURRENTKEY
@@ -198,7 +200,6 @@ identifier
    | DATE2DWY
    | DATEFORMULA
    | DATETIME
-   | DATI2VARIANT
    | DEBUGGER
    | DECIMAL
    | DECIMALPLACES
@@ -223,13 +224,11 @@ identifier
    | DIRECTION
    | DIVISOR
    | DMY2DATE
-   | DO
    | DOTNET
    | DOTNETASSEMBLY
    | DOTNETTYPEDECLARATION
    | DOWNLOAD
    | DOWNLOADFROMSTREAM
-   | DOWNTO
    | DRILLDOWN
    | DRILLDOWNPAGEID
    | DROPDOWN
@@ -240,13 +239,11 @@ identifier
    | DWY2DATE
    | EDITABLE
    | ELLIPSIS
-   | ELSE
    | ENABLED
    | ENABLEDIFERROR
    | ENABLEDIFINSERTION
    | ENABLEDIFSELECTION
    | ENCODING
-   | END
    | ENTITLEMENT
    | ENUM
    | ENUMEXTENSION
@@ -264,12 +261,12 @@ identifier
    | EVENT
    | EXIST
    | EXISTS
-   | EXIT
    | EXPORT
    | EXPORTOBJECTS
    | EXTENDEDDATATYPE
    | EXTENDS
    | FIELD
+   | FIELDS
    | FIELDACTIVE
    | FIELDCAPTION
    | FIELDCLASS
@@ -305,8 +302,6 @@ identifier
    | FONTSIZE
    | FONTSTRIKETHRU
    | FONTUNDERLINE
-   | FOR
-   | FOREACH
    | FORECOLOR
    | FORMAT
    | FREEZECOLUMNID
@@ -326,6 +321,7 @@ identifier
    | GETURL
    | GETVIEW
    | GLOBALLANGUAGE
+   | GROUP
    | GROUPTOTALFIELDS
    | GROUPTYPE
    | GUIALLOWED
@@ -347,13 +343,11 @@ identifier
    | HTTPRESPONSEMESSAGE
    | HYPERLINK
    | ID
-   | IF
    | IMAGE
    | IMPLEMENTS
    | IMPORT
    | IMPORTANCE
    | IMPORTOBJECTS
-   | IN
    | INCLUDEINDATASET
    | INCOLUMN
    | INCOLUMNHEADING
@@ -422,6 +416,7 @@ identifier
    | KEYS
    | LABEL
    | LANGUAGE
+   | LAYOUT
    | LEADERDOTS
    | LEFTMARGIN
    | LEN
@@ -471,6 +466,10 @@ identifier
    | MODIFYALLOWED
    | MODULEDEPENDENCYINFO
    | MODULEINFO
+   | MOVEAFTER
+   | MOVEBEFORE
+   | MOVEFIRST
+   | MOVELAST
    | MULTILINE
    | MULTIPLENEWLINES
    | NAME
@@ -490,7 +489,6 @@ identifier
    | OBJECTTYPE
    | OCCURRENCE
    | OCX
-   | OF
    | ONACTION
    | ONACTIVATE
    | ONAFTERASSIGNFIELD
@@ -580,6 +578,7 @@ identifier
    | PAPERSOURCELASTPAGE
    | PAPERSOURCEOTHERPAGES
    | PARENTCONTROL
+   | PART
    | PARTTYPE
    | PASSWORDTEXT
    | PASTEISVALID
@@ -623,7 +622,7 @@ identifier
    | RECORDSEPARATOR
    | RELATION
    | RENAME
-   | REPEAT
+   | REPEATER
    | REPORT
    | REPORTEXTENSION
    | REPORTFORMAT
@@ -720,6 +719,7 @@ identifier
    | SYNCHRONIZESINGLELOGIN
    | SYSTEM
    | SYSTEMACTION
+   | SYSTEMPART
    | SYSTEMPARTID
    | TABLE
    | TABLEBOXID
@@ -748,11 +748,9 @@ identifier
    | TEXTMODE
    | TEXTPOS
    | TEXTTYPE
-   | THEN
    | TIME
    | TIMERINTERVAL
    | TITLE
-   | TO
    | TODAY
    | TOOLTIP
    | TOOLTIPML
@@ -764,7 +762,6 @@ identifier
    | TRANSACTIONTYPE
    | TRANSFERFIELDS
    | TRIGGER
-   | UNTIL
    | TRUNC
    | TYPE
    | UPDATE
@@ -805,10 +802,8 @@ identifier
    | WEBSERVICEACTIONCONTEXT
    | WEBSERVICEACTIONRESULTCODE
    | WHERE
-   | WHILE
    | WIDTH
    | WINDOWSLANGUAGE
-   | WITH
    | WITHEVENTS
    | WORDDATE
    | WRITE
@@ -877,7 +872,7 @@ sizeDeclaration
    : LEFTBRACKET INTEGER_LITERAL RIGHTBRACKET
    ;
 
-dimensions
+arrayDimensions
    : INTEGER_LITERAL (COMMA INTEGER_LITERAL)*?
    ;
 
@@ -938,10 +933,10 @@ systemEnumerationLiteral
    ;
 
 namespaceDeclaration
-   : {TokenMatches("namespace")}? identifier namespaceIdentifier SEMICOLON;
+   : NAMESPACE namespaceIdentifier SEMICOLON;
 
 usingDeclaration
-   : {TokenMatches("using")}? identifier namespaceIdentifier SEMICOLON;
+   : USING namespaceIdentifier SEMICOLON;
 
 usingDeclarations
    : usingDeclaration+;

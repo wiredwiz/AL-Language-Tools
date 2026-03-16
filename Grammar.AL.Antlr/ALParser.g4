@@ -2,11 +2,17 @@ parser grammar ALParser;
 
 options { tokenVocab=ALLexer; }
 
-import ALCodeunitParser, ALTableParser;
+import ALCodeunitParser, ALTableParser, ALPageParser;
+
+alUnit
+   : codeunitDeclaration
+   | table
+   | page
+   ;
 
 compileUnit
 	: EOF
-   | statement EOF
+   | alUnit EOF
 	;
 
 /*

@@ -10,16 +10,18 @@ import ALCoreParser;
  * method declarations, control structures, expressions and codeunits.
  */
 
-
 /*
  * Method
  */
 
-methodName
-   : identifier;
+methodAccessModifier
+   : LOCAL
+   | PROTECTED
+   | INTERNAL
+   ;
 
 methodDeclaration
-   : methodAttribute*? LOCAL? PROCEDURE identifier LEFTPAREN parameterList? RIGHTPAREN returnValue? varBlock? statementBlock SEMICOLON;
+   : attributes=methodAttribute*? accessModifier=methodAccessModifier* PROCEDURE name=identifier LEFTPAREN parameters=parameterList? RIGHTPAREN returnVal=returnValue? SEMICOLON? variables=varBlock? codeBlock=statementBlock SEMICOLON;
 
 /*
  * Method attributes
@@ -84,21 +86,23 @@ optionValueList
    ;
 
 variableTypeDeclaration
-   : ARRAY LEFTBRACKET dimensions RIGHTBRACKET OF variableTypeDeclaration #ArrayVariable
+   : ARRAY LEFTBRACKET dimensions=arrayDimensions RIGHTBRACKET OF typeDecl=variableTypeDeclaration #ArrayVariable
    | BIGINTEGER #BigIntegerVariable
    | BLOB #BlobVariable
    | BOOLEAN #BooleanVariable
    | BYTE #ByteVariable
    | CHAR #CharVariable
-   | CODE sizeDeclaration #CodeVariable
-   | CODEUNIT objectId #CodeunitVariable
+   | CODE sizeDecl=sizeDeclaration #CodeVariable
+   | CODEUNIT objId=objectId #CodeunitVariable
    | DATE #DateVariable
+   | DATEFORMULA #DateFormulaVariable
    | DATETIME #DatetimeVariable
    | DECIMAL #DecimalVariable
-   | DICTIONARY OF LEFTBRACKET dictionaryKey COMMA dictionaryDataType RIGHTBRACKET #DictionaryVariable
-   | DOTNET objectId #DotNetVariable
+   | DIALOG #DialogVariable
+   | DICTIONARY OF LEFTBRACKET keyDecl=dictionaryKey COMMA typeDecl=dictionaryDataType RIGHTBRACKET #DictionaryVariable
+   | DOTNET objId=objectId #DotNetVariable
    | DURATION #DurationVariable
-   | ENUM objectId #EnumVariable
+   | ENUM objId=objectId #EnumVariable
    | FIELDREF #FieldRefVariable
    | FILE #FileVariable
    | FILTERPAGEBUILDER #FilterPageBuilderVariable
@@ -110,28 +114,29 @@ variableTypeDeclaration
    | HTTPRESPONSEMESSAGE #HttpResponseMessageVariable
    | INSTREAM #InStreamVariable
    | INTEGER #IntegerVariable
+   | INTERFACE objId=objectId #InterfaceVariable
    | JSONARRAY #JsonArrayVariable
    | JSONOBJECT #JsonObjectVariable
    | JSONTOKEN #JsonTokenVariable
    | JSONVALUE #JsonValueVariable
    | KEYREF #KeyRefVariable
-   | LABEL labelText (COMMA labelArgs)? #LabelVariable
-   | LIST OF LEFTBRACKET variableTypeDeclaration RIGHTBRACKET #ListVariable
+   | LABEL text=labelText (COMMA arguments=labelArgs)? #LabelVariable
+   | LIST OF LEFTBRACKET typeDecl=variableTypeDeclaration RIGHTBRACKET #ListVariable
    | MODULEDEPENDENCYINFO #ModuleDependencyInfoVariable
    | MODULEINFO #ModuleInfoVariable
    | NOTIFICATION #NotificationVariable
-   | OPTION #OptionVariable
+   | OPTION options=optionValueList? #OptionVariable
    | OUTSTREAM #OutStreamVariable
-   | PAGE objectId #PageVariable
-   | QUERY objectId #QueryVariable
-   | RECORD objectId TEMPORARY? #RecordVariable
+   | PAGE objId=objectId #PageVariable
+   | QUERY objId=objectId #QueryVariable
+   | RECORD objId=objectId TEMPORARY? #RecordVariable
    | RECORDID #RecordIdVariable
    | RECORDREF #RecordRefVariable
-   | REPORT objectId #ReportVariable
+   | REPORT objId=objectId #ReportVariable
    | SESSIONSETTINGS #SessionSettingsVariable
-   | TEXT sizeDeclaration? #TextVariable
+   | TEXT sizeDecl=sizeDeclaration? #TextVariable
    | TEXTBUILDER #TextBuilderVariable
-   | TEXTCONST identifier EQUAL STRING_LITERAL #TextConstantVariable
+   | TEXTCONST name=identifier EQUAL literalValue=STRING_LITERAL #TextConstantVariable
    | TIME #TimeVariable
    | VARIANT #VariantVariable
    | VERSION #VersionVariable
@@ -139,7 +144,7 @@ variableTypeDeclaration
    | XMLDOCUMENT #XmlDocumentVariable
    | XMLELEMENT #XmlElementVariable
    | XMLNODE #XmlNodeVariable
-   | XMLPORT objectId #XmlPortVariable
+   | XMLPORT objId=objectId #XmlPortVariable
    ;
 
 parameterName
@@ -223,7 +228,7 @@ ifElse
    : ELSE statement?;
 
 ifStatement
-   : ifCondition statement? (ifElse)?;
+   : ifCondition (statement ifElse?)?;
 
 /*
  * AL WHILE statement logic
@@ -253,8 +258,12 @@ forStatement
  * AL FOREACH statement logic
  */
 
+enumeratorExpression
+   : expression
+   ;
+
 forEachControl:
-	FOREACH identifier IN expression DO;
+	FOREACH identifier IN enumeratorExpression DO;
 
 forEachStatement: forEachControl statement?;
 
@@ -276,16 +285,16 @@ caseValueCondition
    : (caseSet | caseRange) COLON statement?;
 
 caseElse
-   : ELSE statement? SEMICOLON?;
+   : ELSE statement?;
 
 caseBody
-   : (caseValueCondition (SEMICOLON caseValueCondition?)*?)? caseElse?;
+   : caseValueCondition (SEMICOLON caseValueCondition)*? (SEMICOLON caseElse)?;
 
 caseControl
    : CASE expression OF;
 
 caseStatement
-   : caseControl caseBody END;
+   : caseControl caseBody? SEMICOLON? END;
 
 /*
  * AL CONTINUE statement logic
@@ -332,8 +341,13 @@ exitStatement
  * AL generic statement statement logic
  */
 
+assignmentStatement
+   : lhs=expression (ASSGN | DIV_ASSGN | MULTIPLY_ASSGN | ADD_ASSGN | MINUS_ASSGN) rhs=expression
+   ;
+
 statementLine
-   : ifStatement
+   : assignmentStatement
+   | ifStatement
    | forStatement
    | forEachStatement
    | caseStatement
@@ -346,14 +360,14 @@ statementLine
    | expression;
 
 statementBlock
-   : BEGIN statementList? END;
+   : BEGIN statementList? SEMICOLON? END;
 
 statement
    : (statementLine | statementBlock)
    ;
 
 statementList
-   : statementLine (SEMICOLON statementLine?)*?;
+   : statementLine (SEMICOLON statementLine)*?;
 
 /*
  * AL expression logic
@@ -375,33 +389,38 @@ methodCallArguments
    ;
 
 expression
-   : LEFTPAREN expression RIGHTPAREN #ParenthesisExpression
-   | booleanLiteral #BooleanLiteralExpression
-   | DATE_LITERAL #DateLiteralExpression
-   | TIME_LITERAL #TimeLiteralExpression
-   | DATETIME_LITERAL #DatetimeLiteralExpression
-   | STRING_LITERAL #StringLiteralExpression
-   | FLOAT_LITERAL #FloatLiteralExpression
-   | INTEGER_LITERAL	#IntegerLiteralExpression
-   | identifier #IdentifierExpression
-   | expression PERIOD methodName LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
-   | methodName LEFTPAREN methodCallArguments? RIGHTPAREN #MethodCallExpression
-   | expression SCOPE identifier # ScopeExpression
-   | expression PERIOD identifier #MemberAccessExpression
-   | expression LEFTBRACKET indexAccessorSet RIGHTBRACKET #IndexExpression
-   | LEFTBRACKET valueSet? RIGHTBRACKET #SetExpression
-   | NOT expression #NotExpression
-   | MINUS expression #NegativeExpression
-   | expression ASTERISK expression	#MultiplyExpression
-   | expression BACKSLASH expression #DivideExpression
-   | expression DIV expression #IntegerDivideExpression
-   | expression MOD expression #ModulusExpression
-   | expression PLUS expression #AddExpression
-   | expression MINUS expression #SubtractExpression
-   | expression (LESSTHAN | GREATERTHAN | LESSTHANEQUAL | GREATERTHANEQUAL | NOTEQUAL | EQUAL) expression #ComparisonExpression
-   | expression (AND | OR | XOR) expression #LogicalComparisonExpression
-   | expression CONDITION expression COLON expression #TernaryExpression
-   | expression (ASSGN | DIV_ASSGN | MULTIPLY_ASSGN | ADD_ASSGN | MINUS_ASSGN) expression #AssignmentExpression
-   | expression IN LEFTBRACKET valueSet? RIGHTBRACKET #InRangeExpression
-   | GUIALLOWED #GuiAllowedFunctionExpression
+   // --- Primary (non-left-recursive) ---
+   : LEFTPAREN expr=expression RIGHTPAREN                                                            #ParenthesisExpression
+   | booleanLiteral                                                                                  #BooleanLiteralExpression
+   | DATE_LITERAL                                                                                    #DateLiteralExpression
+   | TIME_LITERAL                                                                                    #TimeLiteralExpression
+   | DATETIME_LITERAL                                                                                #DatetimeLiteralExpression
+   | STRING_LITERAL                                                                                  #StringLiteralExpression
+   | FLOAT_LITERAL                                                                                   #FloatLiteralExpression
+   | INTEGER_LITERAL                                                                                 #IntegerLiteralExpression
+   | systemEnumerationLiteral                                                                        #SystemEnumerationLiteralExpression
+   | GUIALLOWED                                                                                      #GuiAllowedFunctionExpression
+   | name=identifier LEFTPAREN arguments=methodCallArguments? RIGHTPAREN                            #FunctionCallExpression
+   | identifier                                                                                      #IdentifierExpression
+   | LEFTBRACKET setExpr=valueSet? RIGHTBRACKET                                                     #SetExpression
+   // --- Prefix unary (non-left-recursive; bind tighter than all binary operators) ---
+   | NOT expr=expression                                                                             #NotExpression
+   | MINUS expr=expression                                                                           #NegativeExpression
+   // --- Left-recursive binary operators (highest precedence first) ---
+   | expr=expression SCOPE scope=identifier                                                         #ScopeExpression
+   | expr=expression PERIOD name=identifier LEFTPAREN arguments=methodCallArguments? RIGHTPAREN    #MethodCallExpression
+   | expr=expression PERIOD member=identifier                                                       #MemberAccessExpression
+   | expr=expression LEFTBRACKET indexValue=expression RIGHTBRACKET                                #IndexExpression
+   | lhs=expression ASTERISK rhs=expression                                                         #MultiplyExpression
+   | lhs=expression BACKSLASH rhs=expression                                                        #DivideExpression
+   | lhs=expression DIV rhs=expression                                                              #IntegerDivideExpression
+   | lhs=expression MOD rhs=expression                                                              #ModulusExpression
+   | lhs=expression PLUS rhs=expression                                                             #AddExpression
+   | lhs=expression MINUS rhs=expression                                                            #SubtractExpression
+   | lhs=expression IN LEFTBRACKET setExpr=valueSet? RIGHTBRACKET                                  #InRangeExpression
+   | lhs=expression (LESSTHAN | GREATERTHAN | LESSTHANEQUAL | GREATERTHANEQUAL | NOTEQUAL | EQUAL) rhs=expression #ComparisonExpression
+   | lhs=expression AND rhs=expression                                                              #AndExpression
+   | lhs=expression XOR rhs=expression                                                              #XorExpression
+   | lhs=expression OR rhs=expression                                                               #OrExpression
+   | <assoc=right> condition=expression CONDITION trueExpr=expression COLON falseExpr=expression   #TernaryExpression
    ;

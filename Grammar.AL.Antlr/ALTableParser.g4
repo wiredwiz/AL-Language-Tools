@@ -66,13 +66,14 @@ tableFieldType
 
 tableFieldProperty
    : TABLERELATION EQUAL tableRelation SEMICOLON
-   | CALCFORMULA EQUAL calcForumla SEMICOLON
+   | CALCFORMULA EQUAL calcFormula SEMICOLON
    | multiLanguageCaptionProperty
    | keyIdentifierListProperty
    | keyValueProperty
    | accessByPermProperty
    | decimalPlacesProperty
    | autoformatExpressionProperty
+   | expressionProperty
    ;
 
 tableFieldEntity
@@ -138,6 +139,6 @@ tableExtEntities
    ;
 
 tableExtension
-   : TABLEEXTENSION INTEGER_LITERAL identifier EXTENDS identifier
+   : namespaceDeclaration? usingDeclarations? TABLEEXTENSION INTEGER_LITERAL identifier EXTENDS identifier
       LEFTCBRACE tableProperties tableExtEntities? codeDeclarations? RIGHTCBRACE
    ;

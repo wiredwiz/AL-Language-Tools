@@ -8,6 +8,10 @@ keyValueProperty
    : identifier EQUAL (STRING_LITERAL | INTEGER_LITERAL | FLOAT_LITERAL | identifier | booleanLiteral) SEMICOLON
    ;
 
+expressionProperty
+   : identifier EQUAL expression SEMICOLON
+   ;
+
 identifierList
    : identifier (COMMA identifier)*
    ;
@@ -27,9 +31,24 @@ permissionsProperty
    : PERMISSIONS EQUAL permissionSpecifiers SEMICOLON
    ;
 
+propExpression
+   : booleanLiteral #BooleanPropExpression
+   | STRING_LITERAL #StringPropExpression
+   | FLOAT_LITERAL #FloatPropExpression
+   | INTEGER_LITERAL #IntegerPropExpression
+   | identifier #IdentifierPropExpression
+   // | systemEnumerationLiteral #SystemEnumerationPropExpression
+   // | expression SCOPE identifier #ScopePropExpression
+   // | expression PERIOD identifier #MemberAccessPropExpression
+   ;
+
 /*
  * Field related rules
  */
+
+fieldEnumLiteral
+   : identifier SCOPE identifier
+   ;
 
 fieldValue
    : identifier
@@ -41,6 +60,7 @@ fieldValue
    | STRING_LITERAL
    | booleanLiteral
    | systemEnumerationLiteral
+   | fieldEnumLiteral
    ;
 
 comparisonFilter
@@ -68,14 +88,47 @@ qualifiedFieldReference
    ;
 
 /*
+ * Sub Page Links
+ */
+
+subPageLinkTableFilter
+   : CONST LEFTPAREN fieldValue RIGHTPAREN
+   | FILTER LEFTPAREN compoundFilterRule RIGHTPAREN
+   | FIELD LEFTPAREN identifier RIGHTPAREN
+   | FIELD LEFTPAREN UPPERLIMIT LEFTPAREN FILTER LEFTPAREN identifier RIGHTPAREN RIGHTPAREN RIGHTPAREN
+   | FIELD LEFTPAREN UPPERLIMIT LEFTPAREN identifier RIGHTPAREN RIGHTPAREN
+   | FIELD LEFTPAREN FILTER LEFTPAREN identifier RIGHTPAREN RIGHTPAREN
+   ;
+
+subPageLink
+   : identifier EQUAL subPageLinkTableFilter
+   ;
+
+subPageLinks
+   : subPageLink ( COMMA subPageLink)*
+   ;
+
+subPageLinkProperty
+   : SUBPAGELINK EQUAL subPageLinks SEMICOLON
+   ;
+
+/*
  * Table relations
  */
+
+tableRelationFilterSegment
+   : (EQUAL|NOTEQUAL|LESSTHAN|GREATERTHAN|LESSTHANEQUAL|GREATERTHANEQUAL)? fieldValue
+   ;
+
+tableRelationFilterCompound
+   : tableRelationFilterSegment ( AMPERSAND tableRelationFilterSegment | PIPE tableRelationFilterSegment )*
+   ;
 
 tableRelationFilter
    : identifier EQUAL
         (FIELD LEFTPAREN identifier RIGHTPAREN
         | CONST LEFTPAREN fieldValue RIGHTPAREN
-        | FILTER LEFTPAREN (EQUAL|NOTEQUAL|LESSTHAN|GREATERTHAN|LESSTHANEQUAL|GREATERTHANEQUAL)? fieldValue RIGHTPAREN)
+        | FILTER LEFTPAREN tableRelationFilterCompound RIGHTPAREN)
    ;
 
 tableRelationFilters
@@ -156,7 +209,7 @@ calcFormulaLookup
    : LOOKUP LEFTPAREN qualifiedFieldReference calcFormulaWhereClause? RIGHTPAREN
    ;
 
-calcForumla
+calcFormula
    : calcFormulaExist
    | calcFormulaCount
    | calcFormulaSum

@@ -1,18 +1,181 @@
 lexer grammar ALLexer;
 
-channels { COMMENTS_CHANNEL }
+channels {
+   COMMENTS,
+   DIRECTIVE
+}
+/*
+ * fragments
+ */
 
-SINGLE_LINE_COMMENT
-	: '//' INPUT_CHARACTER* -> channel(COMMENTS_CHANNEL);
+// Because AL is case insensitive, we define fragments for each letter that we use further down
 
-DELIMITED_COMMENT
-	: '/*' .*? '*/' -> channel(COMMENTS_CHANNEL);
+fragment A : [aA];
+fragment B : [bB];
+fragment C : [cC];
+fragment D : [dD];
+fragment E : [eE];
+fragment F : [fF];
+fragment G : [gG];
+fragment H : [hH];
+fragment I : [iI];
+fragment J : [jJ];
+fragment K : [kK];
+fragment L : [lL];
+fragment M : [mM];
+fragment N : [nN];
+fragment O : [oO];
+fragment P : [pP];
+fragment Q : [qQ];
+fragment R : [rR];
+fragment S : [sS];
+fragment T : [tT];
+fragment U : [uU];
+fragment V : [vV];
+fragment W : [wW];
+fragment X : [xX];
+fragment Y : [yY];
+fragment Z : [zZ];
 
-WS
-	:	[ \t\r\n] -> channel(HIDDEN)
+fragment LOWERCASELETTER
+	: [a-z] ;
+
+fragment UPPERCASELETTER
+	: [A-Z] ;
+
+fragment EXPONENT_NOTATION
+	: ('E' | 'e');
+
+fragment EXPONENT_SIGN
+	: ('-' | '+');
+
+fragment DIGIT
+	: [0-9] ;
+
+fragment HEXDIGIT : [0-9] | [A-F] | [a-f];
+
+fragment INTEGER_SUFFIX
+   : [uU] [lL]? [lL]? | [lL] [lL]?;
+
+fragment FLOAT_SUFFIX
+   : [fF];
+
+fragment ESC
+	: '\'\'' ;
+
+fragment INPUT_CHARACTER
+	: ~[\r\n\u0085\u2028\u2029];
+
+fragment WHITESPACE
+   : UNICODE_CLASS_ZS //'<Any Character With Unicode Class Zs>'
+   | '\u0009'     //'<Horizontal Tab Character (U+0009)>'
+   | '\u000B'     //'<Vertical Tab Character (U+000B)>'
+   | '\u000C'     //'<Form Feed Character (U+000C)>'
+   ;
+
+fragment UNICODE_CLASS_ZS
+   : '\u0020'   // SPACE
+   | '\u00A0' // NO_BREAK SPACE
+   | '\u1680' // OGHAM SPACE MARK
+   | '\u180E' // MONGOLIAN VOWEL SEPARATOR
+   | '\u2000' // EN QUAD
+   | '\u2001' // EM QUAD
+   | '\u2002' // EN SPACE
+   | '\u2003' // EM SPACE
+   | '\u2004' // THREE_PER_EM SPACE
+   | '\u2005' // FOUR_PER_EM SPACE
+   | '\u2006' // SIX_PER_EM SPACE
+   | '\u2008' // PUNCTUATION SPACE
+   | '\u2009' // THIN SPACE
+   | '\u200A' // HAIR SPACE
+   | '\u202F' // NARROW NO_BREAK SPACE
+   | '\u3000' // IDEOGRAPHIC SPACE
+   | '\u205F' // MEDIUM MATHEMATICAL SPACE
+   ;
+
+fragment NEWLINE
+   : '\r\n'
+   | '\r'
+   | '\n'
+   | '\u0085' // <Next Line CHARACTER (U+0085)>'
+   | '\u2028' //'<Line Separator CHARACTER (U+2028)>'
+   | '\u2029' //'<Paragraph Separator CHARACTER (U+2029)>'
+   ;
+
+/*
+ * Whitespace
+ */
+
+WHITE_SPACE
+	:	WHITESPACE+ -> channel(HIDDEN)
 	;
 
-// SYMBOLS
+NEW_LINE
+   :	NEWLINE+ -> channel(HIDDEN)
+	;
+
+/*
+ * boolean
+ */
+
+TRUE
+   : T R U E;
+
+FALSE
+   : F A L S E;
+
+/*
+ * date
+ */
+
+DATE_LITERAL
+   : DIGIT+ D;
+
+/*
+ * time
+ */
+
+TIME_LITERAL
+   : DIGIT+ ([.] DIGIT+)? T;
+
+/*
+ * datetime
+ */
+
+DATETIME_LITERAL
+   : DIGIT+ D T;
+
+/*
+ * numbers
+ */
+
+INTEGER_LITERAL
+   : DIGIT+
+   | ('0' X HEXDIGIT*? | DIGIT+) (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)? (INTEGER_SUFFIX | FLOAT_SUFFIX)?
+   ;
+
+FLOAT_LITERAL
+	: (DIGIT+ [.] (DIGIT*)? {_input.La(1) != '.'}? (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)?
+	| [.] DIGIT+ (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)?
+	| DIGIT+ EXPONENT_NOTATION EXPONENT_SIGN DIGIT+) (INTEGER_SUFFIX | FLOAT_SUFFIX)?
+	;
+
+/*
+ * comments
+ */
+
+SINGLE_LINE_COMMENT
+	: '//' INPUT_CHARACTER* -> channel(COMMENTS);
+
+DELIMITED_COMMENT
+	: '/*' .*? '*/' -> channel(COMMENTS);
+
+/*
+ * Symbols
+ */
+
+HASH
+   : '#' -> mode(DIRECTIVE_MODE), skip;
 
 SCOPE
    : '::';
@@ -132,7 +295,16 @@ XOR
    : X O R
    ;
 
-// WORDS
+/*
+ * strings
+ */
+
+STRING_LITERAL
+	: '\'' ( ESC | ~['\r\n])* '\'';
+
+/*
+ * keywords
+ */
 
 ABS
    : A B S
@@ -140,6 +312,10 @@ ABS
 
 ACTION
    : A C T I O N
+   ;
+
+ACTIONS
+   : A C T I O N S
    ;
 
 ACTIONREF
@@ -158,6 +334,18 @@ ACTIVECONTROLONOPEN
    : A C T I V E C O N T R O L O N O P E N
    ;
 
+ADDBEFORE
+   : A D D B E F O R E
+   ;
+
+ADDFIRST
+   : A D D F I R S T
+   ;
+
+ADDLAST
+   : A D D L A S T
+   ;
+
 ADDLINK
    : A D D L I N K
    ;
@@ -172,6 +360,10 @@ ALTSEARCHFIELD
 
 APPLICATIONPATH
    : A P P L I C A T I O N P A T H
+   ;
+
+AREA
+   : A R E A
    ;
 
 ARRAY
@@ -598,6 +790,10 @@ CREATETEMPFILE
    : C R E A T E T E M P F I L E
    ;
 
+CUEGROUP
+   : C U E G R O U P
+   ;
+
 CURRENTDATETIME
    : C U R R E N T D A T E T I M E
    ;
@@ -704,10 +900,6 @@ DATEFORMULA
 
 DATETIME
    : D A T E T I M E
-   ;
-
-DATI2VARIANT
-   : D A T I [2] V A R I A N T
    ;
 
 DEBUGGER
@@ -1222,6 +1414,10 @@ GLOBALLANGUAGE
    : G L O B A L L A N G U A G E
    ;
 
+GROUP
+   : G R O U P
+   ;
+
 GROUPTOTALFIELDS
    : G R O U P T O T A L F I E L D S
    ;
@@ -1604,6 +1800,10 @@ LANGUAGE
    : L A N G U A G E
    ;
 
+LAYOUT
+   : L A Y O U T
+   ;
+
 LEADERDOTS
    : L E A D E R D O T S
    ;
@@ -1798,6 +1998,22 @@ MODULEDEPENDENCYINFO
 
 MODULEINFO
    : M O D U L E I N F O
+   ;
+
+MOVEAFTER
+   : M O V E A F T E R
+   ;
+
+MOVEBEFORE
+   : M O V E B E F O R E
+   ;
+
+MOVEFIRST
+   : M O V E F I R S T
+   ;
+
+MOVELAST
+   : M O V E L A S T
    ;
 
 MULTILINE
@@ -2236,6 +2452,10 @@ PARENTCONTROL
    : P A R E N T C O N T R O L
    ;
 
+PART
+   : P A R T
+   ;
+
 PARTTYPE
    : P A R T T Y P E
    ;
@@ -2410,6 +2630,10 @@ RENAME
 
 REPEAT
    : R E P E A T
+   ;
+
+REPEATER
+   : R E P E A T E R
    ;
 
 REPORT
@@ -2794,6 +3018,10 @@ SYSTEM
 
 SYSTEMACTION
    : S Y S T E M A C T I O N
+   ;
+
+SYSTEMPART
+   : S Y S T E M P A R T
    ;
 
 SYSTEMPARTID
@@ -3265,59 +3493,6 @@ YPOS
    ;
 
 /*
- * boolean
- */
-
-TRUE
-   : T R U E;
-
-FALSE
-   : F A L S E;
-
-/*
- * date
- */
-
-DATE_LITERAL
-   : DIGIT+ D;
-
-/*
- * time
- */
-
-TIME_LITERAL
-   : DIGIT+ ([.] DIGIT+)? T;
-
-/*
- * datetime
- */
-
-DATETIME_LITERAL
-   : DIGIT+ D T;
-
-/*
- * numbers
- */
-
-INTEGER_LITERAL
-   : DIGIT+
-   | ('0' X HEXDIGIT*? | DIGIT+) (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)? (INTEGER_SUFFIX | FLOAT_SUFFIX)?
-   ;
-
-FLOAT_LITERAL
-	: (DIGIT+ [.] (DIGIT*)? {_input.La(1) != '.'}? (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)?
-	| [.] DIGIT+ (EXPONENT_NOTATION EXPONENT_SIGN DIGIT+)?
-	| DIGIT+ EXPONENT_NOTATION EXPONENT_SIGN DIGIT+) (INTEGER_SUFFIX | FLOAT_SUFFIX)?
-	;
-
-/*
- * strings
- */
-
-STRING_LITERAL
-	: '\'' ( ESC | ~['\r\n])* '\'';
-
-/*
  * identifiers
  */
 
@@ -3338,65 +3513,37 @@ LETTER
  * preprocessor directives
  */
 
-PREPROCESSOR_DIRECTIVE
-   : '#' ~[\r\n]* '\r'? '\n' -> channel(COMMENTS_CHANNEL);
+mode DIRECTIVE_MODE;
 
-/*
- * fragments
- */
+DIRECTIVE_WHITESPACES    : WHITE_SPACE+                                                    -> channel(HIDDEN);
+DEFINE                   : D E F I N E                                                     -> channel(DIRECTIVE);
+UNDEF                    : U N D E F                                                       -> channel(DIRECTIVE);
+DIRECTIVE_IF             : I F                                                             -> channel(DIRECTIVE), type(IF);
+ELIF                     : E L I F                                                         -> channel(DIRECTIVE);
+DIRECTIVE_ELSE           : E L S E                                                         -> channel(DIRECTIVE), type(ELSE);
+ENDIF                    : E N D I F                                                       -> channel(DIRECTIVE);
+REGION                   : R E G I O N WHITE_SPACE*                                        -> channel(DIRECTIVE), mode(DIRECTIVE_TEXT_MODE);
+ENDREGION                : E N D R E G I O N WHITE_SPACE*                                  -> channel(DIRECTIVE), mode(DIRECTIVE_TEXT_MODE);
+PRAGMA                   : P R A G M A WHITE_SPACE+                                        -> channel(DIRECTIVE);
+DIRECTIVE_OPEN_PARENS    : '('                                                             -> channel(DIRECTIVE), type(LEFTPAREN);
+DIRECTIVE_CLOSE_PARENS   : ')'                                                             -> channel(DIRECTIVE), type(RIGHTPAREN);
+OP_NOT                   : 'not'                                                           -> channel(DIRECTIVE), type(NOT);
+OP_AND                   : 'and'                                                           -> channel(DIRECTIVE), type(AND);
+OP_OR                    : 'or'                                                            -> channel(DIRECTIVE), type(OR);
+DIRECTIVE_COMMA          : ','                                                             -> channel(DIRECTIVE), type(COMMA);
+WARNING                  : W A R N I N G                                                   -> channel(DIRECTIVE);
+IMPLICITWITH             : I M P L I C I T W I T H                                         -> channel(DIRECTIVE);
+DISABLE                  : D I S A B L E                                                   -> channel(DIRECTIVE);
+RESTORE                  : R E S T O R E                                                   -> channel(DIRECTIVE);
 
-fragment LOWERCASELETTER
-	: [a-z] ;
+DIRECTIVE_IDENT          : (LETTER | DIGIT | UNDERSCORE)+                                  -> channel(DIRECTIVE), type(IDENTIFIER);
+DIRECTIVE_NEW_LINE       : NEW_LINE+                                                       -> channel(DIRECTIVE), mode(DEFAULT_MODE);
+DIR_SINGLE_LINE_COMMENT  : '//' INPUT_CHARACTER*                                           -> channel(COMMENTS), type(SINGLE_LINE_COMMENT);
+DIR_DELIMITED_COMMENT    : '/*' .*? '*/'                                                   -> channel(COMMENTS), type(DELIMITED_COMMENT);
 
-fragment UPPERCASELETTER
-	: [A-Z] ;
+mode DIRECTIVE_TEXT_MODE;
 
-fragment EXPONENT_NOTATION
-	: ('E' | 'e');
-
-fragment EXPONENT_SIGN
-	: ('-' | '+');
-
-fragment DIGIT
-	: [0-9] ;
-
-fragment HEXDIGIT : [0-9] | [A-F] | [a-f];
-
-fragment INTEGER_SUFFIX
-   : [uU] [lL]? [lL]? | [lL] [lL]?;
-
-fragment FLOAT_SUFFIX
-   : [fF];
-
-fragment ESC
-	: '\'\'' ;
-
-fragment INPUT_CHARACTER
-	: ~[\r\n\u0085\u2028\u2029];
-
-fragment A : [aA];
-fragment B : [bB];
-fragment C : [cC];
-fragment D : [dD];
-fragment E : [eE];
-fragment F : [fF];
-fragment G : [gG];
-fragment H : [hH];
-fragment I : [iI];
-fragment J : [jJ];
-fragment K : [kK];
-fragment L : [lL];
-fragment M : [mM];
-fragment N : [nN];
-fragment O : [oO];
-fragment P : [pP];
-fragment Q : [qQ];
-fragment R : [rR];
-fragment S : [sS];
-fragment T : [tT];
-fragment U : [uU];
-fragment V : [vV];
-fragment W : [wW];
-fragment X : [xX];
-fragment Y : [yY];
-fragment Z : [zZ];
+TEXT_NEW_LINE            : NEW_LINE+                                                       -> channel(DIRECTIVE), type(DIRECTIVE_NEW_LINE), mode(DEFAULT_MODE);
+DIRECTIVE_TEXT           : (~[\r\n\u0085\u2028\u2029/] | '/' {_input.La(1) != '/' && _input.La(1) != '*'}?)+   -> channel(DIRECTIVE);
+DT_SINGLE_LINE_COMMENT  : '//' INPUT_CHARACTER*                                            -> channel(COMMENTS), type(SINGLE_LINE_COMMENT);
+DT_DELIMITED_COMMENT    : '/*' .*? '*/'                                                    -> channel(COMMENTS), type(DELIMITED_COMMENT);
