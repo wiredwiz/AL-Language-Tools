@@ -620,7 +620,7 @@ Expected: `Build succeeded.` — if ANTLR reports grammar errors, fix them befor
 ```bash
 cd "D:/Projects/AL Langauge Tools/Grammar.AL.Antlr"
 git add "ALCodeParser.g4"
-git commit -m "Extract assignment to assignmentStatement rule; remove from expression"
+git commit -m "Extract assignment to assignmentStatement rule; insert into statementLine"
 ```
 
 ---
