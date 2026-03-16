@@ -392,34 +392,38 @@ methodCallArguments
    ;
 
 expression
-   : LEFTPAREN expr=expression RIGHTPAREN #ParenthesisExpression
-   | booleanLiteral #BooleanLiteralExpression
-   | DATE_LITERAL #DateLiteralExpression
-   | TIME_LITERAL #TimeLiteralExpression
-   | DATETIME_LITERAL #DatetimeLiteralExpression
-   | STRING_LITERAL #StringLiteralExpression
-   | FLOAT_LITERAL #FloatLiteralExpression
-   | INTEGER_LITERAL	#IntegerLiteralExpression
-   | systemEnumerationLiteral #SystemEnumerationLiteralExpression
-   | identifier #IdentifierExpression
-   | expression PERIOD name=methodName LEFTPAREN arguments=methodCallArguments? RIGHTPAREN #MethodCallExpression
-   | name=methodName LEFTPAREN arguments=methodCallArguments? RIGHTPAREN #MethodCallExpression
-   | expr=expression SCOPE scope=identifier #ScopeExpression
-   | expr=expression PERIOD member=identifier #MemberAccessExpression
-   | expr=expression LEFTBRACKET indexValue=expression RIGHTBRACKET #IndexExpression
-   | LEFTBRACKET setExpr=valueSet? RIGHTBRACKET #SetExpression
-   | NOT expr=expression #NotExpression
-   | MINUS expr=expression #NegativeExpression
-   | lhs=expression ASTERISK rhs=expression	#MultiplyExpression
-   | lhs=expression BACKSLASH rhs=expression #DivideExpression
-   | lhs=expression DIV rhs=expression #IntegerDivideExpression
-   | lhs=expression MOD rhs=expression #ModulusExpression
-   | lhs=expression PLUS rhs=expression #AddExpression
-   | lhs=expression MINUS rhs=expression #SubtractExpression
+   // --- Primary (non-left-recursive) ---
+   : LEFTPAREN expr=expression RIGHTPAREN                                                            #ParenthesisExpression
+   | booleanLiteral                                                                                  #BooleanLiteralExpression
+   | DATE_LITERAL                                                                                    #DateLiteralExpression
+   | TIME_LITERAL                                                                                    #TimeLiteralExpression
+   | DATETIME_LITERAL                                                                                #DatetimeLiteralExpression
+   | STRING_LITERAL                                                                                  #StringLiteralExpression
+   | FLOAT_LITERAL                                                                                   #FloatLiteralExpression
+   | INTEGER_LITERAL                                                                                 #IntegerLiteralExpression
+   | systemEnumerationLiteral                                                                        #SystemEnumerationLiteralExpression
+   | GUIALLOWED                                                                                      #GuiAllowedFunctionExpression
+   | name=identifier LEFTPAREN arguments=methodCallArguments? RIGHTPAREN                            #FunctionCallExpression
+   | identifier                                                                                      #IdentifierExpression
+   | LEFTBRACKET setExpr=valueSet? RIGHTBRACKET                                                     #SetExpression
+   // --- Prefix unary (non-left-recursive; bind tighter than all binary operators) ---
+   | NOT expr=expression                                                                             #NotExpression
+   | MINUS expr=expression                                                                           #NegativeExpression
+   // --- Left-recursive binary operators (highest precedence first) ---
+   | expr=expression SCOPE scope=identifier                                                         #ScopeExpression
+   | expr=expression PERIOD name=identifier LEFTPAREN arguments=methodCallArguments? RIGHTPAREN    #MethodCallExpression
+   | expr=expression PERIOD member=identifier                                                       #MemberAccessExpression
+   | expr=expression LEFTBRACKET indexValue=expression RIGHTBRACKET                                #IndexExpression
+   | lhs=expression ASTERISK rhs=expression                                                         #MultiplyExpression
+   | lhs=expression BACKSLASH rhs=expression                                                        #DivideExpression
+   | lhs=expression DIV rhs=expression                                                              #IntegerDivideExpression
+   | lhs=expression MOD rhs=expression                                                              #ModulusExpression
+   | lhs=expression PLUS rhs=expression                                                             #AddExpression
+   | lhs=expression MINUS rhs=expression                                                            #SubtractExpression
+   | lhs=expression IN LEFTBRACKET setExpr=valueSet? RIGHTBRACKET                                  #InRangeExpression
    | lhs=expression (LESSTHAN | GREATERTHAN | LESSTHANEQUAL | GREATERTHANEQUAL | NOTEQUAL | EQUAL) rhs=expression #ComparisonExpression
-   | lhs=expression (AND | OR | XOR) rhs=expression #LogicalComparisonExpression
-   | condition=expression CONDITION trueExpr=expression COLON falseExpr=expression #TernaryExpression
-   | lhs=expression (ASSGN | DIV_ASSGN | MULTIPLY_ASSGN | ADD_ASSGN | MINUS_ASSGN) rhs=expression #AssignmentExpression
-   | expr=expression IN LEFTBRACKET setExpr=valueSet? RIGHTBRACKET #InRangeExpression
-   | GUIALLOWED #GuiAllowedFunctionExpression
+   | lhs=expression AND rhs=expression                                                              #AndExpression
+   | lhs=expression XOR rhs=expression                                                              #XorExpression
+   | lhs=expression OR rhs=expression                                                               #OrExpression
+   | <assoc=right> condition=expression CONDITION trueExpr=expression COLON falseExpr=expression   #TernaryExpression
    ;
