@@ -344,8 +344,13 @@ exitStatement
  * AL generic statement statement logic
  */
 
+assignmentStatement
+   : lhs=expression (ASSGN | DIV_ASSGN | MULTIPLY_ASSGN | ADD_ASSGN | MINUS_ASSGN) rhs=expression
+   ;
+
 statementLine
-   : ifStatement
+   : assignmentStatement
+   | ifStatement
    | forStatement
    | forEachStatement
    | caseStatement
