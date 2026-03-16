@@ -176,19 +176,20 @@ namespace Org.Edgerunner.BC.AL.Models
       /// </summary>
       /// <param name="entities">The entities.</param>
       /// <param name="builder">The builder.</param>
-      public void FormatSetWithSeparator(List<IFormattable> entities, StringBuilder builder)
+      public void FormatSetWithSeparator(IEnumerable<IFormattable> entities, StringBuilder builder)
       {
-         if (entities.Count == 1)
-            entities[0].Format(this, builder);
-         if (entities.Count > 0)
+         var list = entities as IList<IFormattable> ?? new List<IFormattable>(entities);
+         if (list.Count == 1)
+            list[0].Format(this, builder);
+         if (list.Count > 0)
          {
-            for (int i = 0; i < entities.Count - 1; i++)
+            for (int i = 0; i < list.Count - 1; i++)
             {
-               entities[i].Format(this, builder);
+               list[i].Format(this, builder);
                FormatSeparator(builder, ",");
             }
 
-            entities[entities.Count - 1].Format(this, builder);
+            list[list.Count - 1].Format(this, builder);
          }
       }
 

@@ -1,6 +1,6 @@
 using Org.Edgerunner.Language.AL.Parsing.Tests.Helpers;
 
-namespace Org.Edgerunner.Language.AL.Parsing.Tests;
+namespace Org.Edgerunner.Language.AL.Grammar.Tests;
 
 /// <summary>
 /// Verifies correct operator precedence and assignment handling in AL expressions.
