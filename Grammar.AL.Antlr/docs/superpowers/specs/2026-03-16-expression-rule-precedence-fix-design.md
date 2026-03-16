@@ -155,20 +155,40 @@ After the reorder, the bare function call alternative is non-left-recursive (pri
 | File | Change |
 |------|--------|
 | `ALCodeParser.g4` | Reorder `expression` alternatives; add `assignmentStatement`; update `statementLine`; split logical comparison labels; rename bare call label |
+| `ALValidator.cs` | Fix compile break from removed `LogicalComparisonExpressionContext`; add `FunctionCallExpressionContext` to both validator helpers |
 
-No other files require changes. The grammar import chain (`ALParser.g4` → `ALCodeunitParser.g4` → `ALCodeParser.g4` → `ALCoreParser.g4`) is unaffected.
+The grammar import chain (`ALParser.g4` → `ALCodeunitParser.g4` → `ALCodeParser.g4` → `ALCoreParser.g4`) is unaffected. `ALParser.g4.cs` and `ALLexer.g4.cs` (partial class stubs) require no changes.
+
+### Change 5: Update `ALValidator.cs` to match renamed/split labels
+
+The `ALValidator.cs` changes are **included in this implementation** — without them the project will not compile after the grammar is regenerated.
+
+**`IsValidBooleanExpression` (line 113):** Replace the single `LogicalComparisonExpressionContext` check with three separate checks:
+
+```csharp
+expression is Grammar.AL.Antlr.ALParser.AndExpressionContext ||
+expression is Grammar.AL.Antlr.ALParser.XorExpressionContext ||
+expression is Grammar.AL.Antlr.ALParser.OrExpressionContext ||
+```
+
+**`IsValidNumericExpression` (line 93) and `IsValidBooleanExpression` (line 118):** Add `FunctionCallExpressionContext` alongside the existing `MethodCallExpressionContext` check in both methods:
+
+```csharp
+expression is Grammar.AL.Antlr.ALParser.FunctionCallExpressionContext ||
+expression is Grammar.AL.Antlr.ALParser.MethodCallExpressionContext ||
+```
 
 ---
 
-## Downstream Impact
+## Downstream Impact (informational — all items addressed above)
 
-| Consumer | Impact |
+| Consumer | Status |
 |----------|--------|
-| `ALValidator.cs` — `IsValidBooleanExpression` (line 113) | **Compile break:** `LogicalComparisonExpressionContext` no longer exists. Must be replaced with three separate checks: `AndExpressionContext`, `XorExpressionContext`, `OrExpressionContext`. |
-| `ALValidator.cs` — `IsValidNumericExpression` (line 93) and `IsValidBooleanExpression` (line 118) | **Silent regression:** both methods currently check `MethodCallExpressionContext`. The rename to `#FunctionCallExpression` for bare calls introduces `FunctionCallExpressionContext` as a distinct type. Both helper methods must add `FunctionCallExpressionContext` alongside `MethodCallExpressionContext` or bare function calls returning numeric/boolean values will incorrectly fail validation. |
-| `ALParser.g4.cs` / `ALLexer.g4.cs` | No change — these are lexer/parser partial class stubs. |
-| Parser Benchmark | Parses whole files; no AST node type dependencies. Unaffected. |
-| ANTLR-generated C# | Must regenerate after grammar change. |
+| `ALValidator.cs` — `IsValidBooleanExpression` (line 113) | Fixed in Change 5 — `LogicalComparisonExpressionContext` split into three checks |
+| `ALValidator.cs` — both validator helpers (lines 93, 118) | Fixed in Change 5 — `FunctionCallExpressionContext` added |
+| `ALParser.g4.cs` / `ALLexer.g4.cs` | No change required |
+| Parser Benchmark | No change required |
+| ANTLR-generated C# | Must regenerate after grammar change |
 
 ---
 
