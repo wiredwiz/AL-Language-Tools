@@ -20,9 +20,6 @@ methodAccessModifier
    | INTERNAL
    ;
 
-methodName
-   : identifier;
-
 methodDeclaration
    : attributes=methodAttribute*? accessModifier=methodAccessModifier* PROCEDURE name=identifier LEFTPAREN parameters=parameterList? RIGHTPAREN returnVal=returnValue? SEMICOLON? variables=varBlock? codeBlock=statementBlock SEMICOLON;
 
