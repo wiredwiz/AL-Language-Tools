@@ -56,6 +56,8 @@ statementLine
 
 **Rationale:** Placing `assignmentStatement` before `expression` in `statementLine` ensures ANTLR4's LL(*) lookahead will correctly route `x := expr` to `assignmentStatement` rather than treating the whole thing as an expression. The right-hand side `rhs=expression` can itself be any valid expression (including method calls, arithmetic, etc.).
 
+**Lookahead disambiguation:** A bare `identifier ASSGN expression` at statement level could theoretically be attempted as an `expression` first. ANTLR4's LL(*) parser will look ahead past the identifier to the `:=` token. Since `:=` (`ASSGN`) is removed from the `expression` rule entirely, it cannot appear inside an expression context — ANTLR4 will unambiguously route to `assignmentStatement`. The existing `forControl` rule uses `ASSGN` inline (`FOR identifier ASSGN expression ...`) but is a separate alternative in `statementLine` and is not affected.
+
 ---
 
 ### Change 2: Reorder `expression` Alternatives by Precedence
@@ -67,7 +69,7 @@ In ANTLR4's left-recursive rule transformation, **alternatives listed earlier ha
 | Level | Operators | Notes |
 |-------|-----------|-------|
 | Primary | literals, identifier, `GUIALLOWED`, `[]` set, `()`, bare `f(args)` | non-left-recursive |
-| Prefix unary | `NOT expr`, `-expr` | non-left-recursive, treated as primary |
+| Prefix unary | `NOT expr`, `-expr` | non-left-recursive, treated as primary; see note below |
 | Scope | `expr :: identifier` | left-recursive |
 | Method call | `expr . method ( args )` | left-recursive |
 | Member access | `expr . member` | left-recursive |
@@ -80,6 +82,12 @@ In ANTLR4's left-recursive rule transformation, **alternatives listed earlier ha
 | Logical XOR | `XOR` | left-recursive |
 | Logical OR | `OR` | left-recursive |
 | Ternary | `expr ? expr : expr` | right-associative, use `<assoc=right>` |
+
+**Note on prefix unary operators and ANTLR4 non-left-recursive alternatives:** ANTLR4's left-recursive rule transformation separates alternatives into two groups: *primary* (non-left-recursive, used as base cases) and *binary* (left-recursive, ordered by their position). All primary alternatives are attempted before any binary alternative at a given precedence level. This means `NOT` and unary `MINUS`, being non-left-recursive, always bind tighter than any binary operator — they wrap the full right-hand expression at whatever the current recursive call depth resolves. This matches AL's specification where unary operators have the highest precedence among operators.
+
+`NOT` and unary `MINUS` are listed in that order in the rule. Both are non-left-recursive primaries, so their relative position only matters when both appear together (e.g., `NOT - x`). AL treats both at the same unary precedence level; the order `NOT` before `MINUS` is arbitrary for this edge case and has no practical effect on normal code.
+
+**Note on `COLON` in ternary vs. other uses:** The `COLON` token also appears in `returnType`, `parameterDeclaration`, `attributeIdentifier`, and `caseValueCondition`. None of these occur inside an expression context — they appear at declaration or statement scope. ANTLR4's LL(*) lookahead resolves them by context without conflict.
 
 **`expression` rule after the change:**
 
@@ -156,7 +164,8 @@ No other files require changes. The grammar import chain (`ALParser.g4` → `ALC
 
 | Consumer | Impact |
 |----------|--------|
-| `ALValidator.cs` | `ExitLogicalComparisonExpression` no longer exists; replace with `ExitAndExpression`, `ExitXorExpression`, `ExitOrExpression` if needed. Currently no active code uses this — commented out. |
+| `ALValidator.cs` — `IsValidBooleanExpression` (line 113) | **Compile break:** `LogicalComparisonExpressionContext` no longer exists. Must be replaced with three separate checks: `AndExpressionContext`, `XorExpressionContext`, `OrExpressionContext`. |
+| `ALValidator.cs` — `IsValidNumericExpression` (line 93) and `IsValidBooleanExpression` (line 118) | **Silent regression:** both methods currently check `MethodCallExpressionContext`. The rename to `#FunctionCallExpression` for bare calls introduces `FunctionCallExpressionContext` as a distinct type. Both helper methods must add `FunctionCallExpressionContext` alongside `MethodCallExpressionContext` or bare function calls returning numeric/boolean values will incorrectly fail validation. |
 | `ALParser.g4.cs` / `ALLexer.g4.cs` | No change — these are lexer/parser partial class stubs. |
 | Parser Benchmark | Parses whole files; no AST node type dependencies. Unaffected. |
 | ANTLR-generated C# | Must regenerate after grammar change. |
