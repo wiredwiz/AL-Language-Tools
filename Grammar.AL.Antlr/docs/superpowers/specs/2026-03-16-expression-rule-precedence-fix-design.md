@@ -136,7 +136,7 @@ expression
 
 The existing label `#LogicalComparisonExpression` covers `AND`, `OR`, and `XOR` in a single alternative. Now that they are separated into their own alternatives for precedence purposes, they get distinct labels: `#AndExpression`, `#XorExpression`, `#OrExpression`.
 
-This is a breaking change to any existing listener/visitor code that handles `ExitLogicalComparisonExpression`. The `ALValidator.cs` does not currently handle this case (the relevant validation logic is commented out), so no downstream code is affected.
+This is a breaking change to any existing listener/visitor code that handles `ExitLogicalComparisonExpression`. See the Downstream Impact section for the required `ALValidator.cs` updates.
 
 ---
 
