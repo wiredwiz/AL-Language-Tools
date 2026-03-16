@@ -90,6 +90,7 @@ namespace Org.Edgerunner.Language.AL.Parsing.Validators
              expression is Grammar.AL.Antlr.ALParser.SystemEnumerationLiteralExpressionContext ||
              expression is Grammar.AL.Antlr.ALParser.ScopeExpressionContext ||
              expression is Grammar.AL.Antlr.ALParser.MemberAccessExpressionContext ||
+             expression is Grammar.AL.Antlr.ALParser.FunctionCallExpressionContext ||
              expression is Grammar.AL.Antlr.ALParser.MethodCallExpressionContext ||
              expression is Grammar.AL.Antlr.ALParser.TernaryExpressionContext ||
              expression is Grammar.AL.Antlr.ALParser.IndexExpressionContext)
@@ -110,11 +111,14 @@ namespace Org.Edgerunner.Language.AL.Parsing.Validators
          // ReSharper disable once ComplexConditionExpression
          if (expression is Grammar.AL.Antlr.ALParser.BooleanLiteralExpressionContext ||
              expression is Grammar.AL.Antlr.ALParser.ComparisonExpressionContext ||
-             expression is Grammar.AL.Antlr.ALParser.LogicalComparisonExpressionContext ||
+             expression is Grammar.AL.Antlr.ALParser.AndExpressionContext ||
+             expression is Grammar.AL.Antlr.ALParser.XorExpressionContext ||
+             expression is Grammar.AL.Antlr.ALParser.OrExpressionContext ||
              expression is Grammar.AL.Antlr.ALParser.NotExpressionContext ||
              expression is Grammar.AL.Antlr.ALParser.GuiAllowedFunctionExpressionContext ||
              expression is Grammar.AL.Antlr.ALParser.IdentifierExpressionContext ||
              expression is Grammar.AL.Antlr.ALParser.MemberAccessExpressionContext ||
+             expression is Grammar.AL.Antlr.ALParser.FunctionCallExpressionContext ||
              expression is Grammar.AL.Antlr.ALParser.MethodCallExpressionContext ||
              expression is Grammar.AL.Antlr.ALParser.TernaryExpressionContext ||
              expression is Grammar.AL.Antlr.ALParser.IndexExpressionContext)
