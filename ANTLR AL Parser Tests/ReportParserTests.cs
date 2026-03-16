@@ -1,0 +1,160 @@
+using Org.Edgerunner.Language.AL.Parsing.Tests.Helpers;
+
+namespace Org.Edgerunner.Language.AL.Grammar.Tests;
+
+/// <summary>
+/// Verifies structural parsing of AL report objects.
+/// </summary>
+public class ReportParserTests
+{
+    [Fact]
+    public void Minimal_report_parses_without_errors()
+    {
+        var source = @"
+report 50000 ""MinimalReport""
+{
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("a minimal report with no sections should parse without errors");
+    }
+
+    [Fact]
+    public void Minimal_report_produces_ReportContext()
+    {
+        var source = @"
+report 50000 ""MinimalReport""
+{
+}";
+        var (tree, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty();
+        ParseTreeSearch.FindFirst<ALParser.ReportContext>(tree)
+            .Should().NotBeNull("a report object should produce a ReportContext node");
+    }
+
+    [Fact]
+    public void Report_with_dataset_and_columns_parses_without_errors()
+    {
+        var source = @"
+report 50000 ""CustomerReport""
+{
+    dataset
+    {
+        dataitem(Customer; Customer)
+        {
+            column(No; ""No."") { }
+            column(Name; Name) { }
+        }
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("a report with a dataset section should parse without errors");
+    }
+
+    [Fact]
+    public void Report_with_nested_dataitems_parses_without_errors()
+    {
+        var source = @"
+report 50000 ""NestedReport""
+{
+    dataset
+    {
+        dataitem(Customer; Customer)
+        {
+            column(No; Customer.""No."") { }
+            dataitem(SalesLine; ""Sales Line"")
+            {
+                column(Amount; ""Sales Line"".Amount) { }
+            }
+        }
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("a report with nested dataitems should parse without errors");
+    }
+
+    [Fact]
+    public void Report_with_requestpage_parses_without_errors()
+    {
+        var source = @"
+report 50000 ""ReportWithRequestPage""
+{
+    dataset
+    {
+        dataitem(Customer; Customer)
+        {
+            column(No; ""No."") { }
+        }
+    }
+    requestpage
+    {
+        layout
+        {
+            area(content)
+            {
+                group(Options)
+                {
+                    field(ShowAll; ShowAll) { }
+                }
+            }
+        }
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("a report with a requestpage section should parse without errors");
+    }
+
+    [Fact]
+    public void Report_with_rendering_section_parses_without_errors()
+    {
+        var source = @"
+report 50000 ""ReportWithRendering""
+{
+    rendering
+    {
+        layout(RdlcLayout)
+        {
+            Type = RDLC;
+            LayoutFile = 'MyReport.rdlc';
+        }
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("a report with a rendering section should parse without errors");
+    }
+
+    [Fact]
+    public void Report_with_labels_parses_without_errors()
+    {
+        var source = @"
+report 50000 ""ReportWithLabels""
+{
+    labels
+    {
+        MyLabel = 'Hello', Comment = 'A greeting';
+        AmountLabel = 'Amount';
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("a report with a labels section should parse without errors");
+    }
+
+    [Fact]
+    public void Report_dataitem_produces_ReportDataItemContext()
+    {
+        var source = @"
+report 50000 ""CustomerReport""
+{
+    dataset
+    {
+        dataitem(Customer; Customer)
+        {
+            column(No; ""No."") { }
+        }
+    }
+}";
+        var (tree, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty();
+        ParseTreeSearch.FindFirst<ALParser.ReportDataItemContext>(tree)
+            .Should().NotBeNull("a report dataitem should produce a ReportDataItemContext node");
+    }
+}
