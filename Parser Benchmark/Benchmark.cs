@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -53,12 +53,18 @@ namespace Parser_Benchmark
       {
          if (numFileThreads.Value > numParserThreads.Value)
             numFileThreads.Value = numParserThreads.Value;
+
+         if (numFileThreads.Value > 1)
+            chkThreadSafety.CheckState = CheckState.Checked;
       }
 
       private void numFileThreads_ValueChanged(object sender, EventArgs e)
       {
          if (numFileThreads.Value > numParserThreads.Value)
             numParserThreads.Value = numFileThreads.Value;
+
+         if (numFileThreads.Value > 1)
+            chkThreadSafety.CheckState = CheckState.Checked;
       }
 
       private void chkThreadSafety_CheckedChanged(object sender, EventArgs e)
@@ -137,18 +143,18 @@ namespace Parser_Benchmark
          }
          catch (Exception ex)
          {
-            MessageBox.Show(ex.Message, "Error");
+            MessageBox.Show(ex.Message + "\r\n" + ex.StackTrace, "Error");
          }
          finally
          {
-            viewErrors.SetObjects(_Errors);
+            //viewErrors.SetObjects(_Errors);
          }
       }
 
       private void Benchmark_ReportErrors(object sender, ParseErrorsEvent e)
       {
-         if (e.SourceFile.Contains("Table") || e.SourceFile.Contains("Codeunit") || e.SourceFile.Contains("Page"))
-            _Errors.AddRange(e.Errors);
+         //if (e.SourceFile.Contains("Table") || e.SourceFile.Contains("Codeunit") || e.SourceFile.Contains("Page"))
+         //   _Errors.AddRange(e.Errors);
       }
 
       private void Benchmark_ReportData(object sender, Datum e)
@@ -190,6 +196,8 @@ namespace Parser_Benchmark
          if (workerCount <= 0) throw new ArgumentOutOfRangeException(nameof(workerCount), "Must be > 0");
 
          var token = cts.Token;
+
+
 
          // Producer: enumerate files
          var files = await Task.Run(() => Directory.EnumerateFiles(directoryPath, "*.al", SearchOption.AllDirectories).ToArray()).ConfigureAwait(true);
@@ -281,8 +289,8 @@ namespace Parser_Benchmark
                var elapsed = watch.Elapsed;
                if (chkUpdates.CheckState == CheckState.Checked)
                   AddBenchEvent(BenchAction.Parsed, Path.GetFileName(file), elapsed.ToString());
-               if (parser.Errors.Count > 0)
-                  _Errors.AddRange(parser.Errors);
+               //if (parser.Errors.Count > 0)
+               //   _Errors.AddRange(parser.Errors);
                progParsing.Value += 1;
             }
 
@@ -298,8 +306,9 @@ namespace Parser_Benchmark
          {
             _Timer.Stop();
             _IsRunning = false;
-            viewErrors.SetObjects(_Errors);
          }
+         Application.DoEvents();
+         viewErrors.SetObjects(_Errors);
       }
 
       private void TimerElapsed(object sender, System.Timers.ElapsedEventArgs e)

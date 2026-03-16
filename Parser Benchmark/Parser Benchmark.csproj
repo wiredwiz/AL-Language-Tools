@@ -69,6 +69,7 @@
     <Compile Include="IParserWorker.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VirtualErrorDataList.cs" />
     <EmbeddedResource Include="Benchmark.resx">
       <DependentUpon>Benchmark.cs</DependentUpon>
     </EmbeddedResource>
