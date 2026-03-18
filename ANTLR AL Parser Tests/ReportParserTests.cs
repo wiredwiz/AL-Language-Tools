@@ -273,4 +273,23 @@ report 50000 ""MethodSourceReport""
         var (_, errors) = ALParseHelper.ParseAlUnit(source);
         errors.Should().BeEmpty("a report column with a method call source should parse without errors");
     }
+
+    [Fact]
+    public void Report_dataitem_with_empty_trigger_declaration_parses_without_errors()
+    {
+        var source = @"
+report 50000 ""EmptyTriggerReport""
+{
+    dataset
+    {
+        dataitem(Customer; Customer)
+        {
+            column(No; ""No."") { }
+            trigger OnPreDataItem();
+        }
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("a trigger declaration with no body (semicolon only) should parse without errors");
+    }
 }

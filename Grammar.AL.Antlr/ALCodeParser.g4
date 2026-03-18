@@ -200,7 +200,7 @@ returnType
 triggerName : identifier;
 
 triggerDeclaration
-   : TRIGGER triggerName LEFTPAREN parameterList? RIGHTPAREN returnValue? varBlock? statementBlock SEMICOLON;
+   : TRIGGER triggerName LEFTPAREN parameterList? RIGHTPAREN returnValue? (varBlock? statementBlock)? SEMICOLON;
 
 /*
  * Code declaration elements
