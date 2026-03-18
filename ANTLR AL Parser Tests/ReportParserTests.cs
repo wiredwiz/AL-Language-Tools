@@ -275,10 +275,10 @@ report 50000 ""MethodSourceReport""
     }
 
     [Fact]
-    public void Report_dataitem_with_empty_trigger_declaration_parses_without_errors()
+    public void Report_dataitem_trigger_with_semicolon_separator_parses_without_errors()
     {
         var source = @"
-report 50000 ""EmptyTriggerReport""
+report 50000 ""TriggerSemicolonReport""
 {
     dataset
     {
@@ -286,10 +286,12 @@ report 50000 ""EmptyTriggerReport""
         {
             column(No; ""No."") { }
             trigger OnPreDataItem();
+            begin
+            end;
         }
     }
 }";
         var (_, errors) = ALParseHelper.ParseAlUnit(source);
-        errors.Should().BeEmpty("a trigger declaration with no body (semicolon only) should parse without errors");
+        errors.Should().BeEmpty("a trigger with an optional semicolon before the body should parse without errors");
     }
 }
