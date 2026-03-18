@@ -246,3 +246,44 @@ decimalPlacesProperty
 autoformatExpressionProperty
     : {TokenMatches("AutoFormatExpression")}? identifier EQUAL expression SEMICOLON
     ;
+
+/*
+ * Table view (DataItemTableView, SourceTableView)
+ * sorting("F1","F2") order(Ascending) where("F"=CONST(V))
+ */
+
+tableViewSortingClause : SORTING LEFTPAREN identifierList RIGHTPAREN ;
+tableViewOrderClause   : ORDER LEFTPAREN identifier RIGHTPAREN ;
+tableViewWhereClause   : WHERE LEFTPAREN tableRelationFilters RIGHTPAREN ;
+
+tableViewValue
+    : tableViewSortingClause? tableViewOrderClause? tableViewWhereClause?
+    ;
+
+// Predicate prevents ambiguity with keyValueProperty when SORTING/ORDER/WHERE
+// happen to be used as soft-keyword identifiers in other property values.
+tableViewProperty
+    : {TokenMatches("DataItemTableView") || TokenMatches("SourceTableView")}?
+      identifier EQUAL tableViewValue SEMICOLON
+    ;
+
+/*
+ * DataItemLink / DataItemLinkReference
+ * Reuses subPageLink/subPageLinks — same field=FIELD(field) syntax.
+ * DATAITEMLINK and DATAITEMLINKREFERENCE are dedicated tokens so no ambiguity.
+ */
+
+dataItemLinkProperty
+    : (DATAITEMLINK | DATAITEMLINKREFERENCE) EQUAL subPageLinks SEMICOLON
+    ;
+
+/*
+ * DataItemTableFilter
+ * "Document Type"=CONST(Order),"No."=FILTER(A001..A999)
+ * Uses tableRelationFilters (already defined above).
+ * Predicate prevents ambiguity with keyValueProperty.
+ */
+
+dataItemTableFilterProperty
+    : {TokenMatches("DataItemTableFilter")}? identifier EQUAL tableRelationFilters SEMICOLON
+    ;

@@ -18,12 +18,15 @@ reportColumn
       LEFTCBRACE keyValueProperty*? triggerDeclaration*? RIGHTCBRACE
     ;
 
-// Properties within a dataitem block: single-value (keyValueProperty) or
-// comma-separated field list (keyIdentifierListProperty) for properties
-// like RequestFilterFields = "No.","Name";
+// Properties within a dataitem block. Structured properties are listed first
+// so ANTLR4's LL(*) prediction resolves them before falling through to the
+// general-purpose alternatives.
 reportDataItemProperty
-    : keyValueProperty
-    | keyIdentifierListProperty
+    : tableViewProperty           // DataItemTableView = sorting(...) where(...)
+    | dataItemLinkProperty        // DataItemLink / DataItemLinkReference = field=FIELD(field)
+    | dataItemTableFilterProperty // DataItemTableFilter = "F"=CONST(V),"F"=FILTER(...)
+    | keyValueProperty            // single key = value
+    | keyIdentifierListProperty   // key = id1, id2  (RequestFilterFields, CalcFields, etc.)
     ;
 
 reportDataItem

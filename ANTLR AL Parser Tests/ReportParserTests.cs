@@ -176,4 +176,65 @@ report 50000 ""FilterFieldsReport""
         var (_, errors) = ALParseHelper.ParseAlUnit(source);
         errors.Should().BeEmpty("RequestFilterFields with a comma-separated field list should parse without errors");
     }
+
+    [Fact]
+    public void Report_dataitem_with_DataItemTableView_parses_without_errors()
+    {
+        var source = @"
+report 50000 ""TableViewReport""
+{
+    dataset
+    {
+        dataitem(SalesHeader; ""Sales Header"")
+        {
+            DataItemTableView = sorting(""Document Type"",""No."") where(""Document Type""=CONST(Order));
+            column(No; ""No."") { }
+        }
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("DataItemTableView with sorting and where clause should parse without errors");
+    }
+
+    [Fact]
+    public void Report_dataitem_with_DataItemLink_parses_without_errors()
+    {
+        var source = @"
+report 50000 ""LinkedReport""
+{
+    dataset
+    {
+        dataitem(Customer; Customer)
+        {
+            column(No; ""No."") { }
+            dataitem(SalesLine; ""Sales Line"")
+            {
+                DataItemLink = ""Sell-to Customer No.""=FIELD(""No."");
+                column(Amount; Amount) { }
+            }
+        }
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("DataItemLink with field reference should parse without errors");
+    }
+
+    [Fact]
+    public void Report_dataitem_with_DataItemTableFilter_parses_without_errors()
+    {
+        var source = @"
+report 50000 ""FilteredTableReport""
+{
+    dataset
+    {
+        dataitem(SalesHeader; ""Sales Header"")
+        {
+            DataItemTableFilter = ""Document Type""=CONST(Order);
+            column(No; ""No."") { }
+        }
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("DataItemTableFilter with CONST filter should parse without errors");
+    }
 }
