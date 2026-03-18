@@ -157,4 +157,23 @@ report 50000 ""CustomerReport""
         ParseTreeSearch.FindFirst<ALParser.ReportDataItemContext>(tree)
             .Should().NotBeNull("a report dataitem should produce a ReportDataItemContext node");
     }
+
+    [Fact]
+    public void Report_dataitem_with_RequestFilterFields_parses_without_errors()
+    {
+        var source = @"
+report 50000 ""FilterFieldsReport""
+{
+    dataset
+    {
+        dataitem(Customer; Customer)
+        {
+            RequestFilterFields = ""No."",""Sell-to Customer No."",""No. Printed"";
+            column(No; ""No."") { }
+        }
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("RequestFilterFields with a comma-separated field list should parse without errors");
+    }
 }

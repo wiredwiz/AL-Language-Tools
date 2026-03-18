@@ -18,14 +18,22 @@ reportColumn
       LEFTCBRACE keyValueProperty*? triggerDeclaration*? RIGHTCBRACE
     ;
 
+// Properties within a dataitem block: single-value (keyValueProperty) or
+// comma-separated field list (keyIdentifierListProperty) for properties
+// like RequestFilterFields = "No.","Name";
+reportDataItemProperty
+    : keyValueProperty
+    | keyIdentifierListProperty
+    ;
+
 reportDataItem
     : {TokenMatches("dataitem")}? IDENTIFIER
       LEFTPAREN varName=identifier SEMICOLON tableName=identifier RIGHTPAREN
       LEFTCBRACE
-          keyValueProperty*?      // 1. properties (DataItemLink, DataItemTableFilter, etc.)
-          reportColumn*?          // 2. columns
-          reportDataItem*?        // 3. nested dataitems
-          triggerDeclaration*?    // 4. triggers last (OnPreDataItem, OnAfterGetRecord, OnPostDataItem)
+          reportDataItemProperty*?  // 1. properties (DataItemLink, DataItemTableFilter, RequestFilterFields, etc.)
+          reportColumn*?            // 2. columns
+          reportDataItem*?          // 3. nested dataitems
+          triggerDeclaration*?      // 4. triggers last (OnPreDataItem, OnAfterGetRecord, OnPostDataItem)
       RIGHTCBRACE
     ;
 
