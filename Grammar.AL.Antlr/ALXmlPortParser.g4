@@ -4,7 +4,12 @@ options { tokenVocab=ALLexer; }
 
 import ALCodeParser, ALPropertyParser, ALPageParser;
 
-xmlPortProperties : keyValueProperty* ;
+xmlPortProperty
+    : permissionsProperty
+    | keyValueProperty
+    ;
+
+xmlPortProperties : xmlPortProperty* ;
 
 // fieldelement and fieldattribute source is always TableVar.Field
 xmlPortFieldSource : identifier PERIOD identifier ;
@@ -38,6 +43,15 @@ xmlPortSchemaElement
     | xmlPortFieldAttribute
     ;
 
+// Properties within a tableelement block. Structured properties listed first
+// so LL(*) prediction resolves them before keyValueProperty.
+xmlPortTableElementProperty
+    : tableViewProperty           // SourceTableView = sorting(...) where(...)
+    | dataItemLinkProperty        // DataItemLink = field = DataItem.Field
+    | dataItemTableFilterProperty // DataItemTableFilter = "F"=CONST(V),...
+    | keyValueProperty            // single key = value
+    ;
+
 // Container elements — can hold child elements then triggers
 xmlPortTextElement
     : {TokenMatches("textelement")}? IDENTIFIER
@@ -53,9 +67,9 @@ xmlPortTableElement
     : {TokenMatches("tableelement")}? IDENTIFIER
       LEFTPAREN varName=identifier SEMICOLON tableName=identifier RIGHTPAREN
       LEFTCBRACE
-          keyValueProperty*?          // 1. properties (DataItemLink, etc.)
-          xmlPortSchemaElement*?      // 2. child elements/attributes (recursive)
-          triggerDeclaration*?        // 3. triggers last
+          xmlPortTableElementProperty*?  // 1. properties (DataItemLink, SourceTableView, etc.)
+          xmlPortSchemaElement*?         // 2. child elements/attributes (recursive)
+          triggerDeclaration*?           // 3. triggers last
       RIGHTCBRACE
     ;
 

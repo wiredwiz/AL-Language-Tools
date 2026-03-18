@@ -129,6 +129,56 @@ xmlport 50000 ""XmlPortWithRequestPage""
     }
 
     [Fact]
+    public void XmlPort_with_permissions_property_parses_without_errors()
+    {
+        var source = @"
+xmlport 50000 ""PermissionsXmlPort""
+{
+    Permissions = tabledata ""Warehouse Activity Line"" = r,
+                  tabledata Bin = r;
+    schema
+    {
+        textelement(Root)
+        {
+            tableelement(Customer; Customer)
+            {
+                fieldelement(No; Customer.""No."") { }
+            }
+        }
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("an xmlport with a Permissions property should parse without errors");
+    }
+
+    [Fact]
+    public void XmlPort_tableelement_with_DataItemLink_qualified_reference_parses_without_errors()
+    {
+        var source = @"
+xmlport 50000 ""LinkedXmlPort""
+{
+    schema
+    {
+        textelement(Root)
+        {
+            tableelement(WhseActivityLine; ""Warehouse Activity Line"")
+            {
+                fieldelement(No; WhseActivityLine.""No."") { }
+                tableelement(BinContent; ""Bin Content"")
+                {
+                    DataItemLink = ""Location Code"" = WhseActivityLine.""Location Code"",
+                                   ""Bin Code"" = WhseActivityLine.""Bin Code"";
+                    fieldelement(Quantity; BinContent.Quantity) { }
+                }
+            }
+        }
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("an xmlport tableelement with DataItemLink using qualified references should parse without errors");
+    }
+
+    [Fact]
     public void XmlPort_tableelement_produces_XmlPortTableElementContext()
     {
         var source = @"
