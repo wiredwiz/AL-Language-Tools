@@ -117,6 +117,27 @@ query 50000 ""CustomerAPI""
     }
 
     [Fact]
+    public void Query_with_permissions_property_parses_without_errors()
+    {
+        var source = @"
+query 50000 ""PermissionsQuery""
+{
+    Permissions = tabledata ""Warehouse Activity Line"" = r,
+                  tabledata Bin = r,
+                  tabledata ""LAX Package"" = r;
+    elements
+    {
+        dataitem(Customer; Customer)
+        {
+            column(No; ""No."") { }
+        }
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("a query with a Permissions property should parse without errors");
+    }
+
+    [Fact]
     public void Query_dataitem_produces_QueryDataItemContext()
     {
         var source = @"

@@ -4,7 +4,12 @@ options { tokenVocab=ALLexer; }
 
 import ALCodeParser, ALPropertyParser;
 
-queryProperties : keyValueProperty* ;
+queryProperty
+    : permissionsProperty
+    | keyValueProperty
+    ;
+
+queryProperties : queryProperty* ;
 
 // Column source is a bare field name — table is established by the enclosing dataitem
 queryColumnSource : identifier ;
