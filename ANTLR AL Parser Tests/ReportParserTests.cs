@@ -220,6 +220,27 @@ report 50000 ""LinkedReport""
     }
 
     [Fact]
+    public void Report_dataitem_with_DataItemTableFilter_enum_and_float_parses_without_errors()
+    {
+        var source = @"
+report 50000 ""EnumFilterReport""
+{
+    dataset
+    {
+        dataitem(WhseActivityLine; ""Warehouse Activity Line"")
+        {
+            DataItemTableFilter = ""Action Type"" = const(""Warehouse Action Type""::Take),
+                                  ""Activity Type"" = const(""Warehouse Activity Type""::Pick),
+                                  ""Qty. (Base)"" = const(1.0);
+            column(No; ""No."") { }
+        }
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("DataItemTableFilter with enum scoped literals and float CONST values should parse without errors");
+    }
+
+    [Fact]
     public void Report_dataitem_with_DataItemTableFilter_parses_without_errors()
     {
         var source = @"

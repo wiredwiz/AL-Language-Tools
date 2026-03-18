@@ -26,11 +26,20 @@ queryFilter
       LEFTCBRACE keyValueProperty*? RIGHTCBRACE
     ;
 
+// Properties within a query dataitem block. Structured properties are listed first
+// so ANTLR4's LL(*) prediction resolves them before falling through to keyValueProperty.
+queryDataItemProperty
+    : tableViewProperty           // DataItemTableView = sorting(...) where(...)
+    | dataItemLinkProperty        // DataItemLink = field=FIELD(field)
+    | dataItemTableFilterProperty // DataItemTableFilter = "F"=CONST(V),...
+    | keyValueProperty            // single key = value (SqlJoinType, etc.)
+    ;
+
 queryDataItem
     : {TokenMatches("dataitem")}? IDENTIFIER
       LEFTPAREN varName=identifier SEMICOLON tableName=identifier RIGHTPAREN
       LEFTCBRACE
-          keyValueProperty*?              // 1. properties
+          queryDataItemProperty*?         // 1. properties
           (queryColumn | queryFilter)*?   // 2. columns and filters
           queryDataItem*?                 // 3. nested dataitems
           triggerDeclaration*?            // 4. triggers last

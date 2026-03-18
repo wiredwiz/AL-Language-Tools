@@ -138,6 +138,27 @@ query 50000 ""PermissionsQuery""
     }
 
     [Fact]
+    public void Query_dataitem_with_DataItemTableFilter_parses_without_errors()
+    {
+        var source = @"
+query 50000 ""FilteredQuery""
+{
+    elements
+    {
+        dataitem(WhseActivityLine; ""Warehouse Activity Line"")
+        {
+            DataItemTableFilter = ""Action Type"" = const(""Warehouse Action Type""::Take),
+                                  ""Activity Type"" = const(""Warehouse Activity Type""::Pick),
+                                  ""Qty. (Base)"" = const(1.0);
+            column(No; ""No."") { }
+        }
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("a query dataitem with DataItemTableFilter using enum and float CONST values should parse without errors");
+    }
+
+    [Fact]
     public void Query_dataitem_produces_QueryDataItemContext()
     {
         var source = @"
