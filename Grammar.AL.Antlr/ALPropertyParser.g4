@@ -269,12 +269,29 @@ tableViewProperty
 
 /*
  * DataItemLink / DataItemLinkReference
- * Reuses subPageLink/subPageLinks — same field=FIELD(field) syntax.
- * DATAITEMLINK and DATAITEMLINKREFERENCE are dedicated tokens so no ambiguity.
+ * Reports use:  field = FIELD(referenceField)
+ * Queries use:  field = DataItem.ReferenceField  (qualified reference, no FIELD wrapper)
+ * Both forms are supported here.
  */
 
+dataItemLinkValue
+    : FIELD LEFTPAREN UPPERLIMIT LEFTPAREN FILTER LEFTPAREN identifier RIGHTPAREN RIGHTPAREN RIGHTPAREN
+    | FIELD LEFTPAREN UPPERLIMIT LEFTPAREN identifier RIGHTPAREN RIGHTPAREN
+    | FIELD LEFTPAREN FILTER LEFTPAREN identifier RIGHTPAREN RIGHTPAREN
+    | FIELD LEFTPAREN identifier RIGHTPAREN
+    | qualifiedFieldReference   // DataItem.FieldName (query form)
+    ;
+
+dataItemLinkPair
+    : identifier EQUAL dataItemLinkValue
+    ;
+
+dataItemLinkPairs
+    : dataItemLinkPair (COMMA dataItemLinkPair)*
+    ;
+
 dataItemLinkProperty
-    : (DATAITEMLINK | DATAITEMLINKREFERENCE) EQUAL subPageLinks SEMICOLON
+    : (DATAITEMLINK | DATAITEMLINKREFERENCE) EQUAL dataItemLinkPairs SEMICOLON
     ;
 
 /*

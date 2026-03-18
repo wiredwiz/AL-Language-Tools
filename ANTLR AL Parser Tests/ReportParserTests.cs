@@ -241,6 +241,30 @@ report 50000 ""EnumFilterReport""
     }
 
     [Fact]
+    public void Report_dataitem_with_DataItemLink_qualified_reference_parses_without_errors()
+    {
+        var source = @"
+report 50000 ""LinkedReport2""
+{
+    dataset
+    {
+        dataitem(WhseActivityLine; ""Warehouse Activity Line"")
+        {
+            column(No; ""No."") { }
+            dataitem(BinContent; ""Bin Content"")
+            {
+                DataItemLink = ""Location Code"" = WarehouseActivityLine.""Location Code"",
+                               ""Code"" = WarehouseActivityLine.""Bin Code"";
+                column(Quantity; Quantity) { }
+            }
+        }
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("DataItemLink with DataItem.Field qualified reference syntax should parse without errors");
+    }
+
+    [Fact]
     public void Report_dataitem_with_DataItemTableFilter_parses_without_errors()
     {
         var source = @"

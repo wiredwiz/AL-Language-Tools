@@ -159,6 +159,30 @@ query 50000 ""FilteredQuery""
     }
 
     [Fact]
+    public void Query_dataitem_with_DataItemLink_qualified_reference_parses_without_errors()
+    {
+        var source = @"
+query 50000 ""LinkedQuery""
+{
+    elements
+    {
+        dataitem(Salesperson; ""Salesperson/Purchaser"")
+        {
+            column(Code; Code) { }
+            dataitem(SalesHeader; ""Sales Header"")
+            {
+                DataItemLink = ""Salesperson Code"" = Salesperson.Code;
+                SqlJoinType = InnerJoin;
+                column(No; ""No."") { }
+            }
+        }
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("a query DataItemLink with DataItem.Field qualified reference syntax should parse without errors");
+    }
+
+    [Fact]
     public void Query_dataitem_produces_QueryDataItemContext()
     {
         var source = @"
