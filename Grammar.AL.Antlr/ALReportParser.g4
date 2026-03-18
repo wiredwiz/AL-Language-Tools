@@ -6,10 +6,12 @@ import ALCodeParser, ALPropertyParser, ALPageParser;
 
 reportProperties : keyValueProperty* ;
 
-// Column source: bare field name, or DataItem.Field
+// Column source: bare field name, DataItem.Field, or a literal value (integer, string, etc.)
 reportColumnSource
     : identifier PERIOD identifier
     | identifier
+    | INTEGER_LITERAL
+    | STRING_LITERAL
     ;
 
 reportColumn

@@ -237,4 +237,22 @@ report 50000 ""FilteredTableReport""
         var (_, errors) = ALParseHelper.ParseAlUnit(source);
         errors.Should().BeEmpty("DataItemTableFilter with CONST filter should parse without errors");
     }
+
+    [Fact]
+    public void Report_column_with_integer_literal_source_parses_without_errors()
+    {
+        var source = @"
+report 50000 ""LiteralSourceReport""
+{
+    dataset
+    {
+        dataitem(Customer; Customer)
+        {
+            column(ReportForNavId_2; 2) { }
+        }
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("a report column with an integer literal source should parse without errors");
+    }
 }
