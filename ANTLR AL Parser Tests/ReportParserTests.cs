@@ -255,4 +255,22 @@ report 50000 ""LiteralSourceReport""
         var (_, errors) = ALParseHelper.ParseAlUnit(source);
         errors.Should().BeEmpty("a report column with an integer literal source should parse without errors");
     }
+
+    [Fact]
+    public void Report_column_with_method_call_source_parses_without_errors()
+    {
+        var source = @"
+report 50000 ""MethodSourceReport""
+{
+    dataset
+    {
+        dataitem(Header; ""Sales Header"")
+        {
+            column(ReportForNav_Header; ReportForNavWriteDataItem('Header',Header)) { }
+        }
+    }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("a report column with a method call source should parse without errors");
+    }
 }

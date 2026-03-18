@@ -6,13 +6,8 @@ import ALCodeParser, ALPropertyParser, ALPageParser;
 
 reportProperties : keyValueProperty* ;
 
-// Column source: bare field name, DataItem.Field, or a literal value (integer, string, etc.)
-reportColumnSource
-    : identifier PERIOD identifier
-    | identifier
-    | INTEGER_LITERAL
-    | STRING_LITERAL
-    ;
+// Column source: any expression (field name, DataItem.Field, literal, method call, etc.)
+reportColumnSource : expression ;
 
 reportColumn
     : {TokenMatches("column")}? IDENTIFIER
