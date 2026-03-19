@@ -13,7 +13,9 @@ import ALCodeunitParser,
        ALEnumParser, ALEnumExtensionParser,
        ALInterfaceParser,
        ALProfileParser, ALProfileExtensionParser,
-       ALPermissionSetParser, ALPermissionSetExtensionParser;
+       ALPermissionSetParser, ALPermissionSetExtensionParser,
+       ALEntitlementParser,
+       ALDotNetParser;
 
 alUnit
    : codeunitDeclaration
@@ -24,6 +26,8 @@ alUnit
    | interface
    | profile | profileextension
    | permissionset | permissionsetextension
+   | entitlement
+   | dotnet
    ;
 
 compileUnit
