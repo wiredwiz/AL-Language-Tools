@@ -130,6 +130,7 @@ pageLayoutEntity
     | pageCuePart
     | pagePart
     | pageSystemPart
+    | pageField
     ;
 
 pageLayoutEntities
