@@ -38,9 +38,9 @@ alUnit
    ;
 
 compileUnit
-	: EOF
+   : EOF
    | alUnit EOF
-	;
+   ;
 
 /*
 
