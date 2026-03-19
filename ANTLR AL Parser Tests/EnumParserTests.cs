@@ -59,4 +59,41 @@ enum 50001 ""ObsoleteEnum""
         var (_, errors) = ALParseHelper.ParseAlUnit(source);
         errors.Should().BeEmpty("an enum with obsolete properties should parse without errors");
     }
+
+    [Fact]
+    public void Minimal_enumextension_parses_without_errors()
+    {
+        var source = @"
+enumextension 50000 ""DocumentTypeExt"" extends ""Document Type""
+{
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("a minimal enumextension with no new values should parse without errors");
+    }
+
+    [Fact]
+    public void Minimal_enumextension_produces_EnumextensionContext()
+    {
+        var source = @"
+enumextension 50000 ""DocumentTypeExt"" extends ""Document Type""
+{
+}";
+        var (tree, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty();
+        ParseTreeSearch.FindFirst<ALParser.EnumextensionContext>(tree)
+            .Should().NotBeNull("an enumextension object should produce an EnumextensionContext node");
+    }
+
+    [Fact]
+    public void Enumextension_with_values_parses_without_errors()
+    {
+        var source = @"
+enumextension 50000 ""DocumentTypeExt"" extends ""Document Type""
+{
+    value(100; ""New Value"") { Caption = 'New Value'; }
+    value(101; AnotherValue) { Caption = 'Another Value'; }
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("an enumextension with new values should parse without errors");
+    }
 }
