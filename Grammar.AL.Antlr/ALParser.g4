@@ -4,10 +4,15 @@ options { tokenVocab=ALLexer; }
 
 // ALPageParser is kept explicit here: it defines the `page` rule used in alUnit below.
 // It also arrives transitively through ALReportParser and ALXmlPortParser — ANTLR4 deduplicates imported rules.
-import ALCodeunitParser, ALTableParser, ALTableExtensionParser,
+import ALCodeunitParser,
+       ALTableParser, ALTableExtensionParser,
        ALPageParser, ALPageExtensionParser, ALPageCustomizationParser,
-       ALQueryParser, ALReportParser, ALReportExtensionParser, ALXmlPortParser,
-       ALEnumParser, ALEnumExtensionParser, ALInterfaceParser;
+       ALQueryParser,
+       ALReportParser, ALReportExtensionParser,
+       ALXmlPortParser,
+       ALEnumParser, ALEnumExtensionParser,
+       ALInterfaceParser,
+       ALProfileParser, ALProfileExtensionParser;
 
 alUnit
    : codeunitDeclaration
@@ -16,6 +21,7 @@ alUnit
    | query | report | reportextension | xmlPort
    | enum | enumextension
    | interface
+   | profile | profileextension
    ;
 
 compileUnit
