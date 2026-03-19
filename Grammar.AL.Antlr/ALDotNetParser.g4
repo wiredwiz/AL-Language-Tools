@@ -12,7 +12,7 @@ dotNetName
 dotNetType
     : TYPE
       LEFTPAREN dotNetName SEMICOLON dotNetName RIGHTPAREN
-      LEFTCBRACE keyValueProperty*? RIGHTCBRACE
+      LEFTCBRACE keyValueProperty* RIGHTCBRACE
     ;
 
 dotNetAssemblyItem
