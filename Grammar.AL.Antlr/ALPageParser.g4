@@ -206,3 +206,29 @@ pageEntities
 page
    : namespaceDeclaration? usingDeclarations? PAGE INTEGER_LITERAL identifier LEFTCBRACE pageProperties pageEntities codeDeclarations? RIGHTCBRACE
    ;
+
+pageLayoutModification
+    : {TokenMatches("addafter") || TokenMatches("addbefore") ||
+       TokenMatches("addfirst") || TokenMatches("addlast")}?
+      identifier LEFTPAREN identifier RIGHTPAREN
+      LEFTCBRACE pageLayoutEntity* RIGHTCBRACE
+    | {TokenMatches("modify")}?
+      identifier LEFTPAREN identifier RIGHTPAREN
+      LEFTCBRACE pageGenericProperty* triggerDeclaration* RIGHTCBRACE
+    | {TokenMatches("movebefore") || TokenMatches("moveafter") ||
+       TokenMatches("movefirst") || TokenMatches("movelast")}?
+      identifier LEFTPAREN identifier SEMICOLON identifier RIGHTPAREN
+    ;
+
+pageActionModification
+    : {TokenMatches("addafter") || TokenMatches("addbefore") ||
+       TokenMatches("addfirst") || TokenMatches("addlast")}?
+      identifier LEFTPAREN identifier RIGHTPAREN
+      LEFTCBRACE pageAction* RIGHTCBRACE
+    | {TokenMatches("modify")}?
+      identifier LEFTPAREN identifier RIGHTPAREN
+      LEFTCBRACE pageActionEntity* RIGHTCBRACE
+    | {TokenMatches("movebefore") || TokenMatches("moveafter") ||
+       TokenMatches("movefirst") || TokenMatches("movelast")}?
+      identifier LEFTPAREN identifier SEMICOLON identifier RIGHTPAREN
+    ;

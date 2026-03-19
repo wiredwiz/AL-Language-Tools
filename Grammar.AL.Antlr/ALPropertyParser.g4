@@ -21,8 +21,9 @@ keyIdentifierListProperty
    ;
 
 permissionSpecifier
-   : TABLEDATA objectId EQUAL identifier
-   ;
+    : TABLEDATA objectId EQUAL identifier
+    | {!TokenMatches("tabledata")}? identifier (objectId | ASTERISK) EQUAL identifier
+    ;
 
 permissionSpecifiers
    : permissionSpecifier (COMMA permissionSpecifier)*;

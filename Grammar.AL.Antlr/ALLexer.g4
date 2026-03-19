@@ -2532,6 +2532,10 @@ PROFILE
    : P R O F I L E
    ;
 
+PROFILEEXTENSION
+   : P R O F I L E E X T E N S I O N
+   ;
+
 PROGRAM
    : P R O G R A M
    ;
