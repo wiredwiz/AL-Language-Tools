@@ -319,7 +319,7 @@ untilCondition
    : UNTIL expression;
 
 repeatUntilStatement
-   : REPEAT statementList? SEMICOLON? untilCondition;
+   : REPEAT SEMICOLON* statementList? SEMICOLON* untilCondition;
 
 /*
  * AL WITH statement logic
@@ -362,14 +362,14 @@ statementLine
    | expression;
 
 statementBlock
-   : BEGIN SEMICOLON* statementList? SEMICOLON? END;
+   : BEGIN SEMICOLON* statementList? SEMICOLON* END;
 
 statement
    : (statementLine | statementBlock)
    ;
 
 statementList
-   : statementLine (SEMICOLON statementLine)*?;
+   : statementLine (SEMICOLON+ statementLine)*;
 
 /*
  * AL expression logic
