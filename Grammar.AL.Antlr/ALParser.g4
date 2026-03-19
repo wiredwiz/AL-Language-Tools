@@ -6,13 +6,14 @@ options { tokenVocab=ALLexer; }
 // It also arrives transitively through ALReportParser and ALXmlPortParser — ANTLR4 deduplicates imported rules.
 import ALCodeunitParser, ALTableParser, ALTableExtensionParser,
        ALPageParser, ALPageExtensionParser, ALPageCustomizationParser,
-       ALQueryParser, ALReportParser, ALXmlPortParser,
+       ALQueryParser, ALReportParser, ALReportExtensionParser, ALXmlPortParser,
        ALEnumParser, ALEnumExtensionParser, ALInterfaceParser;
 
 alUnit
    : codeunitDeclaration
    | table | tableExtension
-   | page | pageextension | pagecustomization | query | report | xmlPort
+   | page | pageextension | pagecustomization
+   | query | report | reportextension | xmlPort
    | enum | enumextension
    | interface
    ;
