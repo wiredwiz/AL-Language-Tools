@@ -82,4 +82,40 @@ profileextension MyProfileExt extends MyProfile
         var (_, errors) = ALParseHelper.ParseAlUnit(source);
         errors.Should().BeEmpty("a profileextension with properties should parse without errors");
     }
+
+    public static IEnumerable<object[]> ProfileFiles()
+    {
+        var root = @"D:\Projects\Business Central\Applications\Microsoft\BC26";
+        if (!Directory.Exists(root))
+            return Enumerable.Empty<object[]>();
+        return Directory.GetFiles(root, "*.Profile.al", SearchOption.AllDirectories)
+            .Take(40).Select(f => new object[] { f });
+    }
+
+    [Theory]
+    [MemberData(nameof(ProfileFiles))]
+    public void Real_profile_file_parses_without_errors(string filePath)
+    {
+        var source = File.ReadAllText(filePath);
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty($"real-world file {Path.GetFileName(filePath)} should parse without errors");
+    }
+
+    public static IEnumerable<object[]> ProfileExtFiles()
+    {
+        var root = @"D:\Projects\Business Central\Applications\Microsoft\BC26";
+        if (!Directory.Exists(root))
+            return Enumerable.Empty<object[]>();
+        return Directory.GetFiles(root, "*.ProfileExt.al", SearchOption.AllDirectories)
+            .Take(40).Select(f => new object[] { f });
+    }
+
+    [Theory]
+    [MemberData(nameof(ProfileExtFiles))]
+    public void Real_profileextension_file_parses_without_errors(string filePath)
+    {
+        var source = File.ReadAllText(filePath);
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty($"real-world file {Path.GetFileName(filePath)} should parse without errors");
+    }
 }

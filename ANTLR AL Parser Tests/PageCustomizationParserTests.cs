@@ -70,4 +70,22 @@ pagecustomization MyCustomization customizes ""Customer Card""
         var (_, errors) = ALParseHelper.ParseAlUnit(source);
         errors.Should().BeEmpty("a pagecustomization with modify actions should parse without errors");
     }
+
+    public static IEnumerable<object[]> PageCustFiles()
+    {
+        var root = @"D:\Projects\Business Central\Applications\Microsoft\BC26";
+        if (!Directory.Exists(root))
+            return Enumerable.Empty<object[]>();
+        return Directory.GetFiles(root, "*.PageCust.al", SearchOption.AllDirectories)
+            .Take(40).Select(f => new object[] { f });
+    }
+
+    [Theory]
+    [MemberData(nameof(PageCustFiles))]
+    public void Real_pagecustomization_file_parses_without_errors(string filePath)
+    {
+        var source = File.ReadAllText(filePath);
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty($"real-world file {Path.GetFileName(filePath)} should parse without errors");
+    }
 }

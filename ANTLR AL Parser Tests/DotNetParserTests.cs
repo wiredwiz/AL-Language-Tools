@@ -88,4 +88,22 @@ dotnet
         var (_, errors) = ALParseHelper.ParseAlUnit(source);
         errors.Should().BeEmpty("a dotnet with multiple assemblies should parse without errors");
     }
+
+    public static IEnumerable<object[]> DotNetFiles()
+    {
+        var root = @"D:\Projects\Business Central\Applications\Microsoft\BC26";
+        if (!Directory.Exists(root))
+            return Enumerable.Empty<object[]>();
+        return Directory.GetFiles(root, "dotnet*.al", SearchOption.AllDirectories)
+            .Take(40).Select(f => new object[] { f });
+    }
+
+    [Theory]
+    [MemberData(nameof(DotNetFiles))]
+    public void Real_dotnet_file_parses_without_errors(string filePath)
+    {
+        var source = File.ReadAllText(filePath);
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty($"real-world file {Path.GetFileName(filePath)} should parse without errors");
+    }
 }

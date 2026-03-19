@@ -116,4 +116,22 @@ pageextension 50000 ""CustomerCardExt"" extends ""Customer Card""
         var (_, errors) = ALParseHelper.ParseAlUnit(source);
         errors.Should().BeEmpty("a pageextension with a procedure should parse without errors");
     }
+
+    public static IEnumerable<object[]> PageExtFiles()
+    {
+        var root = @"D:\Projects\Business Central\Applications\Microsoft\BC26";
+        if (!Directory.Exists(root))
+            return Enumerable.Empty<object[]>();
+        return Directory.GetFiles(root, "*.PageExt.al", SearchOption.AllDirectories)
+            .Take(40).Select(f => new object[] { f });
+    }
+
+    [Theory]
+    [MemberData(nameof(PageExtFiles))]
+    public void Real_pageextension_file_parses_without_errors(string filePath)
+    {
+        var source = File.ReadAllText(filePath);
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty($"real-world file {Path.GetFileName(filePath)} should parse without errors");
+    }
 }

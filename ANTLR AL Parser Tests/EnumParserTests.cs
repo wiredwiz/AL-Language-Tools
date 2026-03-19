@@ -96,4 +96,40 @@ enumextension 50000 ""DocumentTypeExt"" extends ""Document Type""
         var (_, errors) = ALParseHelper.ParseAlUnit(source);
         errors.Should().BeEmpty("an enumextension with new values should parse without errors");
     }
+
+    public static IEnumerable<object[]> EnumFiles()
+    {
+        var root = @"D:\Projects\Business Central\Applications\Microsoft\BC26";
+        if (!Directory.Exists(root))
+            return Enumerable.Empty<object[]>();
+        return Directory.GetFiles(root, "*.Enum.al", SearchOption.AllDirectories)
+            .Take(40).Select(f => new object[] { f });
+    }
+
+    [Theory]
+    [MemberData(nameof(EnumFiles))]
+    public void Real_enum_file_parses_without_errors(string filePath)
+    {
+        var source = File.ReadAllText(filePath);
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty($"real-world file {Path.GetFileName(filePath)} should parse without errors");
+    }
+
+    public static IEnumerable<object[]> EnumExtFiles()
+    {
+        var root = @"D:\Projects\Business Central\Applications\Microsoft\BC26";
+        if (!Directory.Exists(root))
+            return Enumerable.Empty<object[]>();
+        return Directory.GetFiles(root, "*.EnumExt.al", SearchOption.AllDirectories)
+            .Take(40).Select(f => new object[] { f });
+    }
+
+    [Theory]
+    [MemberData(nameof(EnumExtFiles))]
+    public void Real_enumextension_file_parses_without_errors(string filePath)
+    {
+        var source = File.ReadAllText(filePath);
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty($"real-world file {Path.GetFileName(filePath)} should parse without errors");
+    }
 }

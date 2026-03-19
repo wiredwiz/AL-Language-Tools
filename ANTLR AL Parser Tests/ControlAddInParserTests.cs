@@ -108,4 +108,22 @@ controladdin MyControlAddIn
         var (_, errors) = ALParseHelper.ParseAlUnit(source);
         errors.Should().BeEmpty("a controladdin with mixed properties, events, and procedures should parse without errors");
     }
+
+    public static IEnumerable<object[]> ControlAddInFiles()
+    {
+        var root = @"D:\Projects\Business Central\Applications\Lanham\BC26\Lanham Associates_Lanham ACE Warehousing_25.2.1.5_symbols\Source\Control Addins";
+        if (!Directory.Exists(root))
+            return Enumerable.Empty<object[]>();
+        return Directory.GetFiles(root, "*.al", SearchOption.AllDirectories)
+            .Take(40).Select(f => new object[] { f });
+    }
+
+    [Theory]
+    [MemberData(nameof(ControlAddInFiles))]
+    public void Real_controladdin_file_parses_without_errors(string filePath)
+    {
+        var source = File.ReadAllText(filePath);
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty($"real-world file {Path.GetFileName(filePath)} should parse without errors");
+    }
 }
