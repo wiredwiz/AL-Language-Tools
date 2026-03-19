@@ -5,9 +5,13 @@ options { tokenVocab=ALLexer; }
 import ALPageParser;
 
 // Restrict modify blocks to properties only — no triggers, no code
-pageCustomizationLayoutEntity : pageGenericProperty ;
+pageCustomizationLayoutEntity
+    : pageGenericProperty
+    ;
 
-pageCustomizationActionEntity : pageGenericProperty ;
+pageCustomizationActionEntity
+    : pageGenericProperty
+    ;
 
 pageCustomizationLayoutModification
     : {TokenMatches("modify")}?
