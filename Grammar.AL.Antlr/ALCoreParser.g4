@@ -108,6 +108,7 @@ identifier
    | BORDERSTYLE
    | BORDERWIDTH
    | BOTTOMMARGIN
+   | BREAK
    | BYTE
    | CALCDATE
    | CALCFIELD

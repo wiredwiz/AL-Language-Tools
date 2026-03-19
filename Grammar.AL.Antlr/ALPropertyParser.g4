@@ -69,7 +69,9 @@ comparisonFilter
    ;
 
 filterRule
-   : (fieldValue | comparisonFilter)
+   : fieldValue RANGE fieldValue?   // range filter: val1..val2 or val1..
+   | RANGE fieldValue               // range filter: ..val2
+   | (fieldValue | comparisonFilter)
    ;
 
 compoundFilterRule
@@ -121,8 +123,13 @@ tableRelationFilterSegment
    : (EQUAL|NOTEQUAL|LESSTHAN|GREATERTHAN|LESSTHANEQUAL|GREATERTHANEQUAL)? fieldValue
    ;
 
+tableRelationRangeFilter
+   : fieldValue RANGE fieldValue?   // range: val.. or val1..val2
+   | RANGE fieldValue               // range: ..val2
+   ;
+
 tableRelationFilterCompound
-   : tableRelationFilterSegment ( AMPERSAND tableRelationFilterSegment | PIPE tableRelationFilterSegment )*
+   : (tableRelationRangeFilter | tableRelationFilterSegment) ( AMPERSAND (tableRelationRangeFilter | tableRelationFilterSegment) | PIPE (tableRelationRangeFilter | tableRelationFilterSegment) )*
    ;
 
 tableRelationFilter
@@ -304,4 +311,65 @@ dataItemLinkProperty
 
 dataItemTableFilterProperty
     : {TokenMatches("DataItemTableFilter")}? identifier EQUAL tableRelationFilters SEMICOLON
+    ;
+
+/*
+ * Caption = 'text' [, Comment = 'comment'] [, Locked = true/false] ;
+ * The comma-separated modifiers after the string literal need special handling.
+ */
+
+captionProperty
+    : CAPTION EQUAL STRING_LITERAL (COMMA labelArgs)? SEMICOLON
+    ;
+
+/*
+ * RunObject = Page "My Page" | RunObject = Report "My Report" | etc.
+ * The RunObject property uses a keyword as an object type, which cannot
+ * be matched by the generic keyValueProperty rule.
+ */
+
+runObjectType
+    : PAGE
+    | REPORT
+    | CODEUNIT
+    | QUERY
+    | XMLPORT
+    | TABLE
+    ;
+
+runObjectProperty
+    : RUNOBJECT EQUAL runObjectType objectId SEMICOLON
+    ;
+
+/*
+ * RunPageLink = field1 = CONST(val), field2 = FIELD(ref);
+ * RunPageView = sorting(...) where(...)
+ * Reuse existing subPageLink/tableView rules.
+ */
+
+runPageLinkProperty
+    : {TokenMatches("RunPageLink")}? identifier EQUAL subPageLinks SEMICOLON
+    ;
+
+runPageViewProperty
+    : {TokenMatches("RunPageView")}? identifier EQUAL tableViewValue SEMICOLON
+    ;
+
+/*
+ * Implementation = "InterfaceName" = "ImplementationName";
+ * DefaultImplementation = "InterfaceName" = "ImplementationName";
+ * Used in enum values and enum bodies when implementing interfaces.
+ */
+
+implementationPair
+    : identifier EQUAL identifier
+    ;
+
+implementationPairs
+    : implementationPair (COMMA implementationPair)*
+    ;
+
+implementationProperty
+    : {TokenMatches("Implementation") || TokenMatches("DefaultImplementation")}?
+      identifier EQUAL implementationPairs SEMICOLON
     ;

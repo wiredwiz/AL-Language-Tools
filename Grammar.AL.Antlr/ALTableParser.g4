@@ -68,6 +68,7 @@ tableFieldProperty
    : TABLERELATION EQUAL tableRelation SEMICOLON
    | CALCFORMULA EQUAL calcFormula SEMICOLON
    | multiLanguageCaptionProperty
+   | captionProperty
    | keyIdentifierListProperty
    | keyValueProperty
    | accessByPermProperty

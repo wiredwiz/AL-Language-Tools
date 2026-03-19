@@ -8,7 +8,7 @@ reportExtensionDatasetModification
     : {TokenMatches("addafter") || TokenMatches("addbefore") ||
        TokenMatches("addfirst") || TokenMatches("addlast")}?
       identifier LEFTPAREN identifier RIGHTPAREN
-      LEFTCBRACE reportColumn* RIGHTCBRACE
+      LEFTCBRACE (reportDataItem | reportColumn)* RIGHTCBRACE
     | {TokenMatches("modify")}?
       identifier LEFTPAREN identifier RIGHTPAREN
       LEFTCBRACE reportDataItemProperty* RIGHTCBRACE
@@ -21,7 +21,7 @@ reportExtensionDataset
 
 reportExtensionRequestPage
     : {TokenMatches("requestpage")}? IDENTIFIER
-      LEFTCBRACE pageExtensionLayoutSection? pageExtensionActionSection? RIGHTCBRACE
+      LEFTCBRACE pageExtensionLayoutSection? pageExtensionActionSection? codeDeclarations? RIGHTCBRACE
     ;
 
 reportextension

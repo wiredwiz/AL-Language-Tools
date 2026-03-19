@@ -13,8 +13,17 @@ tableExtFieldGroups
     : FIELDGROUPS LEFTCBRACE tableExtFieldGroup*? RIGHTCBRACE
     ;
 
+tableExtFieldModification
+    : {TokenMatches("modify")}? identifier LEFTPAREN identifier RIGHTPAREN
+      LEFTCBRACE tableFieldProperty*? RIGHTCBRACE
+    ;
+
+tableExtFields
+    : FIELDS LEFTCBRACE (tableField | tableExtFieldModification)*? RIGHTCBRACE
+    ;
+
 tableExtEntity
-    : tableFields
+    : tableExtFields
     | tableKeys
     | tableExtFieldGroups
     ;

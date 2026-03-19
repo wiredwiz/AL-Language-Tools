@@ -3502,7 +3502,7 @@ YPOS
 
 IDENTIFIER
 	: (LETTER | DIGIT | UNDERSCORE)+
-   | '"' ~["]+ '"'
+   | '"' (~["] | '""')* '"'
 	;
 
 UNDERSCORE

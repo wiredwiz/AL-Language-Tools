@@ -133,6 +133,7 @@ variableTypeDeclaration
    | RECORDID #RecordIdVariable
    | RECORDREF #RecordRefVariable
    | REPORT objId=objectId #ReportVariable
+   | SECRETTEXT #SecretTextVariable
    | SESSIONSETTINGS #SessionSettingsVariable
    | TEXT sizeDecl=sizeDeclaration? #TextVariable
    | TEXTBUILDER #TextBuilderVariable
@@ -145,6 +146,7 @@ variableTypeDeclaration
    | XMLELEMENT #XmlElementVariable
    | XMLNODE #XmlNodeVariable
    | XMLPORT objId=objectId #XmlPortVariable
+   | identifier #IdentifierTypeVariable
    ;
 
 parameterName

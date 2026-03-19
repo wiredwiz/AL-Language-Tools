@@ -11,8 +11,12 @@ interfaceMethodDeclaration
       returnVal=returnValue? SEMICOLON?
     ;
 
+interfaceExtendsList
+    : EXTENDS identifier (COMMA identifier)*
+    ;
+
 interface
     : namespaceDeclaration? usingDeclarations?
-      INTERFACE identifier
+      INTERFACE identifier interfaceExtendsList?
       LEFTCBRACE keyValueProperty* interfaceMethodDeclaration* RIGHTCBRACE
     ;

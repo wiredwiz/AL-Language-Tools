@@ -22,6 +22,7 @@ pageProperties
 pageFieldProperty
    : TABLERELATION EQUAL tableRelation SEMICOLON
    | multiLanguageCaptionProperty
+   | captionProperty
    | keyIdentifierListProperty
    | keyValueProperty
    | accessByPermProperty
@@ -32,7 +33,11 @@ pageFieldProperty
 
 pageGenericProperty
    : multiLanguageCaptionProperty
+   | captionProperty
    | keyIdentifierListProperty
+   | runObjectProperty
+   | runPageLinkProperty
+   | runPageViewProperty
    | keyValueProperty
    | accessByPermProperty
    | decimalPlacesProperty
@@ -84,8 +89,7 @@ pageFieldName
     ;
 
 pagefieldSource
-    : identifier
-    | identifier PERIOD identifier
+    : expression
     ;
 
 pageEntityName
@@ -105,7 +109,7 @@ pageFields
     ;
 
 pageLayoutGroup
-    : GROUP LEFTPAREN pageEntityName RIGHTPAREN LEFTCBRACE pageFields RIGHTCBRACE
+    : GROUP LEFTPAREN pageEntityName RIGHTPAREN LEFTCBRACE pageGenericProperty* pageLayoutEntities RIGHTCBRACE
     ;
 
 pageLayoutRepeater
@@ -162,6 +166,10 @@ pageAction
     : ACTION LEFTPAREN identifier RIGHTPAREN LEFTCBRACE pageActionEntity* RIGHTCBRACE
     ;
 
+pageActionRef
+    : ACTIONREF LEFTPAREN identifier SEMICOLON identifier RIGHTPAREN LEFTCBRACE pageGenericProperty* RIGHTCBRACE
+    ;
+
 pageActions
     : pageAction*
     ;
@@ -180,6 +188,8 @@ actionGroup
 
 actionGroupEntity
     : actionGroup
+    | pageAction
+    | pageActionRef
     | pageGenericProperty
     ;
 
@@ -225,7 +235,7 @@ pageActionModification
     : {TokenMatches("addafter") || TokenMatches("addbefore") ||
        TokenMatches("addfirst") || TokenMatches("addlast")}?
       identifier LEFTPAREN identifier RIGHTPAREN
-      LEFTCBRACE pageAction* RIGHTCBRACE
+      LEFTCBRACE (actionGroup | pageAction | pageActionRef)* RIGHTCBRACE
     | {TokenMatches("modify")}?
       identifier LEFTPAREN identifier RIGHTPAREN
       LEFTCBRACE pageActionEntity* RIGHTCBRACE
