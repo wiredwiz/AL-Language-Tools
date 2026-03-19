@@ -13,7 +13,7 @@ import ALCodeunitParser,
        ALEnumParser, ALEnumExtensionParser,
        ALInterfaceParser,
        ALProfileParser, ALProfileExtensionParser,
-       ALPermissionSetParser;
+       ALPermissionSetParser, ALPermissionSetExtensionParser;
 
 alUnit
    : codeunitDeclaration
@@ -23,7 +23,7 @@ alUnit
    | enum | enumextension
    | interface
    | profile | profileextension
-   | permissionset
+   | permissionset | permissionsetextension
    ;
 
 compileUnit

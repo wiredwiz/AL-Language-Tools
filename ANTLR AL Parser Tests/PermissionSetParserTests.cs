@@ -71,4 +71,41 @@ permissionset 50000 ""MyPermSet""
         var (_, errors) = ALParseHelper.ParseAlUnit(source);
         errors.Should().BeEmpty("a permissionset with IncludedPermissionSets property should parse without errors");
     }
+
+    [Fact]
+    public void Minimal_permissionsetextension_parses_without_errors()
+    {
+        var source = @"
+permissionsetextension 50000 ""MyPermSetExt"" extends ""MyPermSet""
+{
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("a minimal permissionsetextension should parse without errors");
+    }
+
+    [Fact]
+    public void Minimal_permissionsetextension_produces_PermissionsetextensionContext()
+    {
+        var source = @"
+permissionsetextension 50000 ""MyPermSetExt"" extends ""MyPermSet""
+{
+}";
+        var (tree, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty();
+        ParseTreeSearch.FindFirst<ALParser.PermissionsetextensionContext>(tree)
+            .Should().NotBeNull("a permissionsetextension object should produce a PermissionsetextensionContext node");
+    }
+
+    [Fact]
+    public void Permissionsetextension_with_permissions_parses_without_errors()
+    {
+        var source = @"
+permissionsetextension 50000 ""MyPermSetExt"" extends ""MyPermSet""
+{
+    Permissions = tabledata ""Sales Invoice Header"" = R,
+                  codeunit ""My Codeunit"" = X;
+}";
+        var (_, errors) = ALParseHelper.ParseAlUnit(source);
+        errors.Should().BeEmpty("a permissionsetextension with permissions should parse without errors");
+    }
 }
