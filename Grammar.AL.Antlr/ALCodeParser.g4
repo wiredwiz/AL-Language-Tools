@@ -362,7 +362,7 @@ statementLine
    | expression;
 
 statementBlock
-   : BEGIN statementList? SEMICOLON? END;
+   : BEGIN SEMICOLON* statementList? SEMICOLON? END;
 
 statement
    : (statementLine | statementBlock)

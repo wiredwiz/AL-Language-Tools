@@ -4,7 +4,12 @@ options { tokenVocab=ALLexer; }
 
 import ALCodeParser, ALPropertyParser, ALPageParser;
 
-reportProperties : keyValueProperty* ;
+reportProperty
+    : permissionsProperty
+    | keyValueProperty
+    ;
+
+reportProperties : reportProperty* ;
 
 // Column source: any expression (field name, DataItem.Field, literal, method call, etc.)
 reportColumnSource : expression ;
